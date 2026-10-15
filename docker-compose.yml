@@ -1,0 +1,31 @@
+# Local stack: FalkorDB + Custody (API and UI on http://localhost:8000).
+#   docker compose up --build
+# Only the database:  docker compose up -d falkordb
+services:
+  falkordb:
+    image: falkordb/falkordb:latest
+    ports:
+      - "6379:6379"   # Redis protocol / FalkorDB
+      - "3000:3000"   # FalkorDB browser UI
+    volumes:
+      - falkordb-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      retries: 20
+
+  custody:
+    build: .
+    profiles: ["app"]
+    ports:
+      - "8000:8000"
+    environment:
+      CUSTODY_FALKORDB_HOST: falkordb
+      CUSTODY_FALKORDB_PORT: "6379"
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+    depends_on:
+      falkordb:
+        condition: service_healthy
+
+volumes:
+  falkordb-data:
