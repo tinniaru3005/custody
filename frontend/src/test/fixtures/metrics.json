@@ -1,0 +1,66 @@
+{
+ "affected_actions": 2,
+ "affected_agents": [
+  "ops",
+  "scout"
+ ],
+ "affected_memories": 1,
+ "affected_messages": 0,
+ "agents_crossed": [
+  "ops",
+  "scout"
+ ],
+ "blocked_actions": 1,
+ "decisions_recorded": 3,
+ "deterministic_identical": true,
+ "deterministic_runs": 3,
+ "focus_action": "act_4d4325c0f2114f7e",
+ "graph_edges": 42,
+ "graph_nodes": 27,
+ "guard_latency_breakdown": {
+  "approvals": 0.329,
+  "binding_query": 0.651,
+  "confidentiality_query": 0.891,
+  "confidentiality_search": 0.011,
+  "contamination": 6.415,
+  "graph_version": 0.382,
+  "integrity_query": 1.571,
+  "integrity_search": 0.021,
+  "load_action": 0.92
+ },
+ "guard_latency_max": 16.626,
+ "guard_latency_ms": 12.446,
+ "guard_latency_p50": 13.462,
+ "guard_latency_samples": [
+  13.462,
+  9.703,
+  16.626
+ ],
+ "path_length": 2,
+ "queries": [
+  {
+   "name": "untrusted_origin_search",
+   "pattern": "UNWIND $frontier \u2026 (n)-[r:DERIVED_FROM]->(m) per level, visited set",
+   "purpose": "verdict: complete BFS (no depth bound) \u2192 PATH_FOUND / NO_PATH / INDETERMINATE (fails closed)"
+  },
+  {
+   "name": "integrity_paths",
+   "pattern": "(a:Action)-[:ARG]->(d)-[:DERIVED_FROM*0..25]->(x)-[:FROM]->(s:Source {trust:'untrusted'})",
+   "purpose": "evidence: destination \u2192 \u2026 \u2192 untrusted Source"
+  },
+  {
+   "name": "confidentiality_paths",
+   "pattern": "(a:Action)-[:ARG]->(d)-[:DERIVED_FROM*0..25]->(x {sensitivity:'secret'})",
+   "purpose": "evidence: payload \u2192 \u2026 \u2192 secret Datum"
+  },
+  {
+   "name": "destination_binding",
+   "pattern": "(a)-[:TO]->(k:Sink), (a)-[:ARG {role:'destination'}]->(d)",
+   "purpose": "sink literal = destination datum"
+  }
+ ],
+ "sessions_crossed": [
+  "ops-day4",
+  "scout-day1"
+ ]
+}

@@ -1,0 +1,567 @@
+{
+ "action": {
+  "action_type": "post_slack",
+  "agent": "ops",
+  "created_at": "2026-10-06T13:31:31.256Z",
+  "decisions": 2,
+  "destination": "#platform-team",
+  "explanation": "post_slack by agent 'ops' to #platform-team (internal: Slack channel #platform-team in internal workspace acme-robotics). Allowed. Integrity: destination has no uncleared path to an untrusted source (complete search: 2 node(s), depth 1). Confidentiality: payload derives from secret data but the sink is internal.",
+  "external": false,
+  "id": "act_0e23ec43e2cc4e57",
+  "latency_ms": 9.703,
+  "metadata": {
+   "simulated": true
+  },
+  "session_id": "ops-day4",
+  "sim_time": "2026-10-06T10:02Z",
+  "sink_kind": "slack",
+  "status": "executed",
+  "triggered": [],
+  "verdict": "ALLOW"
+ },
+ "approvals": [],
+ "chain": [
+  {
+   "agent": "ops",
+   "detail": "proposed by ops",
+   "id": "act_0e23ec43e2cc4e57",
+   "label": "Action",
+   "path_length": 1,
+   "path_status": "info",
+   "role": "action",
+   "title": "post_slack",
+   "verdict": "ALLOW"
+  },
+  {
+   "detail": "internal: Slack channel #platform-team in internal workspace acme-robotics",
+   "external": false,
+   "id": "sink_aa5a5c043f164f5b",
+   "label": "Sink",
+   "op": "TO",
+   "path_check": "confidentiality",
+   "role": "sink",
+   "title": "#platform-team"
+  },
+  {
+   "agent": "ops",
+   "detail": "ops \u00b7 ops-day4",
+   "endorsed": false,
+   "id": "d_5906d1b3ef1549dc",
+   "kind": "llm_output",
+   "label": "Datum",
+   "op": "ARG:payload",
+   "role": "payload",
+   "sensitivity": "secret",
+   "session_id": "ops-day4",
+   "title": "[secret:26 chars]\u2026AKEY"
+  },
+  {
+   "agent": "ops",
+   "detail": "ops \u00b7 ops-day4",
+   "endorsed": false,
+   "id": "d_f584b43a0bdd476c",
+   "kind": "secret",
+   "label": "Datum",
+   "op": "attribute",
+   "role": "vault secret",
+   "sensitivity": "secret",
+   "session_id": "ops-day4",
+   "title": "[secret:26 chars]\u2026AKEY"
+  },
+  {
+   "detail": "vault source \u00b7 trusted",
+   "id": "vault:secret/staging/api-key",
+   "kind": "vault",
+   "label": "Source",
+   "op": "FROM",
+   "role": "source",
+   "title": "secret/staging/api-key",
+   "trust": "trusted"
+  }
+ ],
+ "decision": {
+  "action_id": "act_0e23ec43e2cc4e57",
+  "action_status": "executed",
+  "action_type": "post_slack",
+  "agent": "ops",
+  "approval": {
+   "approve_checks": [],
+   "available": false,
+   "endorse_datum_ids": [],
+   "reason": "nothing to approve"
+  },
+  "certificate": {
+   "action_id": "act_0e23ec43e2cc4e57",
+   "ancestor_search": {
+    "depth_explored": 2,
+    "depth_limit": null,
+    "error": null,
+    "latency_ms": 3.015,
+    "max_depth_reached": false,
+    "method": "bfs",
+    "nodes_visited": 8,
+    "outcome": "NO_PATH",
+    "path_found": false,
+    "queries": 4,
+    "search_complete": true,
+    "termination_reason": "exhausted",
+    "witness_node_ids": [],
+    "witness_ops": []
+   },
+   "ancestry_digest": "sha256:f25094159c98c837638b29ed29e21ec6a49d809c10dd2eb9e7f17441f4c1f86c",
+   "certificate_id": "pcc_9ba10a19bcd69feb",
+   "certificate_id_inputs": [
+    "action",
+    "ancestry_digest",
+    "coverage",
+    "destination",
+    "graph",
+    "graph_version",
+    "payload",
+    "policy",
+    "reduced",
+    "roots"
+   ],
+   "certificate_latency_ms": 5.032,
+   "claim": "No untrusted influence was found relative to the recorded provenance graph (graph version custody-fixtures:acme@v31) and current Source trust labels. Every model output in the ancestry recorded edges to its whole context window (FULL_CONTEXT) and the traversal was complete. Paths the Guard does not follow are listed with the reason (context-only edges, human-endorsed or typed data). Trust labels are policy inputs, not findings. Influence the runtime never recorded (e.g. implicit flows) is outside this claim; it does not say the action is safe.",
+   "context_edges_examined": 3,
+   "context_provenance_included": true,
+   "decision_id": "dec_e90593d871bb46d5",
+   "derived_from_edges_examined": 10,
+   "frontier_exhausted": true,
+   "graph": "custody-fixtures:acme",
+   "graph_version": 31,
+   "graph_version_label": "custody-fixtures:acme@v31",
+   "guard_followed_nodes": 2,
+   "guard_latency_ms": 14.236,
+   "id": "cert_c6f2b2fb0e19460a",
+   "integrity_search": {
+    "depth_explored": 1,
+    "depth_limit": null,
+    "error": null,
+    "latency_ms": 3.698,
+    "max_depth_reached": false,
+    "method": "bfs",
+    "nodes_visited": 2,
+    "outcome": "NO_PATH",
+    "path_found": false,
+    "queries": 3,
+    "search_complete": true,
+    "termination_reason": "exhausted",
+    "witness_node_ids": [],
+    "witness_ops": []
+   },
+   "issued_at": "2026-10-06T13:31:31.413Z",
+   "limits": {
+    "max_depth": null,
+    "max_nodes": 100000,
+    "timeout_ms": 2000
+   },
+   "max_depth_reached": 2,
+   "nodes_examined": 8,
+   "payload": "payload derives from secret data; the sink is internal",
+   "provenance_coverage": "FULL_CONTEXT",
+   "reduced_provenance": [],
+   "reduced_provenance_count": 0,
+   "relationships_examined": 18,
+   "root_sources": [
+    {
+     "datum_ids": [
+      "d_d46d460174e94fa1"
+     ],
+     "id": "web:https://docs.vaultsync-backup.example/setup",
+     "kind": "web",
+     "min_depth": 2,
+     "note": "reached only through context edges: a trusted Datum supplied the value verbatim (exact-value attribution)",
+     "status": "context_only",
+     "trust": "untrusted"
+    },
+    {
+     "datum_ids": [
+      "d_b1eb82a1fa814250"
+     ],
+     "id": "system:agent:ops",
+     "kind": "system",
+     "min_depth": 0,
+     "note": "on a path the Guard follows",
+     "status": "followed",
+     "trust": "trusted"
+    },
+    {
+     "datum_ids": [
+      "d_c711fc490d494a37",
+      "d_db300af6a4854227"
+     ],
+     "id": "system:agent:scout",
+     "kind": "system",
+     "min_depth": 1,
+     "note": "reached only through context edges: a trusted Datum supplied the value verbatim (exact-value attribution)",
+     "status": "context_only",
+     "trust": "trusted"
+    },
+    {
+     "datum_ids": [
+      "d_5cfd3f4536e34565"
+     ],
+     "id": "system:memory-store",
+     "kind": "system",
+     "min_depth": 1,
+     "note": "reached only through context edges: a trusted Datum supplied the value verbatim (exact-value attribution)",
+     "status": "context_only",
+     "trust": "trusted"
+    },
+    {
+     "datum_ids": [
+      "d_4372f51027ea481b"
+     ],
+     "id": "user:sam@acme-robotics.example",
+     "kind": "user",
+     "min_depth": 1,
+     "note": "on a path the Guard follows",
+     "status": "followed",
+     "trust": "trusted"
+    },
+    {
+     "datum_ids": [
+      "d_f584b43a0bdd476c"
+     ],
+     "id": "vault:secret/staging/api-key",
+     "kind": "vault",
+     "min_depth": 1,
+     "note": "reached only through context edges: a trusted Datum supplied the value verbatim (exact-value attribution)",
+     "status": "context_only",
+     "trust": "trusted"
+    },
+    {
+     "datum_ids": [
+      "d_fb37ee896e024813"
+     ],
+     "id": "user:priya@acme-robotics.example",
+     "kind": "user",
+     "min_depth": 2,
+     "note": "reached only through context edges: a trusted Datum supplied the value verbatim (exact-value attribution)",
+     "status": "context_only",
+     "trust": "trusted"
+    }
+   ],
+   "root_sources_checked": 7,
+   "scope": "destination argument(s): d_b1eb82a1fa814250",
+   "strength": "STRONG",
+   "termination_reason": "exhausted",
+   "traversal_complete": true,
+   "trust_labels_note": "Source trust labels are policy inputs (set by whoever registered the Source or by tenant policy), not facts Custody infers. Every reached root Source is listed with its label so the assumption can be audited.",
+   "untrusted_influence": "NONE_FOUND",
+   "untrusted_roots_not_followed": 1
+  },
+  "certificate_unavailable": null,
+  "checks": {
+   "confidentiality": {
+    "cleared_by_action_approval": [],
+    "cleared_by_endorsement": [],
+    "detail": "payload derives from secret data but the sink is internal",
+    "evaluated": true,
+    "latency_ms": 1.39,
+    "name": "confidentiality",
+    "paths": [
+     {
+      "agents": [
+       "ops"
+      ],
+      "arg_datum_id": "d_5906d1b3ef1549dc",
+      "arg_role": "payload",
+      "check": "confidentiality",
+      "cleared_by": [],
+      "endorsed_datum_ids": [],
+      "length": 1,
+      "nodes": [
+       {
+        "agent": "ops",
+        "endorsed": false,
+        "id": "d_5906d1b3ef1549dc",
+        "kind": "llm_output",
+        "labels": [
+         "Datum"
+        ],
+        "preview": "[secret:26 chars]\u2026AKEY",
+        "quarantined": false,
+        "sensitivity": "secret",
+        "session_id": "ops-day4",
+        "trust": null
+       },
+       {
+        "agent": "ops",
+        "endorsed": false,
+        "id": "d_f584b43a0bdd476c",
+        "kind": "secret",
+        "labels": [
+         "Datum"
+        ],
+        "preview": "[secret:26 chars]\u2026AKEY",
+        "quarantined": false,
+        "sensitivity": "secret",
+        "session_id": "ops-day4",
+        "trust": null
+       },
+       {
+        "agent": null,
+        "endorsed": false,
+        "id": "vault:secret/staging/api-key",
+        "kind": "vault",
+        "labels": [
+         "Source"
+        ],
+        "preview": "secret/staging/api-key",
+        "quarantined": false,
+        "sensitivity": null,
+        "session_id": null,
+        "trust": "trusted"
+       }
+      ],
+      "ops": [
+       "attribute",
+       "FROM"
+      ],
+      "sessions": [
+       "ops-day4"
+      ],
+      "status": "info",
+      "text": "act_0e23ec43e2cc4e57 =payload=> d_5906d1b3ef1549dc (llm_output \u00b7 ops@ops-day4) SECRET -attribute-> d_f584b43a0bdd476c (secret \u00b7 ops@ops-day4) SECRET -FROM-> vault:secret/staging/api-key [trusted]",
+      "typed_datum_ids": []
+     }
+    ],
+    "precedents": [],
+    "query": "confidentiality_paths + secret_origin_search",
+    "raw_violation": false,
+    "search": {
+     "depth_explored": 1,
+     "depth_limit": 25,
+     "error": null,
+     "latency_ms": 1.374,
+     "max_depth_reached": false,
+     "method": "bounded_paths",
+     "nodes_visited": 0,
+     "outcome": "PATH_FOUND",
+     "path_found": true,
+     "queries": 1,
+     "search_complete": true,
+     "termination_reason": "path_found",
+     "witness_node_ids": [
+      "d_5906d1b3ef1549dc",
+      "d_f584b43a0bdd476c",
+      "vault:secret/staging/api-key"
+     ],
+     "witness_ops": [
+      "attribute",
+      "FROM"
+     ]
+    },
+    "violated": false
+   },
+   "human_review": {
+    "cleared_by_action_approval": [],
+    "cleared_by_endorsement": [],
+    "detail": "policy does not require human review for this action type",
+    "evaluated": false,
+    "latency_ms": 0.0,
+    "name": "human_review",
+    "paths": [],
+    "precedents": [],
+    "query": "policy",
+    "raw_violation": false,
+    "search": null,
+    "violated": false
+   },
+   "integrity": {
+    "cleared_by_action_approval": [],
+    "cleared_by_endorsement": [],
+    "detail": "destination has no uncleared path to an untrusted source (complete search: 2 node(s), depth 1)",
+    "evaluated": true,
+    "latency_ms": 5.786,
+    "name": "integrity",
+    "paths": [],
+    "precedents": [],
+    "query": "integrity_paths + destination_binding + untrusted_origin_search",
+    "raw_violation": false,
+    "search": {
+     "depth_explored": 1,
+     "depth_limit": null,
+     "error": null,
+     "latency_ms": 3.698,
+     "max_depth_reached": false,
+     "method": "bfs",
+     "nodes_visited": 2,
+     "outcome": "NO_PATH",
+     "path_found": false,
+     "queries": 3,
+     "search_complete": true,
+     "termination_reason": "exhausted",
+     "witness_node_ids": [],
+     "witness_ops": []
+    },
+    "violated": false
+   },
+   "lethal_trifecta": {
+    "cleared_by_action_approval": [],
+    "cleared_by_endorsement": [],
+    "detail": "not all of: untrusted destination (False), secret payload (True), external sink (False)",
+    "evaluated": true,
+    "latency_ms": 0.0,
+    "name": "lethal_trifecta",
+    "paths": [],
+    "precedents": [],
+    "query": "integrity_paths \u2227 confidentiality_paths \u2227 sink policy",
+    "raw_violation": false,
+    "search": null,
+    "violated": false
+   },
+   "precedent": {
+    "cleared_by_action_approval": [],
+    "cleared_by_endorsement": [],
+    "detail": "only evaluated for a secret payload that would otherwise need approval",
+    "evaluated": false,
+    "latency_ms": 0.0,
+    "name": "precedent",
+    "paths": [],
+    "precedents": [],
+    "query": "precedent",
+    "raw_violation": false,
+    "search": null,
+    "violated": false
+   }
+  },
+  "contamination": null,
+  "decision": "ALLOW",
+  "deterministic": true,
+  "evaluated_at": "2026-10-06T13:31:31.413Z",
+  "explanation": "post_slack by agent 'ops' to #platform-team (internal: Slack channel #platform-team in internal workspace acme-robotics). Allowed. Integrity: destination has no uncleared path to an untrusted source (complete search: 2 node(s), depth 1). Confidentiality: payload derives from secret data but the sink is internal.",
+  "id": "dec_e90593d871bb46d5",
+  "indeterminate_checks": [],
+  "latency_ms": {
+   "approvals": 0.46,
+   "binding_query": 0.922,
+   "certificate": 5.032,
+   "confidentiality_query": 1.374,
+   "confidentiality_search": 0.016,
+   "graph_version": 0.344,
+   "integrity_query": 1.122,
+   "integrity_search": 3.742,
+   "load_action": 0.902,
+   "total": 14.236
+  },
+  "paths": [
+   {
+    "agents": [
+     "ops"
+    ],
+    "arg_datum_id": "d_5906d1b3ef1549dc",
+    "arg_role": "payload",
+    "check": "confidentiality",
+    "cleared_by": [],
+    "endorsed_datum_ids": [],
+    "length": 1,
+    "nodes": [
+     {
+      "agent": "ops",
+      "endorsed": false,
+      "id": "d_5906d1b3ef1549dc",
+      "kind": "llm_output",
+      "labels": [
+       "Datum"
+      ],
+      "preview": "[secret:26 chars]\u2026AKEY",
+      "quarantined": false,
+      "sensitivity": "secret",
+      "session_id": "ops-day4",
+      "trust": null
+     },
+     {
+      "agent": "ops",
+      "endorsed": false,
+      "id": "d_f584b43a0bdd476c",
+      "kind": "secret",
+      "labels": [
+       "Datum"
+      ],
+      "preview": "[secret:26 chars]\u2026AKEY",
+      "quarantined": false,
+      "sensitivity": "secret",
+      "session_id": "ops-day4",
+      "trust": null
+     },
+     {
+      "agent": null,
+      "endorsed": false,
+      "id": "vault:secret/staging/api-key",
+      "kind": "vault",
+      "labels": [
+       "Source"
+      ],
+      "preview": "secret/staging/api-key",
+      "quarantined": false,
+      "sensitivity": null,
+      "session_id": null,
+      "trust": "trusted"
+     }
+    ],
+    "ops": [
+     "attribute",
+     "FROM"
+    ],
+    "sessions": [
+     "ops-day4"
+    ],
+    "status": "info",
+    "text": "act_0e23ec43e2cc4e57 =payload=> d_5906d1b3ef1549dc (llm_output \u00b7 ops@ops-day4) SECRET -attribute-> d_f584b43a0bdd476c (secret \u00b7 ops@ops-day4) SECRET -FROM-> vault:secret/staging/api-key [trusted]",
+    "typed_datum_ids": []
+   }
+  ],
+  "policy": "acme-robotics@1",
+  "search_complete": true,
+  "sink": {
+   "bound": true,
+   "declared_external": false,
+   "destination": "#platform-team",
+   "external": false,
+   "id": "sink_aa5a5c043f164f5b",
+   "kind": "slack",
+   "reason": "Slack channel #platform-team in internal workspace acme-robotics",
+   "workspace": "acme-robotics",
+   "zone": "internal"
+  },
+  "sources": [
+   {
+    "id": "vault:secret/staging/api-key",
+    "kind": "vault",
+    "reached_from": [
+     "d_5906d1b3ef1549dc"
+    ],
+    "trust": "trusted"
+   }
+  ],
+  "triggered_checks": []
+ },
+ "history": [
+  {
+   "action_id": "act_0e23ec43e2cc4e57",
+   "created_at": "2026-10-06T13:31:31.273Z",
+   "decision": "ALLOW",
+   "explanation": "post_slack by agent 'ops' to #platform-team (internal: Slack channel #platform-team in internal workspace acme-robotics). Allowed. Integrity: destination has no uncleared path to an untrusted source (complete search: 2 node(s), depth 1). Confidentiality: payload derives from secret data but the sink is internal.",
+   "id": "dec_4b4359d9d3b446e5",
+   "latency_ms": 13.462,
+   "policy": "acme-robotics@1",
+   "sink_external": false,
+   "triggered": []
+  },
+  {
+   "action_id": "act_0e23ec43e2cc4e57",
+   "created_at": "2026-10-06T13:31:31.285Z",
+   "decision": "ALLOW",
+   "explanation": "post_slack by agent 'ops' to #platform-team (internal: Slack channel #platform-team in internal workspace acme-robotics). Allowed. Integrity: destination has no uncleared path to an untrusted source (complete search: 2 node(s), depth 1). Confidentiality: payload derives from secret data but the sink is internal.",
+   "id": "dec_ce442ca10d824d6f",
+   "latency_ms": 9.703,
+   "policy": "acme-robotics@1",
+   "sink_external": false,
+   "triggered": []
+  }
+ ]
+}
