@@ -44,6 +44,7 @@ through **MCP tools** that run graph queries and graph algorithms.
 - [Testing](#testing)
 - [Deployment](#deployment) (including [public-demo mode](#public-demo-mode))
 - [Repository layout](#repository-layout)
+- [Acknowledgements](#acknowledgements)
 
 ---
 
@@ -731,3 +732,21 @@ scripts/        attack_demo.py, export_ui_fixtures.py, seed/guard/warden demos
 tests/          unit, integration, guard, warden, console
 docs/           graph-model.md, guard.md, warden.md, screenshots/
 ```
+
+## Acknowledgements
+
+- **[Claude Code](https://www.anthropic.com/claude-code)** (Anthropic): pair-programming,
+  design reviews and help with the docs throughout the build.
+- **[ChatGPT](https://chatgpt.com)** (OpenAI): brainstorming, research and second opinions.
+- **Harvard's course on self-improving AI models**: the ideas on agents that learn from
+  and act on their own memory that shaped the threat model behind Custody.
+- **[FalkorDB](https://www.falkordb.com)**: the graph database at the core of Custody, and
+  **falkordblite** for the embedded mode that powers the hosted demo.
+- **[Model Context Protocol](https://modelcontextprotocol.io)**: the open standard the
+  Warden uses to expose its graph tools.
+- **[Render](https://render.com)**: hosting for the public demo.
+- Open-source projects this is built on: [FastAPI](https://fastapi.tiangolo.com),
+  [Pydantic](https://docs.pydantic.dev), [React](https://react.dev),
+  [Vite](https://vite.dev), [react-force-graph](https://github.com/vasturiano/react-force-graph),
+  [Vitest](https://vitest.dev), [Playwright](https://playwright.dev) and
+  [pytest](https://pytest.org).
