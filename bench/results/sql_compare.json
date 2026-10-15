@@ -1,0 +1,210 @@
+{
+ "command": "python -m bench.run_sql_compare ",
+ "machine": {
+  "date_utc": "2026-10-06T10:49:36+00:00",
+  "python": "3.13.16",
+  "platform": "Linux-6.18.44-fc-v70-x86_64-with-glibc2.39",
+  "cpu": "Intel(R) Xeon(R) Processor @ 2.10GHz",
+  "cpus": 2,
+  "backend": "embedded falkordblite",
+  "falkordblite": "0.10.0",
+  "sqlite": "3.45.1"
+ },
+ "cap_s": 10.0,
+ "cycles": {
+  "a": {
+   "truth": true,
+   "falkordb_bfs": {
+    "found": true,
+    "complete": true,
+    "ms": 4.565,
+    "witness": [
+     "a",
+     "b",
+     "c",
+     "d_dbcbb520498b4b3c",
+     "web:https://cycle.example/"
+    ]
+   },
+   "sqlite_reach_union": {
+    "found": true,
+    "status": "ok",
+    "ms": 0.594
+   },
+   "sqlite_pathstring": {
+    "found": true,
+    "status": "ok",
+    "ms": 0.407,
+    "path": ",a,b,c,d_dbcbb520498b4b3c,"
+   }
+  },
+  "z": {
+   "truth": false,
+   "falkordb_bfs": {
+    "found": false,
+    "complete": true,
+    "ms": 3.254,
+    "witness": []
+   },
+   "sqlite_reach_union": {
+    "found": false,
+    "status": "ok",
+    "ms": 0.267
+   },
+   "sqlite_pathstring": {
+    "found": false,
+    "status": "ok",
+    "ms": 0.236,
+    "path": null
+   }
+  }
+ },
+ "dense": [
+  {
+   "turns": 6,
+   "edges": 21,
+   "falkordb_bfs": {
+    "ms": 3.021,
+    "status": "ok",
+    "hops": 1
+   },
+   "falkordb_varlength": {
+    "ms": 1.318,
+    "status": "ok",
+    "hops": 2
+   },
+   "sqlite_levels": {
+    "ms": 0.654,
+    "status": "ok",
+    "hops": 1
+   },
+   "sqlite_pathstring": {
+    "ms": 0.502,
+    "status": "ok",
+    "hops": 1
+   }
+  },
+  {
+   "turns": 10,
+   "edges": 55,
+   "falkordb_bfs": {
+    "ms": 3.224,
+    "status": "ok",
+    "hops": 1
+   },
+   "falkordb_varlength": {
+    "ms": 7.251,
+    "status": "ok",
+    "hops": 2
+   },
+   "sqlite_levels": {
+    "ms": 0.764,
+    "status": "ok",
+    "hops": 1
+   },
+   "sqlite_pathstring": {
+    "ms": 2.161,
+    "status": "ok",
+    "hops": 1
+   }
+  },
+  {
+   "turns": 14,
+   "edges": 105,
+   "falkordb_bfs": {
+    "ms": 4.486,
+    "status": "ok",
+    "hops": 1
+   },
+   "falkordb_varlength": {
+    "ms": 104.875,
+    "status": "ok",
+    "hops": 2
+   },
+   "sqlite_levels": {
+    "ms": 0.794,
+    "status": "ok",
+    "hops": 1
+   },
+   "sqlite_pathstring": {
+    "ms": 22.019,
+    "status": "ok",
+    "hops": 1
+   }
+  },
+  {
+   "turns": 18,
+   "edges": 171,
+   "falkordb_bfs": {
+    "ms": 3.253,
+    "status": "ok",
+    "hops": 1
+   },
+   "falkordb_varlength": {
+    "ms": 1310.07,
+    "status": "ok",
+    "hops": 2
+   },
+   "sqlite_levels": {
+    "ms": 1.239,
+    "status": "ok",
+    "hops": 1
+   },
+   "sqlite_pathstring": {
+    "ms": 433.658,
+    "status": "ok",
+    "hops": 1
+   }
+  },
+  {
+   "turns": 22,
+   "edges": 253,
+   "falkordb_bfs": {
+    "ms": 3.035,
+    "status": "ok",
+    "hops": 1
+   },
+   "falkordb_varlength": {
+    "ms": 58855.468,
+    "status": "error: Timeout reading from socket",
+    "hops": null
+   },
+   "sqlite_levels": {
+    "ms": 1.418,
+    "status": "ok",
+    "hops": 1
+   },
+   "sqlite_pathstring": {
+    "ms": 8257.9,
+    "status": "ok",
+    "hops": 1
+   }
+  }
+ ],
+ "complexity": {
+  "sqlite_reach_union": {
+   "lines": 6,
+   "chars": 194
+  },
+  "sqlite_levels": {
+   "lines": 7,
+   "chars": 174
+  },
+  "sqlite_pathstring": {
+   "lines": 8,
+   "chars": 322
+  },
+  "falkordb_varlength": {
+   "lines": 1,
+   "chars": 173
+  },
+  "falkordb_bfs (one level query)": {
+   "lines": 3,
+   "chars": 178
+  },
+  "falkordb_bfs (Python driver: traversal.search)": {
+   "lines": 117,
+   "chars": 5337
+  }
+ }
+}
