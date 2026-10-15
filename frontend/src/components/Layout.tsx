@@ -49,6 +49,12 @@ export function Layout({ children }: { children: ReactNode }) {
               {n.to === "/approvals" && pending > 0 && <span className="pill">{pending}</span>}
             </NavLink>
           ))}
+          <NavLink to="/docs" className="nav-item nav-docs" data-testid="docs-link">
+            <span className="nav-icon" aria-hidden>
+              ?
+            </span>
+            Documentation
+          </NavLink>
         </nav>
         <div className="sidebar-foot">
           <div className="small">

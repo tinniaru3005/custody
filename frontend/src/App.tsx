@@ -1,3 +1,4 @@
+import { lazy, Suspense } from "react";
 import { Route, Routes } from "react-router-dom";
 import { Layout } from "./components/Layout";
 import { ApprovalsPage } from "./pages/ApprovalsPage";
@@ -9,7 +10,10 @@ import { MetricsPage } from "./pages/MetricsPage";
 import { WardenPage } from "./pages/WardenPage";
 import { WorldsPage } from "./pages/WorldsPage";
 
-export default function App() {
+// The documentation site (/docs) is its own layout and bundle, loaded on first visit.
+const DocsApp = lazy(() => import("./docs/DocsApp"));
+
+function Console() {
   return (
     <Layout>
       <Routes>
@@ -25,5 +29,21 @@ export default function App() {
         <Route path="*" element={<p className="page">Page not found.</p>} />
       </Routes>
     </Layout>
+  );
+}
+
+export default function App() {
+  return (
+    <Routes>
+      <Route
+        path="/docs/*"
+        element={
+          <Suspense fallback={<p className="page muted">Loading documentation…</p>}>
+            <DocsApp />
+          </Suspense>
+        }
+      />
+      <Route path="*" element={<Console />} />
+    </Routes>
   );
 }
