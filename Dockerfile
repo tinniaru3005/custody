@@ -17,7 +17,7 @@ WORKDIR /app
 COPY pyproject.toml README.md ./
 COPY custody ./custody
 COPY scripts ./scripts
-RUN pip install ".[warden]"
+RUN pip install ".[warden]" "falkordblite>=0.10"
 COPY --from=ui /ui/dist ./frontend/dist
 ENV CUSTODY_STATIC_DIR=/app/frontend/dist
 RUN useradd --create-home custody
