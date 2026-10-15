@@ -1,0 +1,17 @@
+__pycache__/
+*.pyc
+.venv/
+.env
+.data/
+.pytest_cache/
+*.egg-info/
+*.db
+.ruff_cache/
+frontend/node_modules/
+frontend/dist/
+frontend/test-results/
+frontend/playwright-report/
+*.tgz
+
+session-transcript.md
+Claude outputs/

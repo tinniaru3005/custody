@@ -1,0 +1,59 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "custody"
+version = "0.1.0"
+description = "Provenance-tracked shared memory for teams of AI agents"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "falkordb>=1.0",
+    "fastapi>=0.110",
+    "uvicorn>=0.27",
+    "pydantic>=2.5",
+    "pydantic-settings>=2.1",
+]
+
+[project.optional-dependencies]
+# Warden MCP server + LLM agent (MCP Python SDK v2; anthropic only for the Claude planner)
+warden = [
+    "mcp>=2.2,<3",
+    "anthropic>=0.40",
+]
+# benchmark baselines (python -m bench.run_correctness / run_scaling)
+bench = [
+    "scikit-learn>=1.3",
+]
+dev = [
+    "pytest>=8",
+    "ruff>=0.6",
+    "httpx>=0.27",
+    "mcp>=2.2,<3",
+    # embedded FalkorDB used by tests/seed when no server is configured (needs Python 3.12+)
+    "falkordblite>=0.10; python_version >= '3.12'",
+]
+
+[project.scripts]
+custody-warden = "custody.warden.__main__:main"
+
+[tool.setuptools.packages.find]
+include = ["custody*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+markers = [
+    "integration: end-to-end tests that exercise multi-step provenance flows",
+]
+
+[tool.ruff]
+line-length = 110
+target-version = "py310"
+extend-exclude = ["frontend"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "B"]
+# l for labels is idiomatic here; tests use small lambdas
+ignore = ["E741", "E731", "B008", "B905", "B017"]
