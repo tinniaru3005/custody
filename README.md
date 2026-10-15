@@ -22,6 +22,10 @@ through **MCP tools** that run graph queries and graph algorithms.
 
 ![Attack demo: the blocked action and the provenance path that explains it](docs/screenshots/demo.png)
 
+**Documentation:** the full docs (quickstart, architecture, Guard, Warden, MCP, HTTP API,
+configuration, deployment, security model, troubleshooting) are served by the app at `/docs`.
+Their source is in [frontend/src/docs/content/](frontend/src/docs/content/).
+
 ---
 
 ## Contents
@@ -544,7 +548,7 @@ cp .env.example .env                               # C: FalkorDB Cloud: fill in 
 Run it (two terminals):
 
 ```bash
-uvicorn custody.api.app:app --reload --port 8000   # API: http://localhost:8000/docs
+uvicorn custody.api.app:app --reload --port 8000   # API: http://localhost:8000/swagger
 cd frontend && npm run dev                         # UI:  http://localhost:5173 (proxies /api)
 ```
 
@@ -554,6 +558,9 @@ Or as one process serving the built UI:
 cd frontend && npm run build && cd ..
 CUSTODY_STATIC_DIR=frontend/dist uvicorn custody.api.app:app --port 8000   # http://localhost:8000
 ```
+
+The built UI includes the documentation site at `/docs`; FastAPI's interactive API reference
+is at `/swagger` (and `/redoc`, `/openapi.json`).
 
 `make install`, `make api-embedded`, `make ui`, `make test` wrap the same commands.
 
@@ -703,7 +710,7 @@ system (`custody/api/public_demo.py`, `make api-public`):
 - **Reset Demo** restores the initial state **deterministically**: counter-based ids and a
   fixed simulated clock, so the graph is identical after every reset (tested node by node).
   Rate-limited (one reset per 10 s by default; 429 otherwise).
-- **No configuration exposed**: `/docs`, `/redoc` and `/openapi.json` are off; `/health`
+- **No configuration exposed**: `/swagger`, `/redoc` and `/openapi.json` are off; `/health`
   returns status, version and the demo tenant only.
 - **No real credentials in the data**: the vault and its keys are simulated fakes, and raw
   secret values never reach the graph or any API response (tested).
@@ -727,7 +734,7 @@ custody/
   api/          FastAPI app; routes: recorder, guard, console; public_demo.py
   graph/traversal.py  complete, fail-closed provenance search (PATH_FOUND / NO_PATH / INDETERMINATE)
 bench/          benchmark generators, baselines, runners and committed results
-frontend/       React + Vite + TypeScript console (src/pages, src/components, e2e/)
+frontend/       React + Vite + TypeScript console (src/pages, src/components, e2e/) and docs site (src/docs)
 scripts/        attack_demo.py, export_ui_fixtures.py, seed/guard/warden demos
 tests/          unit, integration, guard, warden, console
 docs/           graph-model.md, guard.md, warden.md, screenshots/

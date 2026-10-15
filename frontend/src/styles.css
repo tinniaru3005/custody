@@ -151,6 +151,12 @@ nav {
   background: #1b2740;
   color: #fff;
 }
+.nav-docs {
+  margin-top: 8px;
+  border-top: 1px solid var(--border);
+  border-radius: 0 0 8px 8px;
+  padding-top: 12px;
+}
 .nav-icon {
   width: 18px;
   text-align: center;

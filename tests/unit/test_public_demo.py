@@ -109,7 +109,8 @@ def test_blocked_action_cannot_be_approved_by_visitors(public, demo_tenant):
 
 
 def test_no_server_configuration_or_api_schema(public):
-    for path in ("/docs", "/redoc", "/openapi.json", "/api/docs", "/api/openapi.json"):
+    for path in ("/swagger", "/redoc", "/openapi.json", "/api/swagger", "/api/redoc",
+                 "/api/openapi.json"):
         assert public.get(path).status_code == 404, path
 
 
@@ -157,3 +158,20 @@ def test_normal_mode_is_unchanged(falkordb_client, tenant):
         assert c.get("/openapi.json").status_code == 200
         assert c.post(f"/api/tenants/{tenant}/record/user-input",
                       json={"text": "hi", "user": "u"}).status_code == 201
+
+
+@pytest.mark.parametrize("public_demo", [False, True])
+def test_docs_site_is_served_by_the_ui(falkordb_client, demo_tenant, tmp_path, public_demo):
+    """/docs belongs to the documentation site in the built UI (SPA fallback); FastAPI's
+    API reference moved to /swagger and is only exposed outside public-demo mode."""
+    (tmp_path / "index.html").write_text("<!doctype html><title>ui</title>")
+    settings = Settings(graph_prefix="custody-test", public_demo=public_demo,
+                        demo_tenant=demo_tenant, static_dir=str(tmp_path))
+    with TestClient(create_app(db=falkordb_client, settings=settings)) as c:
+        for path in ("/docs", "/docs/", "/docs/guard", "/docs/api-reference"):
+            r = c.get(path)
+            assert r.status_code == 200 and "<title>ui</title>" in r.text, path
+        expected = 404 if public_demo else 200
+        assert c.get("/swagger").status_code == expected
+        assert c.get("/api/swagger").status_code == expected
+        assert c.get("/api/health").json()["status"] == "ok"
