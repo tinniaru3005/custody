@@ -1,0 +1,2440 @@
+{
+ "command": "python -m bench.run_scaling ",
+ "machine": {
+  "date_utc": "2026-10-06T10:47:01+00:00",
+  "python": "3.13.16",
+  "platform": "Linux-6.18.44-fc-v70-x86_64-with-glibc2.39",
+  "cpu": "Intel(R) Xeon(R) Processor @ 2.10GHz",
+  "cpus": 2,
+  "backend": "embedded falkordblite",
+  "falkordblite": "0.10.0",
+  "sqlite": "3.45.1"
+ },
+ "reps": 7,
+ "rows": [
+  {
+   "scenario": "chain",
+   "params": [
+    10
+   ],
+   "variant": "dangerous",
+   "shape": {
+    "hops": 10,
+    "datums_total": 12,
+    "edges": 10
+   },
+   "generate_ms": 29.0,
+   "custody": {
+    "verdict": "REQUIRE_HUMAN_APPROVAL",
+    "outcome": "PATH_FOUND",
+    "method": "bounded_paths",
+    "search_complete": true,
+    "nodes_visited": 0,
+    "bfs_queries": 1,
+    "depth_explored": 10,
+    "guard_total": {
+     "n": 7,
+     "median_ms": 11.951,
+     "p95_ms": 17.777,
+     "min_ms": 11.34,
+     "max_ms": 17.777
+    },
+    "integrity_search": {
+     "n": 7,
+     "median_ms": 1.196,
+     "p95_ms": 2.175,
+     "min_ms": 1.129,
+     "max_ms": 2.175
+    },
+    "evidence_query": {
+     "n": 7,
+     "median_ms": 1.196,
+     "p95_ms": 2.175,
+     "min_ms": 1.129,
+     "max_ms": 2.175
+    },
+    "evidence_paths": 1
+   },
+   "old_bounded_query_25": {
+    "found": true,
+    "ms": 1.3
+   },
+   "sql_cte": {
+    "found": true,
+    "visited": 11,
+    "latency": {
+     "n": 7,
+     "median_ms": 0.019,
+     "p95_ms": 0.288,
+     "min_ms": 0.018,
+     "max_ms": 0.288
+    }
+   },
+   "correct": true
+  },
+  {
+   "scenario": "chain",
+   "params": [
+    10
+   ],
+   "variant": "clean",
+   "shape": {
+    "hops": 10,
+    "datums_total": 12,
+    "edges": 10
+   },
+   "generate_ms": 28.6,
+   "custody": {
+    "verdict": "ALLOW",
+    "outcome": "NO_PATH",
+    "method": "bfs",
+    "search_complete": true,
+    "nodes_visited": 11,
+    "bfs_queries": 12,
+    "depth_explored": 10,
+    "guard_total": {
+     "n": 7,
+     "median_ms": 15.118,
+     "p95_ms": 22.926,
+     "min_ms": 13.584,
+     "max_ms": 22.926
+    },
+    "integrity_search": {
+     "n": 7,
+     "median_ms": 5.705,
+     "p95_ms": 8.896,
+     "min_ms": 5.303,
+     "max_ms": 8.896
+    },
+    "evidence_query": {
+     "n": 7,
+     "median_ms": 0.605,
+     "p95_ms": 1.244,
+     "min_ms": 0.548,
+     "max_ms": 1.244
+    },
+    "evidence_paths": 0
+   },
+   "old_bounded_query_25": {
+    "found": false,
+    "ms": 0.6
+   },
+   "sql_cte": {
+    "found": false,
+    "visited": 11,
+    "latency": {
+     "n": 7,
+     "median_ms": 0.016,
+     "p95_ms": 0.17,
+     "min_ms": 0.016,
+     "max_ms": 0.17
+    }
+   },
+   "correct": true
+  },
+  {
+   "scenario": "chain",
+   "params": [
+    25
+   ],
+   "variant": "dangerous",
+   "shape": {
+    "hops": 25,
+    "datums_total": 27,
+    "edges": 25
+   },
+   "generate_ms": 61.6,
+   "custody": {
+    "verdict": "REQUIRE_HUMAN_APPROVAL",
+    "outcome": "PATH_FOUND",
+    "method": "bounded_paths",
+    "search_complete": true,
+    "nodes_visited": 0,
+    "bfs_queries": 1,
+    "depth_explored": 25,
+    "guard_total": {
+     "n": 7,
+     "median_ms": 28.576,
+     "p95_ms": 72.552,
+     "min_ms": 27.352,
+     "max_ms": 72.552
+    },
+    "integrity_search": {
+     "n": 7,
+     "median_ms": 2.997,
+     "p95_ms": 5.053,
+     "min_ms": 2.672,
+     "max_ms": 5.053
+    },
+    "evidence_query": {
+     "n": 7,
+     "median_ms": 2.997,
+     "p95_ms": 5.053,
+     "min_ms": 2.672,
+     "max_ms": 5.053
+    },
+    "evidence_paths": 1
+   },
+   "old_bounded_query_25": {
+    "found": true,
+    "ms": 2.9
+   },
+   "sql_cte": {
+    "found": true,
+    "visited": 26,
+    "latency": {
+     "n": 7,
+     "median_ms": 0.048,
+     "p95_ms": 0.308,
+     "min_ms": 0.043,
+     "max_ms": 0.308
+    }
+   },
+   "correct": true
+  },
+  {
+   "scenario": "chain",
+   "params": [
+    25
+   ],
+   "variant": "clean",
+   "shape": {
+    "hops": 25,
+    "datums_total": 27,
+    "edges": 25
+   },
+   "generate_ms": 73.0,
+   "custody": {
+    "verdict": "ALLOW",
+    "outcome": "NO_PATH",
+    "method": "bfs",
+    "search_complete": true,
+    "nodes_visited": 26,
+    "bfs_queries": 27,
+    "depth_explored": 25,
+    "guard_total": {
+     "n": 7,
+     "median_ms": 37.148,
+     "p95_ms": 44.184,
+     "min_ms": 29.424,
+     "max_ms": 44.184
+    },
+    "integrity_search": {
+     "n": 7,
+     "median_ms": 14.414,
+     "p95_ms": 20.257,
+     "min_ms": 11.768,
+     "max_ms": 20.257
+    },
+    "evidence_query": {
+     "n": 7,
+     "median_ms": 0.803,
+     "p95_ms": 1.151,
+     "min_ms": 0.682,
+     "max_ms": 1.151
+    },
+    "evidence_paths": 0
+   },
+   "old_bounded_query_25": {
+    "found": false,
+    "ms": 0.9
+   },
+   "sql_cte": {
+    "found": false,
+    "visited": 26,
+    "latency": {
+     "n": 7,
+     "median_ms": 0.032,
+     "p95_ms": 0.16,
+     "min_ms": 0.031,
+     "max_ms": 0.16
+    }
+   },
+   "correct": true
+  },
+  {
+   "scenario": "chain",
+   "params": [
+    26
+   ],
+   "variant": "dangerous",
+   "shape": {
+    "hops": 26,
+    "datums_total": 28,
+    "edges": 26
+   },
+   "generate_ms": 75.2,
+   "custody": {
+    "verdict": "REQUIRE_HUMAN_APPROVAL",
+    "outcome": "PATH_FOUND",
+    "method": "bfs",
+    "search_complete": true,
+    "nodes_visited": 27,
+    "bfs_queries": 27,
+    "depth_explored": 26,
+    "guard_total": {
+     "n": 7,
+     "median_ms": 44.794,
+     "p95_ms": 51.741,
+     "min_ms": 34.551,
+     "max_ms": 51.741
+    },
+    "integrity_search": {
+     "n": 7,
+     "median_ms": 15.376,
+     "p95_ms": 19.132,
+     "min_ms": 13.403,
+     "max_ms": 19.132
+    },
+    "evidence_query": {
+     "n": 7,
+     "median_ms": 0.799,
+     "p95_ms": 1.456,
+     "min_ms": 0.68,
+     "max_ms": 1.456
+    },
+    "evidence_paths": 1
+   },
+   "old_bounded_query_25": {
+    "found": false,
+    "ms": 0.8
+   },
+   "sql_cte": {
+    "found": true,
+    "visited": 27,
+    "latency": {
+     "n": 7,
+     "median_ms": 0.039,
+     "p95_ms": 0.235,
+     "min_ms": 0.03,
+     "max_ms": 0.235
+    }
+   },
+   "correct": true
+  },
+  {
+   "scenario": "chain",
+   "params": [
+    26
+   ],
+   "variant": "clean",
+   "shape": {
+    "hops": 26,
+    "datums_total": 28,
+    "edges": 26
+   },
+   "generate_ms": 69.5,
+   "custody": {
+    "verdict": "ALLOW",
+    "outcome": "NO_PATH",
+    "method": "bfs",
+    "search_complete": true,
+    "nodes_visited": 27,
+    "bfs_queries": 28,
+    "depth_explored": 26,
+    "guard_total": {
+     "n": 7,
+     "median_ms": 30.968,
+     "p95_ms": 34.631,
+     "min_ms": 29.19,
+     "max_ms": 34.631
+    },
+    "integrity_search": {
+     "n": 7,
+     "median_ms": 14.901,
+     "p95_ms": 15.495,
+     "min_ms": 13.966,
+     "max_ms": 15.495
+    },
+    "evidence_query": {
+     "n": 7,
+     "median_ms": 0.699,
+     "p95_ms": 1.446,
+     "min_ms": 0.613,
+     "max_ms": 1.446
+    },
+    "evidence_paths": 0
+   },
+   "old_bounded_query_25": {
+    "found": false,
+    "ms": 0.8
+   },
+   "sql_cte": {
+    "found": false,
+    "visited": 27,
+    "latency": {
+     "n": 7,
+     "median_ms": 0.032,
+     "p95_ms": 0.202,
+     "min_ms": 0.032,
+     "max_ms": 0.202
+    }
+   },
+   "correct": true
+  },
+  {
+   "scenario": "chain",
+   "params": [
+    50
+   ],
+   "variant": "dangerous",
+   "shape": {
+    "hops": 50,
+    "datums_total": 52,
+    "edges": 50
+   },
+   "generate_ms": 123.4,
+   "custody": {
+    "verdict": "REQUIRE_HUMAN_APPROVAL",
+    "outcome": "PATH_FOUND",
+    "method": "bfs",
+    "search_complete": true,
+    "nodes_visited": 51,
+    "bfs_queries": 51,
+    "depth_explored": 50,
+    "guard_total": {
+     "n": 7,
+     "median_ms": 76.687,
+     "p95_ms": 78.64,
+     "min_ms": 55.783,
+     "max_ms": 78.64
+    },
+    "integrity_search": {
+     "n": 7,
+     "median_ms": 36.737,
+     "p95_ms": 37.499,
+     "min_ms": 24.344,
+     "max_ms": 37.499
+    },
+    "evidence_query": {
+     "n": 7,
+     "median_ms": 0.882,
+     "p95_ms": 1.582,
+     "min_ms": 0.694,
+     "max_ms": 1.582
+    },
+    "evidence_paths": 1
+   },
+   "old_bounded_query_25": {
+    "found": false,
+    "ms": 1.1
+   },
+   "sql_cte": {
+    "found": true,
+    "visited": 51,
+    "latency": {
+     "n": 7,
+     "median_ms": 0.077,
+     "p95_ms": 0.333,
+     "min_ms": 0.069,
+     "max_ms": 0.333
+    }
+   },
+   "correct": true
+  },
+  {
+   "scenario": "chain",
+   "params": [
+    50
+   ],
+   "variant": "clean",
+   "shape": {
+    "hops": 50,
+    "datums_total": 52,
+    "edges": 50
+   },
+   "generate_ms": 109.1,
+   "custody": {
+    "verdict": "ALLOW",
+    "outcome": "NO_PATH",
+    "method": "bfs",
+    "search_complete": true,
+    "nodes_visited": 51,
+    "bfs_queries": 52,
+    "depth_explored": 50,
+    "guard_total": {
+     "n": 7,
+     "median_ms": 57.859,
+     "p95_ms": 63.957,
+     "min_ms": 52.4,
+     "max_ms": 63.957
+    },
+    "integrity_search": {
+     "n": 7,
+     "median_ms": 29.354,
+     "p95_ms": 35.572,
+     "min_ms": 27.197,
+     "max_ms": 35.572
+    },
+    "evidence_query": {
+     "n": 7,
+     "median_ms": 0.813,
+     "p95_ms": 1.385,
+     "min_ms": 0.735,
+     "max_ms": 1.385
+    },
+    "evidence_paths": 0
+   },
+   "old_bounded_query_25": {
+    "found": false,
+    "ms": 0.8
+   },
+   "sql_cte": {
+    "found": false,
+    "visited": 51,
+    "latency": {
+     "n": 7,
+     "median_ms": 0.062,
+     "p95_ms": 0.198,
+     "min_ms": 0.06,
+     "max_ms": 0.198
+    }
+   },
+   "correct": true
+  },
+  {
+   "scenario": "chain",
+   "params": [
+    100
+   ],
+   "variant": "dangerous",
+   "shape": {
+    "hops": 100,
+    "datums_total": 102,
+    "edges": 100
+   },
+   "generate_ms": 233.3,
+   "custody": {
+    "verdict": "REQUIRE_HUMAN_APPROVAL",
+    "outcome": "PATH_FOUND",
+    "method": "bfs",
+    "search_complete": true,
+    "nodes_visited": 101,
+    "bfs_queries": 101,
+    "depth_explored": 100,
+    "guard_total": {
+     "n": 7,
+     "median_ms": 106.354,
+     "p95_ms": 133.109,
+     "min_ms": 99.175,
+     "max_ms": 133.109
+    },
+    "integrity_search": {
+     "n": 7,
+     "median_ms": 49.045,
+     "p95_ms": 59.032,
+     "min_ms": 47.9,
+     "max_ms": 59.032
+    },
+    "evidence_query": {
+     "n": 7,
+     "median_ms": 0.718,
+     "p95_ms": 1.482,
+     "min_ms": 0.689,
+     "max_ms": 1.482
+    },
+    "evidence_paths": 1
+   },
+   "old_bounded_query_25": {
+    "found": false,
+    "ms": 0.8
+   },
+   "sql_cte": {
+    "found": true,
+    "visited": 101,
+    "latency": {
+     "n": 7,
+     "median_ms": 0.127,
+     "p95_ms": 0.273,
+     "min_ms": 0.12,
+     "max_ms": 0.273
+    }
+   },
+   "correct": true
+  },
+  {
+   "scenario": "chain",
+   "params": [
+    100
+   ],
+   "variant": "clean",
+   "shape": {
+    "hops": 100,
+    "datums_total": 102,
+    "edges": 100
+   },
+   "generate_ms": 172.0,
+   "custody": {
+    "verdict": "ALLOW",
+    "outcome": "NO_PATH",
+    "method": "bfs",
+    "search_complete": true,
+    "nodes_visited": 101,
+    "bfs_queries": 102,
+    "depth_explored": 100,
+    "guard_total": {
+     "n": 7,
+     "median_ms": 88.727,
+     "p95_ms": 105.86,
+     "min_ms": 84.821,
+     "max_ms": 105.86
+    },
+    "integrity_search": {
+     "n": 7,
+     "median_ms": 46.032,
+     "p95_ms": 59.715,
+     "min_ms": 44.306,
+     "max_ms": 59.715
+    },
+    "evidence_query": {
+     "n": 7,
+     "median_ms": 0.739,
+     "p95_ms": 1.332,
+     "min_ms": 0.657,
+     "max_ms": 1.332
+    },
+    "evidence_paths": 0
+   },
+   "old_bounded_query_25": {
+    "found": false,
+    "ms": 0.8
+   },
+   "sql_cte": {
+    "found": false,
+    "visited": 101,
+    "latency": {
+     "n": 7,
+     "median_ms": 0.137,
+     "p95_ms": 0.256,
+     "min_ms": 0.12,
+     "max_ms": 0.256
+    }
+   },
+   "correct": true
+  },
+  {
+   "scenario": "chain",
+   "params": [
+    200
+   ],
+   "variant": "dangerous",
+   "shape": {
+    "hops": 200,
+    "datums_total": 202,
+    "edges": 200
+   },
+   "generate_ms": 396.4,
+   "custody": {
+    "verdict": "REQUIRE_HUMAN_APPROVAL",
+    "outcome": "PATH_FOUND",
+    "method": "bfs",
+    "search_complete": true,
+    "nodes_visited": 201,
+    "bfs_queries": 201,
+    "depth_explored": 200,
+    "guard_total": {
+     "n": 7,
+     "median_ms": 244.438,
+     "p95_ms": 285.086,
+     "min_ms": 219.009,
+     "max_ms": 285.086
+    },
+    "integrity_search": {
+     "n": 7,
+     "median_ms": 116.749,
+     "p95_ms": 158.479,
+     "min_ms": 102.398,
+     "max_ms": 158.479
+    },
+    "evidence_query": {
+     "n": 7,
+     "median_ms": 0.825,
+     "p95_ms": 1.376,
+     "min_ms": 0.707,
+     "max_ms": 1.376
+    },
+    "evidence_paths": 1
+   },
+   "old_bounded_query_25": {
+    "found": false,
+    "ms": 1.1
+   },
+   "sql_cte": {
+    "found": true,
+    "visited": 201,
+    "latency": {
+     "n": 7,
+     "median_ms": 0.397,
+     "p95_ms": 0.548,
+     "min_ms": 0.354,
+     "max_ms": 0.548
+    }
+   },
+   "correct": true
+  },
+  {
+   "scenario": "chain",
+   "params": [
+    200
+   ],
+   "variant": "clean",
+   "shape": {
+    "hops": 200,
+    "datums_total": 202,
+    "edges": 200
+   },
+   "generate_ms": 486.9,
+   "custody": {
+    "verdict": "ALLOW",
+    "outcome": "NO_PATH",
+    "method": "bfs",
+    "search_complete": true,
+    "nodes_visited": 201,
+    "bfs_queries": 202,
+    "depth_explored": 200,
+    "guard_total": {
+     "n": 7,
+     "median_ms": 178.628,
+     "p95_ms": 188.809,
+     "min_ms": 163.59,
+     "max_ms": 188.809
+    },
+    "integrity_search": {
+     "n": 7,
+     "median_ms": 97.672,
+     "p95_ms": 103.945,
+     "min_ms": 88.034,
+     "max_ms": 103.945
+    },
+    "evidence_query": {
+     "n": 7,
+     "median_ms": 0.758,
+     "p95_ms": 3.004,
+     "min_ms": 0.687,
+     "max_ms": 3.004
+    },
+    "evidence_paths": 0
+   },
+   "old_bounded_query_25": {
+    "found": false,
+    "ms": 0.9
+   },
+   "sql_cte": {
+    "found": false,
+    "visited": 201,
+    "latency": {
+     "n": 7,
+     "median_ms": 0.349,
+     "p95_ms": 2.501,
+     "min_ms": 0.316,
+     "max_ms": 2.501
+    }
+   },
+   "correct": true
+  },
+  {
+   "scenario": "chain",
+   "params": [
+    500
+   ],
+   "variant": "dangerous",
+   "shape": {
+    "hops": 500,
+    "datums_total": 502,
+    "edges": 500
+   },
+   "generate_ms": 1208.7,
+   "custody": {
+    "verdict": "REQUIRE_HUMAN_APPROVAL",
+    "outcome": "PATH_FOUND",
+    "method": "bfs",
+    "search_complete": true,
+    "nodes_visited": 501,
+    "bfs_queries": 501,
+    "depth_explored": 500,
+    "guard_total": {
+     "n": 7,
+     "median_ms": 574.746,
+     "p95_ms": 706.191,
+     "min_ms": 480.396,
+     "max_ms": 706.191
+    },
+    "integrity_search": {
+     "n": 7,
+     "median_ms": 282.361,
+     "p95_ms": 398.371,
+     "min_ms": 236.858,
+     "max_ms": 398.371
+    },
+    "evidence_query": {
+     "n": 7,
+     "median_ms": 0.842,
+     "p95_ms": 1.591,
+     "min_ms": 0.669,
+     "max_ms": 1.591
+    },
+    "evidence_paths": 1
+   },
+   "old_bounded_query_25": {
+    "found": false,
+    "ms": 1.3
+   },
+   "sql_cte": {
+    "found": true,
+    "visited": 501,
+    "latency": {
+     "n": 7,
+     "median_ms": 1.093,
+     "p95_ms": 1.788,
+     "min_ms": 1.041,
+     "max_ms": 1.788
+    }
+   },
+   "correct": true
+  },
+  {
+   "scenario": "chain",
+   "params": [
+    500
+   ],
+   "variant": "clean",
+   "shape": {
+    "hops": 500,
+    "datums_total": 502,
+    "edges": 500
+   },
+   "generate_ms": 1175.6,
+   "custody": {
+    "verdict": "ALLOW",
+    "outcome": "NO_PATH",
+    "method": "bfs",
+    "search_complete": true,
+    "nodes_visited": 501,
+    "bfs_queries": 502,
+    "depth_explored": 500,
+    "guard_total": {
+     "n": 7,
+     "median_ms": 608.704,
+     "p95_ms": 672.203,
+     "min_ms": 480.54,
+     "max_ms": 672.203
+    },
+    "integrity_search": {
+     "n": 7,
+     "median_ms": 321.672,
+     "p95_ms": 354.646,
+     "min_ms": 273.774,
+     "max_ms": 354.646
+    },
+    "evidence_query": {
+     "n": 7,
+     "median_ms": 0.878,
+     "p95_ms": 2.881,
+     "min_ms": 0.758,
+     "max_ms": 2.881
+    },
+    "evidence_paths": 0
+   },
+   "old_bounded_query_25": {
+    "found": false,
+    "ms": 1.0
+   },
+   "sql_cte": {
+    "found": false,
+    "visited": 501,
+    "latency": {
+     "n": 7,
+     "median_ms": 0.882,
+     "p95_ms": 1.11,
+     "min_ms": 0.862,
+     "max_ms": 1.11
+    }
+   },
+   "correct": true
+  },
+  {
+   "scenario": "fan_in",
+   "params": [
+    10
+   ],
+   "variant": "dangerous",
+   "shape": {
+    "parents": 10,
+    "datums": 13,
+    "datums_total": 14,
+    "edges": 12
+   },
+   "generate_ms": 31.2,
+   "custody": {
+    "verdict": "REQUIRE_HUMAN_APPROVAL",
+    "outcome": "PATH_FOUND",
+    "method": "bounded_paths",
+    "search_complete": true,
+    "nodes_visited": 0,
+    "bfs_queries": 1,
+    "depth_explored": 3,
+    "guard_total": {
+     "n": 7,
+     "median_ms": 9.806,
+     "p95_ms": 15.833,
+     "min_ms": 9.044,
+     "max_ms": 15.833
+    },
+    "integrity_search": {
+     "n": 7,
+     "median_ms": 0.918,
+     "p95_ms": 1.967,
+     "min_ms": 0.762,
+     "max_ms": 1.967
+    },
+    "evidence_query": {
+     "n": 7,
+     "median_ms": 0.918,
+     "p95_ms": 1.967,
+     "min_ms": 0.762,
+     "max_ms": 1.967
+    },
+    "evidence_paths": 1
+   },
+   "old_bounded_query_25": {
+    "found": true,
+    "ms": 0.9
+   },
+   "sql_cte": {
+    "found": true,
+    "visited": 13,
+    "latency": {
+     "n": 7,
+     "median_ms": 0.021,
+     "p95_ms": 0.168,
+     "min_ms": 0.021,
+     "max_ms": 0.168
+    }
+   },
+   "correct": true
+  },
+  {
+   "scenario": "fan_in",
+   "params": [
+    10
+   ],
+   "variant": "clean",
+   "shape": {
+    "parents": 10,
+    "datums": 13,
+    "datums_total": 14,
+    "edges": 12
+   },
+   "generate_ms": 30.5,
+   "custody": {
+    "verdict": "ALLOW",
+    "outcome": "NO_PATH",
+    "method": "bfs",
+    "search_complete": true,
+    "nodes_visited": 13,
+    "bfs_queries": 5,
+    "depth_explored": 3,
+    "guard_total": {
+     "n": 7,
+     "median_ms": 11.169,
+     "p95_ms": 15.708,
+     "min_ms": 10.219,
+     "max_ms": 15.708
+    },
+    "integrity_search": {
+     "n": 7,
+     "median_ms": 3.284,
+     "p95_ms": 4.742,
+     "min_ms": 2.996,
+     "max_ms": 4.742
+    },
+    "evidence_query": {
+     "n": 7,
+     "median_ms": 0.603,
+     "p95_ms": 1.318,
+     "min_ms": 0.584,
+     "max_ms": 1.318
+    },
+    "evidence_paths": 0
+   },
+   "old_bounded_query_25": {
+    "found": false,
+    "ms": 0.7
+   },
+   "sql_cte": {
+    "found": false,
+    "visited": 13,
+    "latency": {
+     "n": 7,
+     "median_ms": 0.021,
+     "p95_ms": 0.147,
+     "min_ms": 0.017,
+     "max_ms": 0.147
+    }
+   },
+   "correct": true
+  },
+  {
+   "scenario": "fan_in",
+   "params": [
+    50
+   ],
+   "variant": "dangerous",
+   "shape": {
+    "parents": 50,
+    "datums": 53,
+    "datums_total": 54,
+    "edges": 52
+   },
+   "generate_ms": 116.2,
+   "custody": {
+    "verdict": "REQUIRE_HUMAN_APPROVAL",
+    "outcome": "PATH_FOUND",
+    "method": "bounded_paths",
+    "search_complete": true,
+    "nodes_visited": 0,
+    "bfs_queries": 1,
+    "depth_explored": 3,
+    "guard_total": {
+     "n": 7,
+     "median_ms": 11.844,
+     "p95_ms": 19.344,
+     "min_ms": 10.129,
+     "max_ms": 19.344
+    },
+    "integrity_search": {
+     "n": 7,
+     "median_ms": 1.1,
+     "p95_ms": 2.415,
+     "min_ms": 0.94,
+     "max_ms": 2.415
+    },
+    "evidence_query": {
+     "n": 7,
+     "median_ms": 1.1,
+     "p95_ms": 2.415,
+     "min_ms": 0.94,
+     "max_ms": 2.415
+    },
+    "evidence_paths": 1
+   },
+   "old_bounded_query_25": {
+    "found": true,
+    "ms": 1.1
+   },
+   "sql_cte": {
+    "found": true,
+    "visited": 53,
+    "latency": {
+     "n": 7,
+     "median_ms": 0.079,
+     "p95_ms": 0.267,
+     "min_ms": 0.065,
+     "max_ms": 0.267
+    }
+   },
+   "correct": true
+  },
+  {
+   "scenario": "fan_in",
+   "params": [
+    50
+   ],
+   "variant": "clean",
+   "shape": {
+    "parents": 50,
+    "datums": 53,
+    "datums_total": 54,
+    "edges": 52
+   },
+   "generate_ms": 101.3,
+   "custody": {
+    "verdict": "ALLOW",
+    "outcome": "NO_PATH",
+    "method": "bfs",
+    "search_complete": true,
+    "nodes_visited": 53,
+    "bfs_queries": 5,
+    "depth_explored": 3,
+    "guard_total": {
+     "n": 7,
+     "median_ms": 16.464,
+     "p95_ms": 21.163,
+     "min_ms": 14.307,
+     "max_ms": 21.163
+    },
+    "integrity_search": {
+     "n": 7,
+     "median_ms": 5.318,
+     "p95_ms": 6.783,
+     "min_ms": 4.871,
+     "max_ms": 6.783
+    },
+    "evidence_query": {
+     "n": 7,
+     "median_ms": 0.807,
+     "p95_ms": 1.423,
+     "min_ms": 0.726,
+     "max_ms": 1.423
+    },
+    "evidence_paths": 0
+   },
+   "old_bounded_query_25": {
+    "found": false,
+    "ms": 1.0
+   },
+   "sql_cte": {
+    "found": false,
+    "visited": 53,
+    "latency": {
+     "n": 7,
+     "median_ms": 0.057,
+     "p95_ms": 0.197,
+     "min_ms": 0.056,
+     "max_ms": 0.197
+    }
+   },
+   "correct": true
+  },
+  {
+   "scenario": "fan_in",
+   "params": [
+    100
+   ],
+   "variant": "dangerous",
+   "shape": {
+    "parents": 100,
+    "datums": 103,
+    "datums_total": 104,
+    "edges": 102
+   },
+   "generate_ms": 208.7,
+   "custody": {
+    "verdict": "REQUIRE_HUMAN_APPROVAL",
+    "outcome": "PATH_FOUND",
+    "method": "bounded_paths",
+    "search_complete": true,
+    "nodes_visited": 0,
+    "bfs_queries": 1,
+    "depth_explored": 3,
+    "guard_total": {
+     "n": 7,
+     "median_ms": 14.453,
+     "p95_ms": 20.729,
+     "min_ms": 11.733,
+     "max_ms": 20.729
+    },
+    "integrity_search": {
+     "n": 7,
+     "median_ms": 1.384,
+     "p95_ms": 2.26,
+     "min_ms": 1.239,
+     "max_ms": 2.26
+    },
+    "evidence_query": {
+     "n": 7,
+     "median_ms": 1.384,
+     "p95_ms": 2.26,
+     "min_ms": 1.239,
+     "max_ms": 2.26
+    },
+    "evidence_paths": 1
+   },
+   "old_bounded_query_25": {
+    "found": true,
+    "ms": 1.3
+   },
+   "sql_cte": {
+    "found": true,
+    "visited": 103,
+    "latency": {
+     "n": 7,
+     "median_ms": 0.108,
+     "p95_ms": 0.225,
+     "min_ms": 0.1,
+     "max_ms": 0.225
+    }
+   },
+   "correct": true
+  },
+  {
+   "scenario": "fan_in",
+   "params": [
+    100
+   ],
+   "variant": "clean",
+   "shape": {
+    "parents": 100,
+    "datums": 103,
+    "datums_total": 104,
+    "edges": 102
+   },
+   "generate_ms": 194.8,
+   "custody": {
+    "verdict": "ALLOW",
+    "outcome": "NO_PATH",
+    "method": "bfs",
+    "search_complete": true,
+    "nodes_visited": 103,
+    "bfs_queries": 5,
+    "depth_explored": 3,
+    "guard_total": {
+     "n": 7,
+     "median_ms": 19.926,
+     "p95_ms": 25.157,
+     "min_ms": 19.165,
+     "max_ms": 25.157
+    },
+    "integrity_search": {
+     "n": 7,
+     "median_ms": 7.462,
+     "p95_ms": 9.455,
+     "min_ms": 7.123,
+     "max_ms": 9.455
+    },
+    "evidence_query": {
+     "n": 7,
+     "median_ms": 0.971,
+     "p95_ms": 1.659,
+     "min_ms": 0.921,
+     "max_ms": 1.659
+    },
+    "evidence_paths": 0
+   },
+   "old_bounded_query_25": {
+    "found": false,
+    "ms": 1.1
+   },
+   "sql_cte": {
+    "found": false,
+    "visited": 103,
+    "latency": {
+     "n": 7,
+     "median_ms": 0.118,
+     "p95_ms": 0.279,
+     "min_ms": 0.108,
+     "max_ms": 0.279
+    }
+   },
+   "correct": true
+  },
+  {
+   "scenario": "fan_in",
+   "params": [
+    500
+   ],
+   "variant": "dangerous",
+   "shape": {
+    "parents": 500,
+    "datums": 503,
+    "datums_total": 504,
+    "edges": 502
+   },
+   "generate_ms": 996.0,
+   "custody": {
+    "verdict": "REQUIRE_HUMAN_APPROVAL",
+    "outcome": "PATH_FOUND",
+    "method": "bounded_paths",
+    "search_complete": true,
+    "nodes_visited": 0,
+    "bfs_queries": 1,
+    "depth_explored": 3,
+    "guard_total": {
+     "n": 7,
+     "median_ms": 58.779,
+     "p95_ms": 82.107,
+     "min_ms": 53.986,
+     "max_ms": 82.107
+    },
+    "integrity_search": {
+     "n": 7,
+     "median_ms": 3.816,
+     "p95_ms": 4.417,
+     "min_ms": 3.142,
+     "max_ms": 4.417
+    },
+    "evidence_query": {
+     "n": 7,
+     "median_ms": 3.816,
+     "p95_ms": 4.417,
+     "min_ms": 3.142,
+     "max_ms": 4.417
+    },
+    "evidence_paths": 1
+   },
+   "old_bounded_query_25": {
+    "found": true,
+    "ms": 4.0
+   },
+   "sql_cte": {
+    "found": true,
+    "visited": 503,
+    "latency": {
+     "n": 7,
+     "median_ms": 0.943,
+     "p95_ms": 1.126,
+     "min_ms": 0.911,
+     "max_ms": 1.126
+    }
+   },
+   "correct": true
+  },
+  {
+   "scenario": "fan_in",
+   "params": [
+    500
+   ],
+   "variant": "clean",
+   "shape": {
+    "parents": 500,
+    "datums": 503,
+    "datums_total": 504,
+    "edges": 502
+   },
+   "generate_ms": 1101.1,
+   "custody": {
+    "verdict": "ALLOW",
+    "outcome": "NO_PATH",
+    "method": "bfs",
+    "search_complete": true,
+    "nodes_visited": 503,
+    "bfs_queries": 5,
+    "depth_explored": 3,
+    "guard_total": {
+     "n": 7,
+     "median_ms": 73.453,
+     "p95_ms": 110.08,
+     "min_ms": 64.051,
+     "max_ms": 110.08
+    },
+    "integrity_search": {
+     "n": 7,
+     "median_ms": 31.713,
+     "p95_ms": 68.471,
+     "min_ms": 28.113,
+     "max_ms": 68.471
+    },
+    "evidence_query": {
+     "n": 7,
+     "median_ms": 3.503,
+     "p95_ms": 4.024,
+     "min_ms": 2.734,
+     "max_ms": 4.024
+    },
+    "evidence_paths": 0
+   },
+   "old_bounded_query_25": {
+    "found": false,
+    "ms": 3.2
+   },
+   "sql_cte": {
+    "found": false,
+    "visited": 503,
+    "latency": {
+     "n": 7,
+     "median_ms": 1.048,
+     "p95_ms": 1.438,
+     "min_ms": 0.844,
+     "max_ms": 1.438
+    }
+   },
+   "correct": true
+  },
+  {
+   "scenario": "summary_tree",
+   "params": [
+    10,
+    2
+   ],
+   "variant": "dangerous",
+   "shape": {
+    "leaves": 100,
+    "datums": 114,
+    "datums_total": 115,
+    "edges": 113
+   },
+   "generate_ms": 252.0,
+   "custody": {
+    "verdict": "REQUIRE_HUMAN_APPROVAL",
+    "outcome": "PATH_FOUND",
+    "method": "bounded_paths",
+    "search_complete": true,
+    "nodes_visited": 0,
+    "bfs_queries": 1,
+    "depth_explored": 5,
+    "guard_total": {
+     "n": 7,
+     "median_ms": 18.672,
+     "p95_ms": 22.945,
+     "min_ms": 16.256,
+     "max_ms": 22.945
+    },
+    "integrity_search": {
+     "n": 7,
+     "median_ms": 1.9,
+     "p95_ms": 2.695,
+     "min_ms": 1.445,
+     "max_ms": 2.695
+    },
+    "evidence_query": {
+     "n": 7,
+     "median_ms": 1.9,
+     "p95_ms": 2.695,
+     "min_ms": 1.445,
+     "max_ms": 2.695
+    },
+    "evidence_paths": 1
+   },
+   "old_bounded_query_25": {
+    "found": true,
+    "ms": 1.6
+   },
+   "sql_cte": {
+    "found": true,
+    "visited": 114,
+    "latency": {
+     "n": 7,
+     "median_ms": 0.161,
+     "p95_ms": 0.328,
+     "min_ms": 0.151,
+     "max_ms": 0.328
+    }
+   },
+   "correct": true
+  },
+  {
+   "scenario": "summary_tree",
+   "params": [
+    10,
+    2
+   ],
+   "variant": "clean",
+   "shape": {
+    "leaves": 100,
+    "datums": 114,
+    "datums_total": 115,
+    "edges": 113
+   },
+   "generate_ms": 251.4,
+   "custody": {
+    "verdict": "ALLOW",
+    "outcome": "NO_PATH",
+    "method": "bfs",
+    "search_complete": true,
+    "nodes_visited": 114,
+    "bfs_queries": 7,
+    "depth_explored": 5,
+    "guard_total": {
+     "n": 7,
+     "median_ms": 24.336,
+     "p95_ms": 33.945,
+     "min_ms": 21.928,
+     "max_ms": 33.945
+    },
+    "integrity_search": {
+     "n": 7,
+     "median_ms": 8.907,
+     "p95_ms": 12.566,
+     "min_ms": 8.418,
+     "max_ms": 12.566
+    },
+    "evidence_query": {
+     "n": 7,
+     "median_ms": 1.195,
+     "p95_ms": 1.914,
+     "min_ms": 1.004,
+     "max_ms": 1.914
+    },
+    "evidence_paths": 0
+   },
+   "old_bounded_query_25": {
+    "found": false,
+    "ms": 1.2
+   },
+   "sql_cte": {
+    "found": false,
+    "visited": 114,
+    "latency": {
+     "n": 7,
+     "median_ms": 0.137,
+     "p95_ms": 0.265,
+     "min_ms": 0.126,
+     "max_ms": 0.265
+    }
+   },
+   "correct": true
+  },
+  {
+   "scenario": "summary_tree",
+   "params": [
+    20,
+    2
+   ],
+   "variant": "dangerous",
+   "shape": {
+    "leaves": 400,
+    "datums": 424,
+    "datums_total": 425,
+    "edges": 423
+   },
+   "generate_ms": 914.2,
+   "custody": {
+    "verdict": "REQUIRE_HUMAN_APPROVAL",
+    "outcome": "PATH_FOUND",
+    "method": "bounded_paths",
+    "search_complete": true,
+    "nodes_visited": 0,
+    "bfs_queries": 1,
+    "depth_explored": 5,
+    "guard_total": {
+     "n": 7,
+     "median_ms": 48.678,
+     "p95_ms": 65.918,
+     "min_ms": 44.03,
+     "max_ms": 65.918
+    },
+    "integrity_search": {
+     "n": 7,
+     "median_ms": 3.432,
+     "p95_ms": 4.988,
+     "min_ms": 2.916,
+     "max_ms": 4.988
+    },
+    "evidence_query": {
+     "n": 7,
+     "median_ms": 3.432,
+     "p95_ms": 4.988,
+     "min_ms": 2.916,
+     "max_ms": 4.988
+    },
+    "evidence_paths": 1
+   },
+   "old_bounded_query_25": {
+    "found": true,
+    "ms": 3.2
+   },
+   "sql_cte": {
+    "found": true,
+    "visited": 424,
+    "latency": {
+     "n": 7,
+     "median_ms": 0.804,
+     "p95_ms": 1.009,
+     "min_ms": 0.774,
+     "max_ms": 1.009
+    }
+   },
+   "correct": true
+  },
+  {
+   "scenario": "summary_tree",
+   "params": [
+    20,
+    2
+   ],
+   "variant": "clean",
+   "shape": {
+    "leaves": 400,
+    "datums": 424,
+    "datums_total": 425,
+    "edges": 423
+   },
+   "generate_ms": 923.8,
+   "custody": {
+    "verdict": "ALLOW",
+    "outcome": "NO_PATH",
+    "method": "bfs",
+    "search_complete": true,
+    "nodes_visited": 424,
+    "bfs_queries": 7,
+    "depth_explored": 5,
+    "guard_total": {
+     "n": 7,
+     "median_ms": 76.631,
+     "p95_ms": 89.243,
+     "min_ms": 55.949,
+     "max_ms": 89.243
+    },
+    "integrity_search": {
+     "n": 7,
+     "median_ms": 33.47,
+     "p95_ms": 37.724,
+     "min_ms": 24.369,
+     "max_ms": 37.724
+    },
+    "evidence_query": {
+     "n": 7,
+     "median_ms": 3.428,
+     "p95_ms": 4.121,
+     "min_ms": 2.473,
+     "max_ms": 4.121
+    },
+    "evidence_paths": 0
+   },
+   "old_bounded_query_25": {
+    "found": false,
+    "ms": 3.1
+   },
+   "sql_cte": {
+    "found": false,
+    "visited": 424,
+    "latency": {
+     "n": 7,
+     "median_ms": 0.66,
+     "p95_ms": 0.805,
+     "min_ms": 0.612,
+     "max_ms": 0.805
+    }
+   },
+   "correct": true
+  },
+  {
+   "scenario": "summary_tree",
+   "params": [
+    5,
+    4
+   ],
+   "variant": "dangerous",
+   "shape": {
+    "leaves": 625,
+    "datums": 784,
+    "datums_total": 785,
+    "edges": 783
+   },
+   "generate_ms": 1664.1,
+   "custody": {
+    "verdict": "REQUIRE_HUMAN_APPROVAL",
+    "outcome": "PATH_FOUND",
+    "method": "bounded_paths",
+    "search_complete": true,
+    "nodes_visited": 0,
+    "bfs_queries": 1,
+    "depth_explored": 7,
+    "guard_total": {
+     "n": 7,
+     "median_ms": 86.871,
+     "p95_ms": 93.459,
+     "min_ms": 85.3,
+     "max_ms": 93.459
+    },
+    "integrity_search": {
+     "n": 7,
+     "median_ms": 4.889,
+     "p95_ms": 6.903,
+     "min_ms": 4.835,
+     "max_ms": 6.903
+    },
+    "evidence_query": {
+     "n": 7,
+     "median_ms": 4.889,
+     "p95_ms": 6.903,
+     "min_ms": 4.835,
+     "max_ms": 6.903
+    },
+    "evidence_paths": 1
+   },
+   "old_bounded_query_25": {
+    "found": true,
+    "ms": 5.0
+   },
+   "sql_cte": {
+    "found": true,
+    "visited": 784,
+    "latency": {
+     "n": 7,
+     "median_ms": 1.729,
+     "p95_ms": 1.86,
+     "min_ms": 1.661,
+     "max_ms": 1.86
+    }
+   },
+   "correct": true
+  },
+  {
+   "scenario": "summary_tree",
+   "params": [
+    5,
+    4
+   ],
+   "variant": "clean",
+   "shape": {
+    "leaves": 625,
+    "datums": 784,
+    "datums_total": 785,
+    "edges": 783
+   },
+   "generate_ms": 1604.3,
+   "custody": {
+    "verdict": "ALLOW",
+    "outcome": "NO_PATH",
+    "method": "bfs",
+    "search_complete": true,
+    "nodes_visited": 784,
+    "bfs_queries": 10,
+    "depth_explored": 7,
+    "guard_total": {
+     "n": 7,
+     "median_ms": 140.378,
+     "p95_ms": 145.044,
+     "min_ms": 97.576,
+     "max_ms": 145.044
+    },
+    "integrity_search": {
+     "n": 7,
+     "median_ms": 61.4,
+     "p95_ms": 66.019,
+     "min_ms": 44.711,
+     "max_ms": 66.019
+    },
+    "evidence_query": {
+     "n": 7,
+     "median_ms": 6.031,
+     "p95_ms": 6.697,
+     "min_ms": 4.444,
+     "max_ms": 6.697
+    },
+    "evidence_paths": 0
+   },
+   "old_bounded_query_25": {
+    "found": false,
+    "ms": 6.9
+   },
+   "sql_cte": {
+    "found": false,
+    "visited": 784,
+    "latency": {
+     "n": 7,
+     "median_ms": 1.665,
+     "p95_ms": 1.835,
+     "min_ms": 1.509,
+     "max_ms": 1.835
+    }
+   },
+   "correct": true
+  },
+  {
+   "scenario": "summary_tree",
+   "params": [
+    10,
+    3
+   ],
+   "variant": "dangerous",
+   "shape": {
+    "leaves": 1000,
+    "datums": 1114,
+    "datums_total": 1115,
+    "edges": 1113
+   },
+   "generate_ms": 2422.0,
+   "custody": {
+    "verdict": "REQUIRE_HUMAN_APPROVAL",
+    "outcome": "PATH_FOUND",
+    "method": "bounded_paths",
+    "search_complete": true,
+    "nodes_visited": 0,
+    "bfs_queries": 1,
+    "depth_explored": 6,
+    "guard_total": {
+     "n": 7,
+     "median_ms": 168.611,
+     "p95_ms": 188.726,
+     "min_ms": 157.672,
+     "max_ms": 188.726
+    },
+    "integrity_search": {
+     "n": 7,
+     "median_ms": 6.682,
+     "p95_ms": 7.568,
+     "min_ms": 6.405,
+     "max_ms": 7.568
+    },
+    "evidence_query": {
+     "n": 7,
+     "median_ms": 6.682,
+     "p95_ms": 7.568,
+     "min_ms": 6.405,
+     "max_ms": 7.568
+    },
+    "evidence_paths": 1
+   },
+   "old_bounded_query_25": {
+    "found": true,
+    "ms": 6.7
+   },
+   "sql_cte": {
+    "found": true,
+    "visited": 1114,
+    "latency": {
+     "n": 7,
+     "median_ms": 2.576,
+     "p95_ms": 2.708,
+     "min_ms": 2.425,
+     "max_ms": 2.708
+    }
+   },
+   "correct": true
+  },
+  {
+   "scenario": "summary_tree",
+   "params": [
+    10,
+    3
+   ],
+   "variant": "clean",
+   "shape": {
+    "leaves": 1000,
+    "datums": 1114,
+    "datums_total": 1115,
+    "edges": 1113
+   },
+   "generate_ms": 2553.1,
+   "custody": {
+    "verdict": "ALLOW",
+    "outcome": "NO_PATH",
+    "method": "bfs",
+    "search_complete": true,
+    "nodes_visited": 1114,
+    "bfs_queries": 9,
+    "depth_explored": 6,
+    "guard_total": {
+     "n": 7,
+     "median_ms": 153.536,
+     "p95_ms": 196.56,
+     "min_ms": 138.117,
+     "max_ms": 196.56
+    },
+    "integrity_search": {
+     "n": 7,
+     "median_ms": 65.938,
+     "p95_ms": 87.366,
+     "min_ms": 62.73,
+     "max_ms": 87.366
+    },
+    "evidence_query": {
+     "n": 7,
+     "median_ms": 6.779,
+     "p95_ms": 8.566,
+     "min_ms": 6.224,
+     "max_ms": 8.566
+    },
+    "evidence_paths": 0
+   },
+   "old_bounded_query_25": {
+    "found": false,
+    "ms": 8.4
+   },
+   "sql_cte": {
+    "found": false,
+    "visited": 1114,
+    "latency": {
+     "n": 7,
+     "median_ms": 3.191,
+     "p95_ms": 3.423,
+     "min_ms": 3.154,
+     "max_ms": 3.423
+    }
+   },
+   "correct": true
+  },
+  {
+   "scenario": "dense_session",
+   "params": [
+    5
+   ],
+   "variant": "dangerous",
+   "shape": {
+    "turns": 5,
+    "datums_total": 8,
+    "edges": 21
+   },
+   "generate_ms": 27.5,
+   "custody": {
+    "verdict": "REQUIRE_HUMAN_APPROVAL",
+    "outcome": "PATH_FOUND",
+    "method": "bounded_paths",
+    "search_complete": true,
+    "nodes_visited": 0,
+    "bfs_queries": 1,
+    "depth_explored": 1,
+    "guard_total": {
+     "n": 7,
+     "median_ms": 30.66,
+     "p95_ms": 38.195,
+     "min_ms": 29.949,
+     "max_ms": 38.195
+    },
+    "integrity_search": {
+     "n": 7,
+     "median_ms": 14.813,
+     "p95_ms": 16.224,
+     "min_ms": 14.539,
+     "max_ms": 16.224
+    },
+    "evidence_query": {
+     "n": 7,
+     "median_ms": 14.813,
+     "p95_ms": 16.224,
+     "min_ms": 14.539,
+     "max_ms": 16.224
+    },
+    "evidence_paths": 32
+   },
+   "old_bounded_query_25": {
+    "found": true,
+    "ms": 1.6
+   },
+   "sql_cte": {
+    "found": true,
+    "visited": 7,
+    "latency": {
+     "n": 7,
+     "median_ms": 0.027,
+     "p95_ms": 0.239,
+     "min_ms": 0.026,
+     "max_ms": 0.239
+    }
+   },
+   "correct": true
+  },
+  {
+   "scenario": "dense_session",
+   "params": [
+    5
+   ],
+   "variant": "clean",
+   "shape": {
+    "turns": 5,
+    "datums_total": 8,
+    "edges": 21
+   },
+   "generate_ms": 25.5,
+   "custody": {
+    "verdict": "ALLOW",
+    "outcome": "NO_PATH",
+    "method": "bfs",
+    "search_complete": true,
+    "nodes_visited": 7,
+    "bfs_queries": 3,
+    "depth_explored": 1,
+    "guard_total": {
+     "n": 7,
+     "median_ms": 12.311,
+     "p95_ms": 18.924,
+     "min_ms": 10.89,
+     "max_ms": 18.924
+    },
+    "integrity_search": {
+     "n": 7,
+     "median_ms": 3.206,
+     "p95_ms": 5.095,
+     "min_ms": 3.048,
+     "max_ms": 5.095
+    },
+    "evidence_query": {
+     "n": 7,
+     "median_ms": 0.981,
+     "p95_ms": 1.877,
+     "min_ms": 0.902,
+     "max_ms": 1.877
+    },
+    "evidence_paths": 0
+   },
+   "old_bounded_query_25": {
+    "found": false,
+    "ms": 1.3
+   },
+   "sql_cte": {
+    "found": false,
+    "visited": 7,
+    "latency": {
+     "n": 7,
+     "median_ms": 0.026,
+     "p95_ms": 0.237,
+     "min_ms": 0.023,
+     "max_ms": 0.237
+    }
+   },
+   "correct": true
+  },
+  {
+   "scenario": "dense_session",
+   "params": [
+    10
+   ],
+   "variant": "dangerous",
+   "shape": {
+    "turns": 10,
+    "datums_total": 13,
+    "edges": 66
+   },
+   "generate_ms": 44.4,
+   "custody": {
+    "verdict": "REQUIRE_HUMAN_APPROVAL",
+    "outcome": "PATH_FOUND",
+    "method": "bounded_paths",
+    "search_complete": true,
+    "nodes_visited": 0,
+    "bfs_queries": 1,
+    "depth_explored": 1,
+    "guard_total": {
+     "n": 7,
+     "median_ms": 57.705,
+     "p95_ms": 85.977,
+     "min_ms": 41.527,
+     "max_ms": 85.977
+    },
+    "integrity_search": {
+     "n": 7,
+     "median_ms": 36.831,
+     "p95_ms": 62.845,
+     "min_ms": 24.641,
+     "max_ms": 62.845
+    },
+    "evidence_query": {
+     "n": 7,
+     "median_ms": 36.831,
+     "p95_ms": 62.845,
+     "min_ms": 24.641,
+     "max_ms": 62.845
+    },
+    "evidence_paths": 50
+   },
+   "old_bounded_query_25": {
+    "found": true,
+    "ms": 13.4
+   },
+   "sql_cte": {
+    "found": true,
+    "visited": 12,
+    "latency": {
+     "n": 7,
+     "median_ms": 0.038,
+     "p95_ms": 0.213,
+     "min_ms": 0.038,
+     "max_ms": 0.213
+    }
+   },
+   "correct": true
+  },
+  {
+   "scenario": "dense_session",
+   "params": [
+    10
+   ],
+   "variant": "clean",
+   "shape": {
+    "turns": 10,
+    "datums_total": 13,
+    "edges": 66
+   },
+   "generate_ms": 35.0,
+   "custody": {
+    "verdict": "ALLOW",
+    "outcome": "NO_PATH",
+    "method": "bfs",
+    "search_complete": true,
+    "nodes_visited": 12,
+    "bfs_queries": 3,
+    "depth_explored": 1,
+    "guard_total": {
+     "n": 7,
+     "median_ms": 20.33,
+     "p95_ms": 24.225,
+     "min_ms": 19.93,
+     "max_ms": 24.225
+    },
+    "integrity_search": {
+     "n": 7,
+     "median_ms": 4.57,
+     "p95_ms": 5.465,
+     "min_ms": 4.382,
+     "max_ms": 5.465
+    },
+    "evidence_query": {
+     "n": 7,
+     "median_ms": 8.623,
+     "p95_ms": 9.126,
+     "min_ms": 8.458,
+     "max_ms": 9.126
+    },
+    "evidence_paths": 0
+   },
+   "old_bounded_query_25": {
+    "found": false,
+    "ms": 8.7
+   },
+   "sql_cte": {
+    "found": false,
+    "visited": 12,
+    "latency": {
+     "n": 7,
+     "median_ms": 0.036,
+     "p95_ms": 0.164,
+     "min_ms": 0.035,
+     "max_ms": 0.164
+    }
+   },
+   "correct": true
+  },
+  {
+   "scenario": "dense_session",
+   "params": [
+    15
+   ],
+   "variant": "dangerous",
+   "shape": {
+    "turns": 15,
+    "datums_total": 18,
+    "edges": 136
+   },
+   "generate_ms": 47.4,
+   "custody": {
+    "verdict": "REQUIRE_HUMAN_APPROVAL",
+    "outcome": "PATH_FOUND",
+    "method": "bfs",
+    "search_complete": true,
+    "nodes_visited": 2,
+    "bfs_queries": 2,
+    "depth_explored": 1,
+    "guard_total": {
+     "n": 7,
+     "median_ms": 278.539,
+     "p95_ms": 282.09,
+     "min_ms": 277.801,
+     "max_ms": 282.09
+    },
+    "integrity_search": {
+     "n": 7,
+     "median_ms": 2.352,
+     "p95_ms": 4.119,
+     "min_ms": 1.759,
+     "max_ms": 4.119
+    },
+    "evidence_query": {
+     "n": 7,
+     "median_ms": 250.887,
+     "p95_ms": 251.552,
+     "min_ms": 250.817,
+     "max_ms": 251.552
+    },
+    "evidence_paths": 1
+   },
+   "old_bounded_query_25": {
+    "found": true,
+    "ms": 483.4
+   },
+   "sql_cte": {
+    "found": true,
+    "visited": 17,
+    "latency": {
+     "n": 7,
+     "median_ms": 0.093,
+     "p95_ms": 0.289,
+     "min_ms": 0.088,
+     "max_ms": 0.289
+    }
+   },
+   "correct": true
+  },
+  {
+   "scenario": "dense_session",
+   "params": [
+    15
+   ],
+   "variant": "clean",
+   "shape": {
+    "turns": 15,
+    "datums_total": 18,
+    "edges": 136
+   },
+   "generate_ms": 57.3,
+   "custody": {
+    "verdict": "ALLOW",
+    "outcome": "NO_PATH",
+    "method": "bfs",
+    "search_complete": true,
+    "nodes_visited": 17,
+    "bfs_queries": 3,
+    "depth_explored": 1,
+    "guard_total": {
+     "n": 7,
+     "median_ms": 269.735,
+     "p95_ms": 276.927,
+     "min_ms": 268.294,
+     "max_ms": 276.927
+    },
+    "integrity_search": {
+     "n": 7,
+     "median_ms": 8.123,
+     "p95_ms": 12.672,
+     "min_ms": 7.273,
+     "max_ms": 12.672
+    },
+    "evidence_query": {
+     "n": 7,
+     "median_ms": 250.941,
+     "p95_ms": 251.558,
+     "min_ms": 250.826,
+     "max_ms": 251.558
+    },
+    "evidence_paths": 0
+   },
+   "old_bounded_query_25": {
+    "found": false,
+    "ms": 236.6
+   },
+   "sql_cte": {
+    "found": false,
+    "visited": 17,
+    "latency": {
+     "n": 7,
+     "median_ms": 0.066,
+     "p95_ms": 0.297,
+     "min_ms": 0.061,
+     "max_ms": 0.297
+    }
+   },
+   "correct": true
+  },
+  {
+   "scenario": "dense_session",
+   "params": [
+    20
+   ],
+   "variant": "dangerous",
+   "shape": {
+    "turns": 20,
+    "datums_total": 23,
+    "edges": 231
+   },
+   "generate_ms": 80.1,
+   "custody": {
+    "verdict": "REQUIRE_HUMAN_APPROVAL",
+    "outcome": "PATH_FOUND",
+    "method": "bfs",
+    "search_complete": true,
+    "nodes_visited": 2,
+    "bfs_queries": 2,
+    "depth_explored": 1,
+    "guard_total": {
+     "n": 7,
+     "median_ms": 300.789,
+     "p95_ms": 305.632,
+     "min_ms": 288.371,
+     "max_ms": 305.632
+    },
+    "integrity_search": {
+     "n": 7,
+     "median_ms": 3.24,
+     "p95_ms": 4.66,
+     "min_ms": 2.381,
+     "max_ms": 4.66
+    },
+    "evidence_query": {
+     "n": 7,
+     "median_ms": 251.024,
+     "p95_ms": 251.633,
+     "min_ms": 250.868,
+     "max_ms": 251.633
+    },
+    "evidence_paths": 1
+   },
+   "old_bounded_query_25": {
+    "found": null,
+    "ms": 5001.0
+   },
+   "sql_cte": {
+    "found": true,
+    "visited": 22,
+    "latency": {
+     "n": 7,
+     "median_ms": 0.155,
+     "p95_ms": 0.437,
+     "min_ms": 0.151,
+     "max_ms": 0.437
+    }
+   },
+   "correct": true
+  },
+  {
+   "scenario": "dense_session",
+   "params": [
+    20
+   ],
+   "variant": "clean",
+   "shape": {
+    "turns": 20,
+    "datums_total": 23,
+    "edges": 231
+   },
+   "generate_ms": 77.8,
+   "custody": {
+    "verdict": "ALLOW",
+    "outcome": "NO_PATH",
+    "method": "bfs",
+    "search_complete": true,
+    "nodes_visited": 22,
+    "bfs_queries": 3,
+    "depth_explored": 1,
+    "guard_total": {
+     "n": 7,
+     "median_ms": 275.222,
+     "p95_ms": 281.354,
+     "min_ms": 274.938,
+     "max_ms": 281.354
+    },
+    "integrity_search": {
+     "n": 7,
+     "median_ms": 12.395,
+     "p95_ms": 14.136,
+     "min_ms": 11.972,
+     "max_ms": 14.136
+    },
+    "evidence_query": {
+     "n": 7,
+     "median_ms": 250.795,
+     "p95_ms": 251.608,
+     "min_ms": 250.696,
+     "max_ms": 251.608
+    },
+    "evidence_paths": 0
+   },
+   "old_bounded_query_25": {
+    "found": null,
+    "ms": 5001.3
+   },
+   "sql_cte": {
+    "found": false,
+    "visited": 22,
+    "latency": {
+     "n": 7,
+     "median_ms": 0.112,
+     "p95_ms": 0.264,
+     "min_ms": 0.109,
+     "max_ms": 0.264
+    }
+   },
+   "correct": true
+  },
+  {
+   "scenario": "dense_session",
+   "params": [
+    30
+   ],
+   "variant": "dangerous",
+   "shape": {
+    "turns": 30,
+    "datums_total": 33,
+    "edges": 496
+   },
+   "generate_ms": 95.2,
+   "custody": {
+    "verdict": "REQUIRE_HUMAN_APPROVAL",
+    "outcome": "PATH_FOUND",
+    "method": "bfs",
+    "search_complete": true,
+    "nodes_visited": 2,
+    "bfs_queries": 2,
+    "depth_explored": 1,
+    "guard_total": {
+     "n": 7,
+     "median_ms": 314.309,
+     "p95_ms": 321.012,
+     "min_ms": 309.779,
+     "max_ms": 321.012
+    },
+    "integrity_search": {
+     "n": 7,
+     "median_ms": 2.74,
+     "p95_ms": 3.734,
+     "min_ms": 2.503,
+     "max_ms": 3.734
+    },
+    "evidence_query": {
+     "n": 7,
+     "median_ms": 250.957,
+     "p95_ms": 251.566,
+     "min_ms": 250.857,
+     "max_ms": 251.566
+    },
+    "evidence_paths": 1
+   },
+   "old_bounded_query_25": {
+    "found": null,
+    "ms": 5001.0
+   },
+   "sql_cte": {
+    "found": true,
+    "visited": 32,
+    "latency": {
+     "n": 7,
+     "median_ms": 0.393,
+     "p95_ms": 0.562,
+     "min_ms": 0.259,
+     "max_ms": 0.562
+    }
+   },
+   "correct": true
+  },
+  {
+   "scenario": "dense_session",
+   "params": [
+    30
+   ],
+   "variant": "clean",
+   "shape": {
+    "turns": 30,
+    "datums_total": 33,
+    "edges": 496
+   },
+   "generate_ms": 120.5,
+   "custody": {
+    "verdict": "ALLOW",
+    "outcome": "NO_PATH",
+    "method": "bfs",
+    "search_complete": true,
+    "nodes_visited": 32,
+    "bfs_queries": 3,
+    "depth_explored": 1,
+    "guard_total": {
+     "n": 7,
+     "median_ms": 290.924,
+     "p95_ms": 296.787,
+     "min_ms": 290.365,
+     "max_ms": 296.787
+    },
+    "integrity_search": {
+     "n": 7,
+     "median_ms": 23.931,
+     "p95_ms": 25.954,
+     "min_ms": 23.271,
+     "max_ms": 25.954
+    },
+    "evidence_query": {
+     "n": 7,
+     "median_ms": 250.801,
+     "p95_ms": 251.476,
+     "min_ms": 250.752,
+     "max_ms": 251.476
+    },
+    "evidence_paths": 0
+   },
+   "old_bounded_query_25": {
+    "found": null,
+    "ms": 5000.9
+   },
+   "sql_cte": {
+    "found": false,
+    "visited": 32,
+    "latency": {
+     "n": 7,
+     "median_ms": 0.228,
+     "p95_ms": 0.354,
+     "min_ms": 0.204,
+     "max_ms": 0.354
+    }
+   },
+   "correct": true
+  }
+ ]
+}

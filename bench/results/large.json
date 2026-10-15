@@ -1,0 +1,1736 @@
+{
+ "command": "python -m bench.run_large ",
+ "machine": {
+  "date_utc": "2026-10-06T10:24:41+00:00",
+  "python": "3.13.16",
+  "platform": "Linux-6.18.44-fc-v70-x86_64-with-glibc2.39",
+  "cpu": "Intel(R) Xeon(R) Processor @ 2.10GHz",
+  "cpus": 2,
+  "backend": "embedded falkordblite",
+  "falkordblite": "0.10.0",
+  "sqlite": "3.45.1"
+ },
+ "reps": 5,
+ "rows": [
+  {
+   "scenario": "fan_in",
+   "params": [
+    1000
+   ],
+   "variant": "dangerous",
+   "datums": 1005,
+   "build_ms": 51,
+   "parents": 1000,
+   "configs": {
+    "default": {
+     "search": {
+      "outcome": "PATH_FOUND",
+      "termination": "path_found",
+      "complete": true,
+      "nodes_visited": 801,
+      "queries": 5,
+      "depth": 4,
+      "latency": {
+       "n": 5,
+       "median_ms": 47.314,
+       "p95_ms": 74.992,
+       "min_ms": 46.219,
+       "max_ms": 74.992
+      }
+     },
+     "correct": true,
+     "guard": {
+      "verdict": "REQUIRE_HUMAN_APPROVAL",
+      "search_complete": true,
+      "certificate": false,
+      "certificate_unavailable": null,
+      "latency": {
+       "n": 3,
+       "median_ms": 38.419,
+       "p95_ms": 43.776,
+       "min_ms": 37.571,
+       "max_ms": 43.776
+      }
+     }
+    },
+    "raised": {
+     "search": {
+      "outcome": "PATH_FOUND",
+      "termination": "path_found",
+      "complete": true,
+      "nodes_visited": 801,
+      "queries": 5,
+      "depth": 4,
+      "latency": {
+       "n": 5,
+       "median_ms": 55.974,
+       "p95_ms": 67.699,
+       "min_ms": 45.659,
+       "max_ms": 67.699
+      }
+     },
+     "correct": true,
+     "guard": {
+      "verdict": "REQUIRE_HUMAN_APPROVAL",
+      "search_complete": true,
+      "certificate": false,
+      "certificate_unavailable": null,
+      "latency": {
+       "n": 3,
+       "median_ms": 34.745,
+       "p95_ms": 46.317,
+       "min_ms": 34.148,
+       "max_ms": 46.317
+      }
+     }
+    }
+   },
+   "sql_cte": {
+    "found": true,
+    "visited": 1004,
+    "latency": {
+     "n": 5,
+     "median_ms": 1.569,
+     "p95_ms": 1.832,
+     "min_ms": 1.524,
+     "max_ms": 1.832
+    }
+   }
+  },
+  {
+   "scenario": "fan_in",
+   "params": [
+    1000
+   ],
+   "variant": "clean",
+   "datums": 1005,
+   "build_ms": 40,
+   "parents": 1000,
+   "configs": {
+    "default": {
+     "search": {
+      "outcome": "NO_PATH",
+      "termination": "exhausted",
+      "complete": true,
+      "nodes_visited": 1004,
+      "queries": 7,
+      "depth": 4,
+      "latency": {
+       "n": 5,
+       "median_ms": 52.372,
+       "p95_ms": 66.253,
+       "min_ms": 46.902,
+       "max_ms": 66.253
+      }
+     },
+     "correct": true,
+     "guard": {
+      "verdict": "ALLOW",
+      "search_complete": true,
+      "certificate": true,
+      "certificate_unavailable": null,
+      "latency": {
+       "n": 3,
+       "median_ms": 109.3,
+       "p95_ms": 113.413,
+       "min_ms": 107.065,
+       "max_ms": 113.413
+      }
+     }
+    },
+    "raised": {
+     "search": {
+      "outcome": "NO_PATH",
+      "termination": "exhausted",
+      "complete": true,
+      "nodes_visited": 1004,
+      "queries": 7,
+      "depth": 4,
+      "latency": {
+       "n": 5,
+       "median_ms": 50.99,
+       "p95_ms": 53.118,
+       "min_ms": 47.643,
+       "max_ms": 53.118
+      }
+     },
+     "correct": true,
+     "guard": {
+      "verdict": "ALLOW",
+      "search_complete": true,
+      "certificate": true,
+      "certificate_unavailable": null,
+      "latency": {
+       "n": 3,
+       "median_ms": 121.591,
+       "p95_ms": 144.295,
+       "min_ms": 102.881,
+       "max_ms": 144.295
+      }
+     }
+    }
+   },
+   "sql_cte": {
+    "found": false,
+    "visited": 1004,
+    "latency": {
+     "n": 5,
+     "median_ms": 1.38,
+     "p95_ms": 1.518,
+     "min_ms": 1.286,
+     "max_ms": 1.518
+    }
+   }
+  },
+  {
+   "scenario": "fan_in",
+   "params": [
+    10000
+   ],
+   "variant": "dangerous",
+   "datums": 10005,
+   "build_ms": 263,
+   "parents": 10000,
+   "configs": {
+    "default": {
+     "search": {
+      "outcome": "PATH_FOUND",
+      "termination": "path_found",
+      "complete": true,
+      "nodes_visited": 9473,
+      "queries": 5,
+      "depth": 4,
+      "latency": {
+       "n": 5,
+       "median_ms": 547.861,
+       "p95_ms": 673.014,
+       "min_ms": 520.216,
+       "max_ms": 673.014
+      }
+     },
+     "correct": true,
+     "guard": {
+      "verdict": "REQUIRE_HUMAN_APPROVAL",
+      "search_complete": true,
+      "certificate": false,
+      "certificate_unavailable": null,
+      "latency": {
+       "n": 3,
+       "median_ms": 326.453,
+       "p95_ms": 355.601,
+       "min_ms": 277.593,
+       "max_ms": 355.601
+      }
+     }
+    },
+    "raised": {
+     "search": {
+      "outcome": "PATH_FOUND",
+      "termination": "path_found",
+      "complete": true,
+      "nodes_visited": 9473,
+      "queries": 5,
+      "depth": 4,
+      "latency": {
+       "n": 5,
+       "median_ms": 497.422,
+       "p95_ms": 586.179,
+       "min_ms": 487.998,
+       "max_ms": 586.179
+      }
+     },
+     "correct": true,
+     "guard": {
+      "verdict": "REQUIRE_HUMAN_APPROVAL",
+      "search_complete": true,
+      "certificate": false,
+      "certificate_unavailable": null,
+      "latency": {
+       "n": 3,
+       "median_ms": 297.508,
+       "p95_ms": 304.195,
+       "min_ms": 281.199,
+       "max_ms": 304.195
+      }
+     }
+    }
+   },
+   "sql_cte": {
+    "found": true,
+    "visited": 10004,
+    "latency": {
+     "n": 5,
+     "median_ms": 23.019,
+     "p95_ms": 23.582,
+     "min_ms": 22.298,
+     "max_ms": 23.582
+    }
+   }
+  },
+  {
+   "scenario": "fan_in",
+   "params": [
+    10000
+   ],
+   "variant": "clean",
+   "datums": 10005,
+   "build_ms": 259,
+   "parents": 10000,
+   "configs": {
+    "default": {
+     "search": {
+      "outcome": "NO_PATH",
+      "termination": "exhausted",
+      "complete": true,
+      "nodes_visited": 10004,
+      "queries": 25,
+      "depth": 4,
+      "latency": {
+       "n": 5,
+       "median_ms": 541.465,
+       "p95_ms": 573.269,
+       "min_ms": 470.443,
+       "max_ms": 573.269
+      }
+     },
+     "correct": true,
+     "guard": {
+      "verdict": "ALLOW",
+      "search_complete": true,
+      "certificate": true,
+      "certificate_unavailable": null,
+      "latency": {
+       "n": 3,
+       "median_ms": 1321.493,
+       "p95_ms": 1386.16,
+       "min_ms": 1194.568,
+       "max_ms": 1386.16
+      }
+     }
+    },
+    "raised": {
+     "search": {
+      "outcome": "NO_PATH",
+      "termination": "exhausted",
+      "complete": true,
+      "nodes_visited": 10004,
+      "queries": 25,
+      "depth": 4,
+      "latency": {
+       "n": 5,
+       "median_ms": 558.067,
+       "p95_ms": 638.338,
+       "min_ms": 495.423,
+       "max_ms": 638.338
+      }
+     },
+     "correct": true,
+     "guard": {
+      "verdict": "ALLOW",
+      "search_complete": true,
+      "certificate": true,
+      "certificate_unavailable": null,
+      "latency": {
+       "n": 3,
+       "median_ms": 1312.427,
+       "p95_ms": 1338.168,
+       "min_ms": 1118.394,
+       "max_ms": 1338.168
+      }
+     }
+    }
+   },
+   "sql_cte": {
+    "found": false,
+    "visited": 10004,
+    "latency": {
+     "n": 5,
+     "median_ms": 25.895,
+     "p95_ms": 26.464,
+     "min_ms": 22.979,
+     "max_ms": 26.464
+    }
+   }
+  },
+  {
+   "scenario": "fan_in",
+   "params": [
+    100000
+   ],
+   "variant": "dangerous",
+   "datums": 100005,
+   "build_ms": 2373,
+   "parents": 100000,
+   "configs": {
+    "default": {
+     "search": {
+      "outcome": "INDETERMINATE",
+      "termination": "timeout",
+      "complete": false,
+      "nodes_visited": 4,
+      "queries": 5,
+      "depth": 3,
+      "latency": {
+       "n": 5,
+       "median_ms": 2008.131,
+       "p95_ms": 2010.402,
+       "min_ms": 2007.765,
+       "max_ms": 2010.402
+      }
+     },
+     "correct": null,
+     "guard": {
+      "verdict": "REQUIRE_HUMAN_APPROVAL",
+      "search_complete": false,
+      "certificate": false,
+      "certificate_unavailable": null,
+      "latency": {
+       "n": 3,
+       "median_ms": 2280.924,
+       "p95_ms": 2298.818,
+       "min_ms": 2266.684,
+       "max_ms": 2298.818
+      }
+     }
+    },
+    "raised": {
+     "search": {
+      "outcome": "PATH_FOUND",
+      "termination": "path_found",
+      "complete": true,
+      "nodes_visited": 12248,
+      "queries": 5,
+      "depth": 4,
+      "latency": {
+       "n": 5,
+       "median_ms": 5423.801,
+       "p95_ms": 5792.977,
+       "min_ms": 5326.209,
+       "max_ms": 5792.977
+      }
+     },
+     "correct": true,
+     "guard": {
+      "verdict": "REQUIRE_HUMAN_APPROVAL",
+      "search_complete": true,
+      "certificate": false,
+      "certificate_unavailable": null,
+      "latency": {
+       "n": 3,
+       "median_ms": 9034.015,
+       "p95_ms": 9130.751,
+       "min_ms": 8239.655,
+       "max_ms": 9130.751
+      }
+     }
+    }
+   },
+   "sql_cte": {
+    "found": true,
+    "visited": 100004,
+    "latency": {
+     "n": 5,
+     "median_ms": 241.607,
+     "p95_ms": 275.633,
+     "min_ms": 230.474,
+     "max_ms": 275.633
+    }
+   }
+  },
+  {
+   "scenario": "fan_in",
+   "params": [
+    100000
+   ],
+   "variant": "clean",
+   "datums": 100005,
+   "build_ms": 2914,
+   "parents": 100000,
+   "configs": {
+    "default": {
+     "search": {
+      "outcome": "INDETERMINATE",
+      "termination": "timeout",
+      "complete": false,
+      "nodes_visited": 4,
+      "queries": 5,
+      "depth": 3,
+      "latency": {
+       "n": 5,
+       "median_ms": 2014.919,
+       "p95_ms": 2016.043,
+       "min_ms": 2012.481,
+       "max_ms": 2016.043
+      }
+     },
+     "correct": null,
+     "guard": {
+      "verdict": "REQUIRE_HUMAN_APPROVAL",
+      "search_complete": false,
+      "certificate": false,
+      "certificate_unavailable": null,
+      "latency": {
+       "n": 3,
+       "median_ms": 2279.195,
+       "p95_ms": 2287.586,
+       "min_ms": 2278.415,
+       "max_ms": 2287.586
+      }
+     }
+    },
+    "raised": {
+     "search": {
+      "outcome": "NO_PATH",
+      "termination": "exhausted",
+      "complete": true,
+      "nodes_visited": 100004,
+      "queries": 205,
+      "depth": 4,
+      "latency": {
+       "n": 5,
+       "median_ms": 5754.127,
+       "p95_ms": 5837.521,
+       "min_ms": 5309.997,
+       "max_ms": 5837.521
+      }
+     },
+     "correct": true,
+     "guard": {
+      "verdict": "ALLOW",
+      "search_complete": true,
+      "certificate": true,
+      "certificate_unavailable": null,
+      "latency": {
+       "n": 3,
+       "median_ms": 14363.185,
+       "p95_ms": 15102.835,
+       "min_ms": 14355.283,
+       "max_ms": 15102.835
+      }
+     }
+    }
+   },
+   "sql_cte": {
+    "found": false,
+    "visited": 100004,
+    "latency": {
+     "n": 5,
+     "median_ms": 292.177,
+     "p95_ms": 318.796,
+     "min_ms": 218.188,
+     "max_ms": 318.796
+    }
+   }
+  },
+  {
+   "scenario": "summary_tree",
+   "params": [
+    10,
+    3
+   ],
+   "variant": "dangerous",
+   "datums": 1115,
+   "build_ms": 453,
+   "leaves": 1000,
+   "configs": {
+    "default": {
+     "search": {
+      "outcome": "PATH_FOUND",
+      "termination": "path_found",
+      "complete": true,
+      "nodes_visited": 911,
+      "queries": 7,
+      "depth": 6,
+      "latency": {
+       "n": 5,
+       "median_ms": 57.494,
+       "p95_ms": 62.202,
+       "min_ms": 56.665,
+       "max_ms": 62.202
+      }
+     },
+     "correct": true,
+     "guard": {
+      "verdict": "REQUIRE_HUMAN_APPROVAL",
+      "search_complete": true,
+      "certificate": false,
+      "certificate_unavailable": null,
+      "latency": {
+       "n": 3,
+       "median_ms": 47.14,
+       "p95_ms": 60.002,
+       "min_ms": 45.047,
+       "max_ms": 60.002
+      }
+     }
+    },
+    "raised": {
+     "search": {
+      "outcome": "PATH_FOUND",
+      "termination": "path_found",
+      "complete": true,
+      "nodes_visited": 911,
+      "queries": 7,
+      "depth": 6,
+      "latency": {
+       "n": 5,
+       "median_ms": 59.245,
+       "p95_ms": 62.647,
+       "min_ms": 56.46,
+       "max_ms": 62.647
+      }
+     },
+     "correct": true,
+     "guard": {
+      "verdict": "REQUIRE_HUMAN_APPROVAL",
+      "search_complete": true,
+      "certificate": false,
+      "certificate_unavailable": null,
+      "latency": {
+       "n": 3,
+       "median_ms": 46.865,
+       "p95_ms": 55.779,
+       "min_ms": 45.601,
+       "max_ms": 55.779
+      }
+     }
+    }
+   },
+   "sql_cte": {
+    "found": true,
+    "visited": 1114,
+    "latency": {
+     "n": 5,
+     "median_ms": 2.19,
+     "p95_ms": 2.361,
+     "min_ms": 1.987,
+     "max_ms": 2.361
+    }
+   }
+  },
+  {
+   "scenario": "summary_tree",
+   "params": [
+    10,
+    3
+   ],
+   "variant": "clean",
+   "datums": 1115,
+   "build_ms": 38,
+   "leaves": 1000,
+   "configs": {
+    "default": {
+     "search": {
+      "outcome": "NO_PATH",
+      "termination": "exhausted",
+      "complete": true,
+      "nodes_visited": 1114,
+      "queries": 9,
+      "depth": 6,
+      "latency": {
+       "n": 5,
+       "median_ms": 62.187,
+       "p95_ms": 141.509,
+       "min_ms": 61.102,
+       "max_ms": 141.509
+      }
+     },
+     "correct": true,
+     "guard": {
+      "verdict": "ALLOW",
+      "search_complete": true,
+      "certificate": true,
+      "certificate_unavailable": null,
+      "latency": {
+       "n": 3,
+       "median_ms": 139.422,
+       "p95_ms": 202.095,
+       "min_ms": 128.549,
+       "max_ms": 202.095
+      }
+     }
+    },
+    "raised": {
+     "search": {
+      "outcome": "NO_PATH",
+      "termination": "exhausted",
+      "complete": true,
+      "nodes_visited": 1114,
+      "queries": 9,
+      "depth": 6,
+      "latency": {
+       "n": 5,
+       "median_ms": 79.258,
+       "p95_ms": 89.591,
+       "min_ms": 67.867,
+       "max_ms": 89.591
+      }
+     },
+     "correct": true,
+     "guard": {
+      "verdict": "ALLOW",
+      "search_complete": true,
+      "certificate": true,
+      "certificate_unavailable": null,
+      "latency": {
+       "n": 3,
+       "median_ms": 100.307,
+       "p95_ms": 107.023,
+       "min_ms": 97.434,
+       "max_ms": 107.023
+      }
+     }
+    }
+   },
+   "sql_cte": {
+    "found": false,
+    "visited": 1114,
+    "latency": {
+     "n": 5,
+     "median_ms": 1.304,
+     "p95_ms": 1.601,
+     "min_ms": 1.292,
+     "max_ms": 1.601
+    }
+   }
+  },
+  {
+   "scenario": "summary_tree",
+   "params": [
+    10,
+    4
+   ],
+   "variant": "dangerous",
+   "datums": 11115,
+   "build_ms": 336,
+   "leaves": 10000,
+   "configs": {
+    "default": {
+     "search": {
+      "outcome": "PATH_FOUND",
+      "termination": "path_found",
+      "complete": true,
+      "nodes_visited": 10583,
+      "queries": 9,
+      "depth": 7,
+      "latency": {
+       "n": 5,
+       "median_ms": 745.358,
+       "p95_ms": 909.923,
+       "min_ms": 640.041,
+       "max_ms": 909.923
+      }
+     },
+     "correct": true,
+     "guard": {
+      "verdict": "REQUIRE_HUMAN_APPROVAL",
+      "search_complete": true,
+      "certificate": false,
+      "certificate_unavailable": null,
+      "latency": {
+       "n": 3,
+       "median_ms": 357.178,
+       "p95_ms": 400.229,
+       "min_ms": 355.973,
+       "max_ms": 400.229
+      }
+     }
+    },
+    "raised": {
+     "search": {
+      "outcome": "PATH_FOUND",
+      "termination": "path_found",
+      "complete": true,
+      "nodes_visited": 10583,
+      "queries": 9,
+      "depth": 7,
+      "latency": {
+       "n": 5,
+       "median_ms": 588.135,
+       "p95_ms": 624.598,
+       "min_ms": 506.613,
+       "max_ms": 624.598
+      }
+     },
+     "correct": true,
+     "guard": {
+      "verdict": "REQUIRE_HUMAN_APPROVAL",
+      "search_complete": true,
+      "certificate": false,
+      "certificate_unavailable": null,
+      "latency": {
+       "n": 3,
+       "median_ms": 373.632,
+       "p95_ms": 442.969,
+       "min_ms": 371.572,
+       "max_ms": 442.969
+      }
+     }
+    }
+   },
+   "sql_cte": {
+    "found": true,
+    "visited": 11114,
+    "latency": {
+     "n": 5,
+     "median_ms": 25.75,
+     "p95_ms": 35.863,
+     "min_ms": 25.211,
+     "max_ms": 35.863
+    }
+   }
+  },
+  {
+   "scenario": "summary_tree",
+   "params": [
+    10,
+    4
+   ],
+   "variant": "clean",
+   "datums": 11115,
+   "build_ms": 344,
+   "leaves": 10000,
+   "configs": {
+    "default": {
+     "search": {
+      "outcome": "NO_PATH",
+      "termination": "exhausted",
+      "complete": true,
+      "nodes_visited": 11114,
+      "queries": 29,
+      "depth": 7,
+      "latency": {
+       "n": 5,
+       "median_ms": 411.79,
+       "p95_ms": 760.509,
+       "min_ms": 387.059,
+       "max_ms": 760.509
+      }
+     },
+     "correct": true,
+     "guard": {
+      "verdict": "ALLOW",
+      "search_complete": true,
+      "certificate": true,
+      "certificate_unavailable": null,
+      "latency": {
+       "n": 3,
+       "median_ms": 1327.672,
+       "p95_ms": 1380.395,
+       "min_ms": 1209.65,
+       "max_ms": 1380.395
+      }
+     }
+    },
+    "raised": {
+     "search": {
+      "outcome": "NO_PATH",
+      "termination": "exhausted",
+      "complete": true,
+      "nodes_visited": 11114,
+      "queries": 29,
+      "depth": 7,
+      "latency": {
+       "n": 5,
+       "median_ms": 619.824,
+       "p95_ms": 724.118,
+       "min_ms": 507.839,
+       "max_ms": 724.118
+      }
+     },
+     "correct": true,
+     "guard": {
+      "verdict": "ALLOW",
+      "search_complete": true,
+      "certificate": true,
+      "certificate_unavailable": null,
+      "latency": {
+       "n": 3,
+       "median_ms": 1435.569,
+       "p95_ms": 1442.69,
+       "min_ms": 1231.447,
+       "max_ms": 1442.69
+      }
+     }
+    }
+   },
+   "sql_cte": {
+    "found": false,
+    "visited": 11114,
+    "latency": {
+     "n": 5,
+     "median_ms": 33.809,
+     "p95_ms": 34.038,
+     "min_ms": 24.005,
+     "max_ms": 34.038
+    }
+   }
+  },
+  {
+   "scenario": "summary_tree",
+   "params": [
+    10,
+    5
+   ],
+   "variant": "dangerous",
+   "datums": 111115,
+   "build_ms": 3138,
+   "leaves": 100000,
+   "configs": {
+    "default": {
+     "search": {
+      "outcome": "PATH_FOUND",
+      "termination": "path_found",
+      "complete": true,
+      "nodes_visited": 23358,
+      "queries": 12,
+      "depth": 8,
+      "latency": {
+       "n": 5,
+       "median_ms": 1390.77,
+       "p95_ms": 1442.312,
+       "min_ms": 1306.081,
+       "max_ms": 1442.312
+      }
+     },
+     "correct": true,
+     "guard": {
+      "verdict": "REQUIRE_HUMAN_APPROVAL",
+      "search_complete": true,
+      "certificate": false,
+      "certificate_unavailable": null,
+      "latency": {
+       "n": 3,
+       "median_ms": 2962.511,
+       "p95_ms": 3034.44,
+       "min_ms": 2930.582,
+       "max_ms": 3034.44
+      }
+     }
+    },
+    "raised": {
+     "search": {
+      "outcome": "PATH_FOUND",
+      "termination": "path_found",
+      "complete": true,
+      "nodes_visited": 23358,
+      "queries": 12,
+      "depth": 8,
+      "latency": {
+       "n": 5,
+       "median_ms": 1374.396,
+       "p95_ms": 1475.461,
+       "min_ms": 1343.901,
+       "max_ms": 1475.461
+      }
+     },
+     "correct": true,
+     "guard": {
+      "verdict": "REQUIRE_HUMAN_APPROVAL",
+      "search_complete": true,
+      "certificate": false,
+      "certificate_unavailable": null,
+      "latency": {
+       "n": 3,
+       "median_ms": 2842.642,
+       "p95_ms": 2888.621,
+       "min_ms": 2833.079,
+       "max_ms": 2888.621
+      }
+     }
+    }
+   },
+   "sql_cte": {
+    "found": true,
+    "visited": 111114,
+    "latency": {
+     "n": 5,
+     "median_ms": 341.593,
+     "p95_ms": 435.392,
+     "min_ms": 306.706,
+     "max_ms": 435.392
+    }
+   }
+  },
+  {
+   "scenario": "summary_tree",
+   "params": [
+    10,
+    5
+   ],
+   "variant": "clean",
+   "datums": 111115,
+   "build_ms": 3635,
+   "leaves": 100000,
+   "configs": {
+    "default": {
+     "search": {
+      "outcome": "INDETERMINATE",
+      "termination": "timeout",
+      "complete": false,
+      "nodes_visited": 41114,
+      "queries": 15,
+      "depth": 7,
+      "latency": {
+       "n": 5,
+       "median_ms": 2033.773,
+       "p95_ms": 2090.14,
+       "min_ms": 2006.897,
+       "max_ms": 2090.14
+      }
+     },
+     "correct": null,
+     "guard": {
+      "verdict": "REQUIRE_HUMAN_APPROVAL",
+      "search_complete": false,
+      "certificate": false,
+      "certificate_unavailable": null,
+      "latency": {
+       "n": 3,
+       "median_ms": 2266.064,
+       "p95_ms": 2287.239,
+       "min_ms": 2262.105,
+       "max_ms": 2287.239
+      }
+     }
+    },
+    "raised": {
+     "search": {
+      "outcome": "NO_PATH",
+      "termination": "exhausted",
+      "complete": true,
+      "nodes_visited": 111114,
+      "queries": 229,
+      "depth": 8,
+      "latency": {
+       "n": 5,
+       "median_ms": 6000.064,
+       "p95_ms": 6317.066,
+       "min_ms": 5571.809,
+       "max_ms": 6317.066
+      }
+     },
+     "correct": true,
+     "guard": {
+      "verdict": "ALLOW",
+      "search_complete": true,
+      "certificate": true,
+      "certificate_unavailable": null,
+      "latency": {
+       "n": 3,
+       "median_ms": 14252.896,
+       "p95_ms": 14463.259,
+       "min_ms": 13758.82,
+       "max_ms": 14463.259
+      }
+     }
+    }
+   },
+   "sql_cte": {
+    "found": false,
+    "visited": 111114,
+    "latency": {
+     "n": 5,
+     "median_ms": 301.643,
+     "p95_ms": 364.787,
+     "min_ms": 267.001,
+     "max_ms": 364.787
+    }
+   }
+  },
+  {
+   "scenario": "summary_tree",
+   "params": [
+    50,
+    3
+   ],
+   "variant": "dangerous",
+   "datums": 127555,
+   "build_ms": 4465,
+   "leaves": 125000,
+   "configs": {
+    "default": {
+     "search": {
+      "outcome": "INDETERMINATE",
+      "termination": "timeout",
+      "complete": false,
+      "nodes_visited": 27554,
+      "queries": 8,
+      "depth": 5,
+      "latency": {
+       "n": 5,
+       "median_ms": 2010.369,
+       "p95_ms": 2011.867,
+       "min_ms": 2007.59,
+       "max_ms": 2011.867
+      }
+     },
+     "correct": null,
+     "guard": {
+      "verdict": "REQUIRE_HUMAN_APPROVAL",
+      "search_complete": false,
+      "certificate": false,
+      "certificate_unavailable": null,
+      "latency": {
+       "n": 3,
+       "median_ms": 2269.452,
+       "p95_ms": 2271.525,
+       "min_ms": 2269.085,
+       "max_ms": 2271.525
+      }
+     }
+    },
+    "raised": {
+     "search": {
+      "outcome": "PATH_FOUND",
+      "termination": "path_found",
+      "complete": true,
+      "nodes_visited": 115095,
+      "queries": 11,
+      "depth": 6,
+      "latency": {
+       "n": 5,
+       "median_ms": 7254.119,
+       "p95_ms": 7832.857,
+       "min_ms": 6904.581,
+       "max_ms": 7832.857
+      }
+     },
+     "correct": true,
+     "guard": {
+      "verdict": "REQUIRE_HUMAN_APPROVAL",
+      "search_complete": true,
+      "certificate": false,
+      "certificate_unavailable": null,
+      "latency": {
+       "n": 3,
+       "median_ms": 9286.111,
+       "p95_ms": 9288.415,
+       "min_ms": 8793.213,
+       "max_ms": 9288.415
+      }
+     }
+    }
+   },
+   "sql_cte": {
+    "found": true,
+    "visited": 127554,
+    "latency": {
+     "n": 5,
+     "median_ms": 348.779,
+     "p95_ms": 417.266,
+     "min_ms": 296.122,
+     "max_ms": 417.266
+    }
+   }
+  },
+  {
+   "scenario": "summary_tree",
+   "params": [
+    50,
+    3
+   ],
+   "variant": "clean",
+   "datums": 127555,
+   "build_ms": 4172,
+   "leaves": 125000,
+   "configs": {
+    "default": {
+     "search": {
+      "outcome": "INDETERMINATE",
+      "termination": "timeout",
+      "complete": false,
+      "nodes_visited": 52554,
+      "queries": 8,
+      "depth": 5,
+      "latency": {
+       "n": 5,
+       "median_ms": 2335.551,
+       "p95_ms": 2467.585,
+       "min_ms": 2008.673,
+       "max_ms": 2467.585
+      }
+     },
+     "correct": null,
+     "guard": {
+      "verdict": "REQUIRE_HUMAN_APPROVAL",
+      "search_complete": false,
+      "certificate": false,
+      "certificate_unavailable": null,
+      "latency": {
+       "n": 3,
+       "median_ms": 2630.724,
+       "p95_ms": 2724.922,
+       "min_ms": 2594.454,
+       "max_ms": 2724.922
+      }
+     }
+    },
+    "raised": {
+     "search": {
+      "outcome": "NO_PATH",
+      "termination": "exhausted",
+      "complete": true,
+      "nodes_visited": 127554,
+      "queries": 261,
+      "depth": 6,
+      "latency": {
+       "n": 5,
+       "median_ms": 7152.721,
+       "p95_ms": 7444.868,
+       "min_ms": 6671.029,
+       "max_ms": 7444.868
+      }
+     },
+     "correct": true,
+     "guard": {
+      "verdict": "ALLOW",
+      "search_complete": true,
+      "certificate": true,
+      "certificate_unavailable": null,
+      "latency": {
+       "n": 3,
+       "median_ms": 16943.49,
+       "p95_ms": 17017.245,
+       "min_ms": 16021.697,
+       "max_ms": 17017.245
+      }
+     }
+    }
+   },
+   "sql_cte": {
+    "found": false,
+    "visited": 127554,
+    "latency": {
+     "n": 5,
+     "median_ms": 365.746,
+     "p95_ms": 465.978,
+     "min_ms": 257.783,
+     "max_ms": 465.978
+    }
+   }
+  },
+  {
+   "scenario": "chain_in_100k",
+   "params": [
+    100,
+    100000
+   ],
+   "variant": "dangerous",
+   "datums": 100105,
+   "build_ms": 2089,
+   "hops": 100,
+   "noise": 100000,
+   "configs": {
+    "default": {
+     "search": {
+      "outcome": "PATH_FOUND",
+      "termination": "path_found",
+      "complete": true,
+      "nodes_visited": 104,
+      "queries": 104,
+      "depth": 103,
+      "latency": {
+       "n": 5,
+       "median_ms": 91.784,
+       "p95_ms": 99.446,
+       "min_ms": 74.401,
+       "max_ms": 99.446
+      }
+     },
+     "correct": true,
+     "guard": {
+      "verdict": "REQUIRE_HUMAN_APPROVAL",
+      "search_complete": true,
+      "certificate": false,
+      "certificate_unavailable": null,
+      "latency": {
+       "n": 3,
+       "median_ms": 338.116,
+       "p95_ms": 352.363,
+       "min_ms": 310.602,
+       "max_ms": 352.363
+      }
+     }
+    },
+    "raised": {
+     "search": {
+      "outcome": "PATH_FOUND",
+      "termination": "path_found",
+      "complete": true,
+      "nodes_visited": 104,
+      "queries": 104,
+      "depth": 103,
+      "latency": {
+       "n": 5,
+       "median_ms": 84.094,
+       "p95_ms": 98.757,
+       "min_ms": 66.264,
+       "max_ms": 98.757
+      }
+     },
+     "correct": true,
+     "guard": {
+      "verdict": "REQUIRE_HUMAN_APPROVAL",
+      "search_complete": true,
+      "certificate": false,
+      "certificate_unavailable": null,
+      "latency": {
+       "n": 3,
+       "median_ms": 278.259,
+       "p95_ms": 338.416,
+       "min_ms": 270.935,
+       "max_ms": 338.416
+      }
+     }
+    }
+   },
+   "sql_cte": {
+    "found": true,
+    "visited": 104,
+    "latency": {
+     "n": 5,
+     "median_ms": 4.857,
+     "p95_ms": 5.222,
+     "min_ms": 4.836,
+     "max_ms": 5.222
+    }
+   }
+  },
+  {
+   "scenario": "chain_in_100k",
+   "params": [
+    100,
+    100000
+   ],
+   "variant": "clean",
+   "datums": 100105,
+   "build_ms": 1974,
+   "hops": 100,
+   "noise": 100000,
+   "configs": {
+    "default": {
+     "search": {
+      "outcome": "NO_PATH",
+      "termination": "exhausted",
+      "complete": true,
+      "nodes_visited": 104,
+      "queries": 105,
+      "depth": 103,
+      "latency": {
+       "n": 5,
+       "median_ms": 86.636,
+       "p95_ms": 92.013,
+       "min_ms": 69.281,
+       "max_ms": 92.013
+      }
+     },
+     "correct": true,
+     "guard": {
+      "verdict": "ALLOW",
+      "search_complete": true,
+      "certificate": true,
+      "certificate_unavailable": null,
+      "latency": {
+       "n": 3,
+       "median_ms": 139.315,
+       "p95_ms": 195.883,
+       "min_ms": 123.808,
+       "max_ms": 195.883
+      }
+     }
+    },
+    "raised": {
+     "search": {
+      "outcome": "NO_PATH",
+      "termination": "exhausted",
+      "complete": true,
+      "nodes_visited": 104,
+      "queries": 105,
+      "depth": 103,
+      "latency": {
+       "n": 5,
+       "median_ms": 76.28,
+       "p95_ms": 94.777,
+       "min_ms": 70.384,
+       "max_ms": 94.777
+      }
+     },
+     "correct": true,
+     "guard": {
+      "verdict": "ALLOW",
+      "search_complete": true,
+      "certificate": true,
+      "certificate_unavailable": null,
+      "latency": {
+       "n": 3,
+       "median_ms": 165.242,
+       "p95_ms": 166.68,
+       "min_ms": 150.091,
+       "max_ms": 166.68
+      }
+     }
+    }
+   },
+   "sql_cte": {
+    "found": false,
+    "visited": 104,
+    "latency": {
+     "n": 5,
+     "median_ms": 2.858,
+     "p95_ms": 3.621,
+     "min_ms": 2.747,
+     "max_ms": 3.621
+    }
+   }
+  },
+  {
+   "scenario": "chain_in_100k",
+   "params": [
+    1000,
+    100000
+   ],
+   "variant": "dangerous",
+   "datums": 101005,
+   "build_ms": 1883,
+   "hops": 1000,
+   "noise": 100000,
+   "configs": {
+    "default": {
+     "search": {
+      "outcome": "PATH_FOUND",
+      "termination": "path_found",
+      "complete": true,
+      "nodes_visited": 1004,
+      "queries": 1004,
+      "depth": 1003,
+      "latency": {
+       "n": 5,
+       "median_ms": 640.98,
+       "p95_ms": 778.084,
+       "min_ms": 613.161,
+       "max_ms": 778.084
+      }
+     },
+     "correct": true,
+     "guard": {
+      "verdict": "REQUIRE_HUMAN_APPROVAL",
+      "search_complete": true,
+      "certificate": false,
+      "certificate_unavailable": null,
+      "latency": {
+       "n": 3,
+       "median_ms": 2313.286,
+       "p95_ms": 2739.295,
+       "min_ms": 2197.14,
+       "max_ms": 2739.295
+      }
+     }
+    },
+    "raised": {
+     "search": {
+      "outcome": "PATH_FOUND",
+      "termination": "path_found",
+      "complete": true,
+      "nodes_visited": 1004,
+      "queries": 1004,
+      "depth": 1003,
+      "latency": {
+       "n": 5,
+       "median_ms": 710.628,
+       "p95_ms": 755.151,
+       "min_ms": 591.749,
+       "max_ms": 755.151
+      }
+     },
+     "correct": true,
+     "guard": {
+      "verdict": "REQUIRE_HUMAN_APPROVAL",
+      "search_complete": true,
+      "certificate": false,
+      "certificate_unavailable": null,
+      "latency": {
+       "n": 3,
+       "median_ms": 2061.668,
+       "p95_ms": 2448.126,
+       "min_ms": 2056.36,
+       "max_ms": 2448.126
+      }
+     }
+    }
+   },
+   "sql_cte": {
+    "found": true,
+    "visited": 1004,
+    "latency": {
+     "n": 5,
+     "median_ms": 7.972,
+     "p95_ms": 8.397,
+     "min_ms": 7.521,
+     "max_ms": 8.397
+    }
+   }
+  },
+  {
+   "scenario": "chain_in_100k",
+   "params": [
+    1000,
+    100000
+   ],
+   "variant": "clean",
+   "datums": 101005,
+   "build_ms": 3084,
+   "hops": 1000,
+   "noise": 100000,
+   "configs": {
+    "default": {
+     "search": {
+      "outcome": "NO_PATH",
+      "termination": "exhausted",
+      "complete": true,
+      "nodes_visited": 1004,
+      "queries": 1005,
+      "depth": 1003,
+      "latency": {
+       "n": 5,
+       "median_ms": 937.655,
+       "p95_ms": 945.366,
+       "min_ms": 742.852,
+       "max_ms": 945.366
+      }
+     },
+     "correct": true,
+     "guard": {
+      "verdict": "ALLOW",
+      "search_complete": true,
+      "certificate": true,
+      "certificate_unavailable": null,
+      "latency": {
+       "n": 3,
+       "median_ms": 1521.609,
+       "p95_ms": 1577.141,
+       "min_ms": 1457.374,
+       "max_ms": 1577.141
+      }
+     }
+    },
+    "raised": {
+     "search": {
+      "outcome": "NO_PATH",
+      "termination": "exhausted",
+      "complete": true,
+      "nodes_visited": 1004,
+      "queries": 1005,
+      "depth": 1003,
+      "latency": {
+       "n": 5,
+       "median_ms": 817.959,
+       "p95_ms": 898.228,
+       "min_ms": 699.998,
+       "max_ms": 898.228
+      }
+     },
+     "correct": true,
+     "guard": {
+      "verdict": "ALLOW",
+      "search_complete": true,
+      "certificate": true,
+      "certificate_unavailable": null,
+      "latency": {
+       "n": 3,
+       "median_ms": 1498.311,
+       "p95_ms": 1684.988,
+       "min_ms": 1148.779,
+       "max_ms": 1684.988
+      }
+     }
+    }
+   },
+   "sql_cte": {
+    "found": false,
+    "visited": 1004,
+    "latency": {
+     "n": 5,
+     "median_ms": 6.169,
+     "p95_ms": 7.725,
+     "min_ms": 5.031,
+     "max_ms": 7.725
+    }
+   }
+  },
+  {
+   "scenario": "chain_in_100k",
+   "params": [
+    3000,
+    100000
+   ],
+   "variant": "dangerous",
+   "datums": 103005,
+   "build_ms": 2965,
+   "hops": 3000,
+   "noise": 100000,
+   "configs": {
+    "default": {
+     "search": {
+      "outcome": "INDETERMINATE",
+      "termination": "timeout",
+      "complete": false,
+      "nodes_visited": 2542,
+      "queries": 2542,
+      "depth": 2541,
+      "latency": {
+       "n": 5,
+       "median_ms": 1999.672,
+       "p95_ms": 1999.788,
+       "min_ms": 1999.527,
+       "max_ms": 1999.788
+      }
+     },
+     "correct": null,
+     "guard": {
+      "verdict": "REQUIRE_HUMAN_APPROVAL",
+      "search_complete": false,
+      "certificate": false,
+      "certificate_unavailable": null,
+      "latency": {
+       "n": 3,
+       "median_ms": 2012.377,
+       "p95_ms": 2014.362,
+       "min_ms": 2006.2,
+       "max_ms": 2014.362
+      }
+     }
+    },
+    "raised": {
+     "search": {
+      "outcome": "PATH_FOUND",
+      "termination": "path_found",
+      "complete": true,
+      "nodes_visited": 3004,
+      "queries": 3004,
+      "depth": 3003,
+      "latency": {
+       "n": 5,
+       "median_ms": 2655.564,
+       "p95_ms": 2797.652,
+       "min_ms": 2322.916,
+       "max_ms": 2797.652
+      }
+     },
+     "correct": true,
+     "guard": {
+      "verdict": "REQUIRE_HUMAN_APPROVAL",
+      "search_complete": true,
+      "certificate": false,
+      "certificate_unavailable": null,
+      "latency": {
+       "n": 3,
+       "median_ms": 5245.081,
+       "p95_ms": 5288.269,
+       "min_ms": 4971.215,
+       "max_ms": 5288.269
+      }
+     }
+    }
+   },
+   "sql_cte": {
+    "found": true,
+    "visited": 3004,
+    "latency": {
+     "n": 5,
+     "median_ms": 9.914,
+     "p95_ms": 15.766,
+     "min_ms": 9.256,
+     "max_ms": 15.766
+    }
+   }
+  },
+  {
+   "scenario": "chain_in_100k",
+   "params": [
+    3000,
+    100000
+   ],
+   "variant": "clean",
+   "datums": 103005,
+   "build_ms": 3324,
+   "hops": 3000,
+   "noise": 100000,
+   "configs": {
+    "default": {
+     "search": {
+      "outcome": "INDETERMINATE",
+      "termination": "timeout",
+      "complete": false,
+      "nodes_visited": 2241,
+      "queries": 2241,
+      "depth": 2240,
+      "latency": {
+       "n": 5,
+       "median_ms": 1999.792,
+       "p95_ms": 1999.943,
+       "min_ms": 1999.43,
+       "max_ms": 1999.943
+      }
+     },
+     "correct": null,
+     "guard": {
+      "verdict": "REQUIRE_HUMAN_APPROVAL",
+      "search_complete": false,
+      "certificate": false,
+      "certificate_unavailable": null,
+      "latency": {
+       "n": 3,
+       "median_ms": 2007.591,
+       "p95_ms": 2011.279,
+       "min_ms": 2005.748,
+       "max_ms": 2011.279
+      }
+     }
+    },
+    "raised": {
+     "search": {
+      "outcome": "NO_PATH",
+      "termination": "exhausted",
+      "complete": true,
+      "nodes_visited": 3004,
+      "queries": 3005,
+      "depth": 3003,
+      "latency": {
+       "n": 5,
+       "median_ms": 2516.07,
+       "p95_ms": 2544.609,
+       "min_ms": 2340.489,
+       "max_ms": 2544.609
+      }
+     },
+     "correct": true,
+     "guard": {
+      "verdict": "ALLOW",
+      "search_complete": true,
+      "certificate": true,
+      "certificate_unavailable": null,
+      "latency": {
+       "n": 3,
+       "median_ms": 4777.642,
+       "p95_ms": 4960.426,
+       "min_ms": 4505.264,
+       "max_ms": 4960.426
+      }
+     }
+    }
+   },
+   "sql_cte": {
+    "found": false,
+    "visited": 3004,
+    "latency": {
+     "n": 5,
+     "median_ms": 18.723,
+     "p95_ms": 20.532,
+     "min_ms": 15.489,
+     "max_ms": 20.532
+    }
+   }
+  }
+ ]
+}

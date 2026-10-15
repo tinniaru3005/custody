@@ -1,0 +1,587 @@
+{
+ "overall": {
+  "Custody (FalkorDB BFS)": {
+   "TP": 190,
+   "FP": 0,
+   "FN": 0,
+   "TN": 100,
+   "precision": 1.0,
+   "recall": 1.0,
+   "f1": 1.0,
+   "npv": 1.0
+  },
+  "Recursive SQL CTE": {
+   "TP": 190,
+   "FP": 0,
+   "FN": 0,
+   "TN": 100,
+   "precision": 1.0,
+   "recall": 1.0,
+   "f1": 1.0,
+   "npv": 1.0
+  },
+  "Cypher *0..25 (bounded)": {
+   "TP": 182,
+   "FP": 5,
+   "FN": 8,
+   "TN": 95,
+   "precision": 0.973,
+   "recall": 0.958,
+   "f1": 0.966,
+   "npv": 0.922
+  },
+  "Keyword scan (context)": {
+   "TP": 30,
+   "FP": 10,
+   "FN": 160,
+   "TN": 90,
+   "precision": 0.75,
+   "recall": 0.158,
+   "f1": 0.261,
+   "npv": 0.36
+  },
+  "String exact": {
+   "TP": 120,
+   "FP": 20,
+   "FN": 70,
+   "TN": 80,
+   "precision": 0.857,
+   "recall": 0.632,
+   "f1": 0.727,
+   "npv": 0.533
+  },
+  "String host": {
+   "TP": 120,
+   "FP": 20,
+   "FN": 70,
+   "TN": 80,
+   "precision": 0.857,
+   "recall": 0.632,
+   "f1": 0.727,
+   "npv": 0.533
+  },
+  "String + context attribution": {
+   "TP": 120,
+   "FP": 0,
+   "FN": 70,
+   "TN": 100,
+   "precision": 1.0,
+   "recall": 0.632,
+   "f1": 0.774,
+   "npv": 0.588
+  },
+  "TF-IDF RAG (pre-set \u03c4=0.35, k=5)": {
+   "TP": 130,
+   "FP": 20,
+   "FN": 60,
+   "TN": 80,
+   "precision": 0.867,
+   "recall": 0.684,
+   "f1": 0.765,
+   "npv": 0.571
+  },
+  "TF-IDF RAG (best F1, hindsight)": {
+   "TP": 156,
+   "FP": 20,
+   "FN": 34,
+   "TN": 80,
+   "precision": 0.886,
+   "recall": 0.821,
+   "f1": 0.852,
+   "npv": 0.702
+  },
+  "LSA RAG (best F1, hindsight)": {
+   "TP": 107,
+   "FP": 20,
+   "FN": 83,
+   "TN": 80,
+   "precision": 0.843,
+   "recall": 0.563,
+   "f1": 0.675,
+   "npv": 0.491
+  },
+  "Multi-hop RAG (pre-set \u03c4=0.35)": {
+   "TP": 143,
+   "FP": 20,
+   "FN": 47,
+   "TN": 80,
+   "precision": 0.877,
+   "recall": 0.753,
+   "f1": 0.81,
+   "npv": 0.63
+  },
+  "Multi-hop RAG (best \u03c4=0.2)": {
+   "TP": 143,
+   "FP": 20,
+   "FN": 47,
+   "TN": 80,
+   "precision": 0.877,
+   "recall": 0.753,
+   "f1": 0.81,
+   "npv": 0.63
+  }
+ },
+ "best_vector": {
+  "tfidf": {
+   "model": "tfidf",
+   "query": "host",
+   "k": 10,
+   "tau": 0.05,
+   "TP": 156,
+   "FP": 20,
+   "FN": 34,
+   "TN": 80,
+   "precision": 0.886,
+   "recall": 0.821,
+   "f1": 0.852,
+   "npv": 0.702
+  },
+  "lsa": {
+   "model": "lsa",
+   "query": "url",
+   "k": 10,
+   "tau": 0.05,
+   "TP": 107,
+   "FP": 20,
+   "FN": 83,
+   "TN": 80,
+   "precision": 0.843,
+   "recall": 0.563,
+   "f1": 0.675,
+   "npv": 0.491
+  }
+ },
+ "chain_best_tau": 0.2,
+ "npv": {
+  "Custody (FalkorDB BFS)": {
+   "negatives": 100,
+   "truly_clean": 100,
+   "proven": 100,
+   "false_negatives": 0,
+   "npv": 1.0
+  },
+  "Recursive SQL CTE": {
+   "negatives": 100,
+   "truly_clean": 100,
+   "proven": 100,
+   "false_negatives": 0,
+   "npv": 1.0
+  },
+  "Cypher *0..25 (bounded)": {
+   "negatives": 103,
+   "truly_clean": 95,
+   "proven": 0,
+   "false_negatives": 8,
+   "npv": 0.922
+  },
+  "Keyword scan (context)": {
+   "negatives": 250,
+   "truly_clean": 90,
+   "proven": 0,
+   "false_negatives": 160,
+   "npv": 0.36
+  },
+  "String exact": {
+   "negatives": 150,
+   "truly_clean": 80,
+   "proven": 0,
+   "false_negatives": 70,
+   "npv": 0.533
+  },
+  "String host": {
+   "negatives": 150,
+   "truly_clean": 80,
+   "proven": 0,
+   "false_negatives": 70,
+   "npv": 0.533
+  },
+  "String + context attribution": {
+   "negatives": 170,
+   "truly_clean": 100,
+   "proven": 0,
+   "false_negatives": 70,
+   "npv": 0.588
+  },
+  "TF-IDF RAG (pre-set \u03c4=0.35, k=5)": {
+   "negatives": 140,
+   "truly_clean": 80,
+   "proven": 0,
+   "false_negatives": 60,
+   "npv": 0.571
+  },
+  "TF-IDF RAG (best F1, hindsight)": {
+   "negatives": 114,
+   "truly_clean": 80,
+   "proven": 0,
+   "false_negatives": 34,
+   "npv": 0.702
+  },
+  "LSA RAG (best F1, hindsight)": {
+   "negatives": 163,
+   "truly_clean": 80,
+   "proven": 0,
+   "false_negatives": 83,
+   "npv": 0.491
+  },
+  "Multi-hop RAG (pre-set \u03c4=0.35)": {
+   "negatives": 127,
+   "truly_clean": 80,
+   "proven": 0,
+   "false_negatives": 47,
+   "npv": 0.63
+  },
+  "Multi-hop RAG (best \u03c4=0.2)": {
+   "negatives": 127,
+   "truly_clean": 80,
+   "proven": 0,
+   "false_negatives": 47,
+   "npv": 0.63
+  }
+ },
+ "determinism": {
+  "Custody (FalkorDB BFS)": {
+   "max": 1,
+   "unstable": 0,
+   "cases": 330,
+   "runs": 5
+  },
+  "Recursive SQL CTE": {
+   "max": 1,
+   "unstable": 0,
+   "cases": 330,
+   "runs": 5
+  },
+  "String exact": {
+   "max": 1,
+   "unstable": 0,
+   "cases": 330,
+   "runs": 5
+  },
+  "TF-IDF RAG (pre-set \u03c4=0.35, k=5)": {
+   "max": 1,
+   "unstable": 0,
+   "cases": 330,
+   "runs": 5
+  },
+  "LLM judge": {
+   "max": null,
+   "note": "not measured: no ANTHROPIC_API_KEY in the benchmark environment (harness ready: --llm-judge --llm-runs 10)"
+  }
+ },
+ "hypotheses": [
+  [
+   "H1",
+   true,
+   "min in-scope category recall 1.00; max decoy false escalation 0.00"
+  ],
+  [
+   "H2",
+   true,
+   "F1 gap to best content method (TF-IDF RAG (best F1, hindsight)) 0.148"
+  ],
+  [
+   "H3",
+   true,
+   "string exact on paraphrase hops 0\u20133: [0.0, 0.0, 0.0, 0.0]; keyword scan: [1.0, 0.0, 0.0, 0.0]"
+  ],
+  [
+   "H4",
+   true,
+   "330/330 agree"
+  ],
+  [
+   "H5",
+   true,
+   "max distinct verdicts {'Custody (FalkorDB BFS)': 1, 'Recursive SQL CTE': 1, 'String exact': 1, 'TF-IDF RAG (pre-set \u03c4=0.35, k=5)': 1}; LLM part untested"
+  ],
+  [
+   "H6",
+   true,
+   "Custody NPV 1.0 (100/100 proven); content NPVs Keyword scan (context) 0.36, String exact 0.533, String host 0.533, String + context attribution 0.588, TF-IDF RAG (pre-set \u03c4=0.35, k=5) 0.571, TF-IDF RAG (best F1, hindsight) 0.702, LSA RAG (best F1, hindsight) 0.491, Multi-hop RAG (pre-set \u03c4=0.35) 0.63, Multi-hop RAG (best \u03c4=0.2) 0.63"
+  ],
+  [
+   "H7",
+   true,
+   "case Guard p95 87.304 ms; 10k fan-in under shipped limits: NO_PATH"
+  ],
+  [
+   "H8",
+   true,
+   "*0..25 missed 8 of the 26/40-hop dangerous chains"
+  ],
+  [
+   "H9",
+   true,
+   "custody on transforms: agent_summary (3, 3), base64 (3, 3), dash_split (3, 3), doc_example_key (0, 3), hex (4, 4), identity (4, 4), reverse (3, 3), truncate (3, 3), user_typed (0, 4)"
+  ]
+ ],
+ "falsification": [
+  [
+   "F1",
+   false,
+   "best content F1 0.852 vs Custody 1.0 (gap 0.148)"
+  ],
+  [
+   "F2",
+   null,
+   "untested: no API key"
+  ],
+  [
+   "F3",
+   true,
+   "10k fan-in clean Guard p50 1321.493 ms (includes the ALLOW certificate)"
+  ],
+  [
+   "F4",
+   null,
+   "untested: no genuine LLM recording exists yet (scripts/record_llm_run.py)"
+  ],
+  [
+   "F5",
+   false,
+   "330/330 agree"
+  ]
+ ],
+ "categories": {
+  "Custody (FalkorDB BFS)": {
+   "direct": 1.0,
+   "verbatim relay": 1.0,
+   "cross-session memory": 1.0,
+   "obfuscated value": 1.0,
+   "split source": 1.0,
+   "high fan-in": 1.0,
+   "implicit flow": 0.0,
+   "unrelated clean": 0.0,
+   "lexical decoy": 0.0,
+   "identical bytes (trusted)": 0.0,
+   "over-approximation": 1.0,
+   "paraphrase laundering": 1.0,
+   "transformed secret": 1.0,
+   "secret in context": 0.0,
+   "deep chain": 1.0,
+   "semantic decoy": 0.0,
+   "policy-endorsed": 0.0,
+   "endorsed sibling": 1.0
+  },
+  "Recursive SQL CTE": {
+   "direct": 1.0,
+   "verbatim relay": 1.0,
+   "cross-session memory": 1.0,
+   "obfuscated value": 1.0,
+   "split source": 1.0,
+   "high fan-in": 1.0,
+   "implicit flow": 0.0,
+   "unrelated clean": 0.0,
+   "lexical decoy": 0.0,
+   "identical bytes (trusted)": 0.0,
+   "over-approximation": 1.0,
+   "paraphrase laundering": 1.0,
+   "transformed secret": 1.0,
+   "secret in context": 0.0,
+   "deep chain": 1.0,
+   "semantic decoy": 0.0,
+   "policy-endorsed": 0.0,
+   "endorsed sibling": 1.0
+  },
+  "Cypher *0..25 (bounded)": {
+   "direct": 1.0,
+   "verbatim relay": 1.0,
+   "cross-session memory": 1.0,
+   "obfuscated value": 1.0,
+   "split source": 1.0,
+   "high fan-in": 1.0,
+   "implicit flow": 0.0,
+   "unrelated clean": 0.1,
+   "lexical decoy": 0.0,
+   "identical bytes (trusted)": 0.0,
+   "over-approximation": 1.0,
+   "paraphrase laundering": 1.0,
+   "transformed secret": 1.0,
+   "secret in context": 0.0,
+   "deep chain": 0.6,
+   "semantic decoy": 0.0,
+   "policy-endorsed": 0.0,
+   "endorsed sibling": 1.0
+  },
+  "Keyword scan (context)": {
+   "direct": 1.0,
+   "verbatim relay": 0.0,
+   "cross-session memory": 0.0,
+   "obfuscated value": 0.0,
+   "split source": 0.0,
+   "high fan-in": 0.0,
+   "implicit flow": 1.0,
+   "unrelated clean": 0.0,
+   "lexical decoy": 1.0,
+   "identical bytes (trusted)": 0.0,
+   "over-approximation": 0.0,
+   "paraphrase laundering": 0.25,
+   "transformed secret": 0.0,
+   "secret in context": 0.0,
+   "deep chain": 0.0,
+   "semantic decoy": 0.0,
+   "policy-endorsed": 0.0,
+   "endorsed sibling": 0.0
+  },
+  "String exact": {
+   "direct": 1.0,
+   "verbatim relay": 1.0,
+   "cross-session memory": 1.0,
+   "obfuscated value": 0.0,
+   "split source": 0.0,
+   "high fan-in": 1.0,
+   "implicit flow": 0.0,
+   "unrelated clean": 0.0,
+   "lexical decoy": 0.0,
+   "identical bytes (trusted)": 1.0,
+   "over-approximation": 0.0,
+   "paraphrase laundering": 0.0,
+   "transformed secret": 1.0,
+   "secret in context": 0.0,
+   "deep chain": 1.0,
+   "semantic decoy": 0.0,
+   "policy-endorsed": 1.0,
+   "endorsed sibling": 1.0
+  },
+  "String host": {
+   "direct": 1.0,
+   "verbatim relay": 1.0,
+   "cross-session memory": 1.0,
+   "obfuscated value": 0.0,
+   "split source": 0.0,
+   "high fan-in": 1.0,
+   "implicit flow": 0.0,
+   "unrelated clean": 0.0,
+   "lexical decoy": 0.0,
+   "identical bytes (trusted)": 1.0,
+   "over-approximation": 0.0,
+   "paraphrase laundering": 0.0,
+   "transformed secret": 1.0,
+   "secret in context": 0.0,
+   "deep chain": 1.0,
+   "semantic decoy": 0.0,
+   "policy-endorsed": 1.0,
+   "endorsed sibling": 1.0
+  },
+  "String + context attribution": {
+   "direct": 1.0,
+   "verbatim relay": 1.0,
+   "cross-session memory": 1.0,
+   "obfuscated value": 0.0,
+   "split source": 0.0,
+   "high fan-in": 1.0,
+   "implicit flow": 0.0,
+   "unrelated clean": 0.0,
+   "lexical decoy": 0.0,
+   "identical bytes (trusted)": 0.0,
+   "over-approximation": 0.0,
+   "paraphrase laundering": 0.0,
+   "transformed secret": 1.0,
+   "secret in context": 0.0,
+   "deep chain": 1.0,
+   "semantic decoy": 0.0,
+   "policy-endorsed": 1.0,
+   "endorsed sibling": 1.0
+  },
+  "TF-IDF RAG (pre-set \u03c4=0.35, k=5)": {
+   "direct": 1.0,
+   "verbatim relay": 0.85,
+   "cross-session memory": 1.0,
+   "obfuscated value": 0.4,
+   "split source": 0.0,
+   "high fan-in": 1.0,
+   "implicit flow": 0.0,
+   "unrelated clean": 0.0,
+   "lexical decoy": 0.0,
+   "identical bytes (trusted)": 1.0,
+   "over-approximation": 0.0,
+   "paraphrase laundering": 0.7,
+   "transformed secret": 1.0,
+   "secret in context": 0.0,
+   "deep chain": 0.0,
+   "semantic decoy": 0.0,
+   "policy-endorsed": 1.0,
+   "endorsed sibling": 1.0
+  },
+  "TF-IDF RAG (best F1, hindsight)": {
+   "direct": 1.0,
+   "verbatim relay": 0.925,
+   "cross-session memory": 1.0,
+   "obfuscated value": 0.35,
+   "split source": 1.0,
+   "high fan-in": 1.0,
+   "implicit flow": 0.0,
+   "unrelated clean": 0.0,
+   "lexical decoy": 0.0,
+   "identical bytes (trusted)": 1.0,
+   "over-approximation": 0.0,
+   "paraphrase laundering": 0.95,
+   "transformed secret": 1.0,
+   "secret in context": 0.0,
+   "deep chain": 0.2,
+   "semantic decoy": 0.0,
+   "policy-endorsed": 1.0,
+   "endorsed sibling": 1.0
+  },
+  "LSA RAG (best F1, hindsight)": {
+   "direct": 0.75,
+   "verbatim relay": 0.8,
+   "cross-session memory": 0.4,
+   "obfuscated value": 0.2,
+   "split source": 1.0,
+   "high fan-in": 1.0,
+   "implicit flow": 0.0,
+   "unrelated clean": 0.0,
+   "lexical decoy": 0.0,
+   "identical bytes (trusted)": 1.0,
+   "over-approximation": 0.5,
+   "paraphrase laundering": 0.5,
+   "transformed secret": 0.4,
+   "secret in context": 0.0,
+   "deep chain": 0.2,
+   "semantic decoy": 0.0,
+   "policy-endorsed": 1.0,
+   "endorsed sibling": 0.7
+  },
+  "Multi-hop RAG (pre-set \u03c4=0.35)": {
+   "direct": 1.0,
+   "verbatim relay": 0.85,
+   "cross-session memory": 1.0,
+   "obfuscated value": 0.5,
+   "split source": 1.0,
+   "high fan-in": 1.0,
+   "implicit flow": 0.0,
+   "unrelated clean": 0.0,
+   "lexical decoy": 0.0,
+   "identical bytes (trusted)": 1.0,
+   "over-approximation": 0.0,
+   "paraphrase laundering": 0.725,
+   "transformed secret": 1.0,
+   "secret in context": 0.0,
+   "deep chain": 0.0,
+   "semantic decoy": 0.0,
+   "policy-endorsed": 1.0,
+   "endorsed sibling": 1.0
+  },
+  "Multi-hop RAG (best \u03c4=0.2)": {
+   "direct": 1.0,
+   "verbatim relay": 0.85,
+   "cross-session memory": 1.0,
+   "obfuscated value": 0.5,
+   "split source": 1.0,
+   "high fan-in": 1.0,
+   "implicit flow": 0.0,
+   "unrelated clean": 0.0,
+   "lexical decoy": 0.0,
+   "identical bytes (trusted)": 1.0,
+   "over-approximation": 0.0,
+   "paraphrase laundering": 0.725,
+   "transformed secret": 1.0,
+   "secret in context": 0.0,
+   "deep chain": 0.0,
+   "semantic decoy": 0.0,
+   "policy-endorsed": 1.0,
+   "endorsed sibling": 1.0
+  }
+ }
+}
