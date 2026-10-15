@@ -4,7 +4,8 @@ Run:  uvicorn custody.api.app:app --reload
 
 Every route is also served under ``/api`` (the React UI uses ``/api/...``), and when
 ``CUSTODY_STATIC_DIR`` points at a built UI (``frontend/dist``) it is served at ``/`` with
-an SPA fallback, so one container can host both.
+an SPA fallback, so one container can host both. The UI includes the documentation site at
+``/docs``, so FastAPI's interactive API reference lives at ``/swagger`` (and ``/redoc``).
 """
 from __future__ import annotations
 
@@ -27,7 +28,9 @@ from custody.guard.models import ApprovalRefused
 from custody.memory.errors import MemoryQuarantined
 
 API_PREFIX = "/api"
-_API_ROOTS = ("/tenants", "/health", "/docs", "/openapi.json", "/redoc")
+# Swagger UI is at /swagger because /docs belongs to the documentation site in the UI.
+DOCS_URL, REDOC_URL, OPENAPI_URL = "/swagger", "/redoc", "/openapi.json"
+_API_ROOTS = ("/tenants", "/health", DOCS_URL, OPENAPI_URL, REDOC_URL)
 
 
 class StripApiPrefix:
@@ -64,7 +67,9 @@ def create_app(db: Optional[FalkorDB] = None, settings: Optional[Settings] = Non
     app = FastAPI(title="Custody", version=__version__, lifespan=lifespan,
                   description="Provenance-tracked shared memory and a deterministic Guard for "
                               "teams of AI agents.",
-                  **({"docs_url": None, "redoc_url": None, "openapi_url": None} if public else {}))
+                  **({"docs_url": None, "redoc_url": None, "openapi_url": None} if public
+                     else {"docs_url": DOCS_URL, "redoc_url": REDOC_URL,
+                           "openapi_url": OPENAPI_URL}))
     app.state.settings = settings
     app.state.reset_limiter = ResetLimiter(settings.demo_reset_min_interval_s)
     if settings.cors_origin_list:
