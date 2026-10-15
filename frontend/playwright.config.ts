@@ -26,7 +26,7 @@ export default defineConfig({
     timeout: 60_000,
     env: {
       CUSTODY_FALKORDB_EMBEDDED_PATH: process.env.E2E_DB ?? "/tmp/custody-e2e.db",
-      CUSTODY_GRAPH_PREFIX: "custody-e2e",
+      CUSTODY_GRAPH_PREFIX: process.env.E2E_GRAPH_PREFIX ?? "custody-e2e",
       CUSTODY_STATIC_DIR: "frontend/dist",
       ANTHROPIC_API_KEY: "",
       // the e2e tests check the scripted story; a recorded LLM run (if one was recorded) is
