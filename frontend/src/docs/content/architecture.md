@@ -9,7 +9,7 @@ Custody is one Python process (FastAPI) in front of FalkorDB, plus a React conso
 <defs><marker id="ar-a" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path class="dg-arrow" d="M0,0 L8,4 L0,8 z"/></marker></defs>
 <rect class="dg-box" x="20" y="16" width="720" height="58" rx="10"/>
 <text class="dg-h" x="36" y="40">Console</text>
-<text class="dg-m" x="36" y="60">React + Vite + TypeScript · dashboard, attack demo, graph, Guard, approvals, Warden, metrics, docs</text>
+<text class="dg-m" x="36" y="60">React + Vite + TypeScript · dashboard, attack demo, three worlds, graph, Guard, approvals, Warden, metrics, docs</text>
 <path class="dg-line" d="M380 74 V104" marker-end="url(#ar-a)"/>
 <text class="dg-code" x="390" y="94">/api/… (same origin)</text>
 <rect class="dg-group" x="20" y="108" width="720" height="128" rx="12"/>
@@ -65,7 +65,7 @@ Custody is one Python process (FastAPI) in front of FalkorDB, plus a React conso
 | Guard          | [`custody/guard/`](repo:custody/guard/)       | Policy, provenance queries, decisions, approvals, certificates, contamination analysis, re-adjudication.                                                                               |
 | Warden         | [`custody/warden/`](repo:custody/warden/)     | Investigation analyses, quarantine, remediation, citation-checked disclosures, the MCP server and the agent loop.                                                                      |
 | Console API    | [`custody/console/`](repo:custody/console/)   | Read models for the UI, the demo runner and the in-process Warden runner.                                                                                                              |
-| Demo scenarios | [`custody/demo/`](repo:custody/demo/)         | The scripted primary story, the extended scenario, three worlds, and the recorded-LLM replay.                                                                                          |
+| Demo scenarios | [`custody/demo/`](repo:custody/demo/)         | The scripted primary story, the extended scenario, three worlds, the Warden's incident scenario, and the recorded-LLM replay.                                                          |
 | HTTP app       | [`custody/api/`](repo:custody/api/)           | FastAPI app factory, routes, request schemas, public-demo middleware.                                                                                                                  |
 | Console        | [`frontend/`](repo:frontend/)                 | React + Vite + TypeScript UI, this documentation site, unit and Playwright tests.                                                                                                      |
 
@@ -73,12 +73,12 @@ Custody is one Python process (FastAPI) in front of FalkorDB, plus a React conso
 
 1. An agent session records what entered its context: user input, fetched pages, vault reads, recalls, received messages. Each becomes a `Datum` with a `FROM` edge to its `Source`.
 2. Each model output, memory and message is recorded with `DERIVED_FROM` edges to everything in the context window.
-3. When the model asks for a tool call, each argument becomes a Datum. The Recorder links it to a trusted supplier of the exact same value if one exists (exact-value attribution), and keeps the other context edges marked `attribution: "context"`.
+3. When the model asks for a tool call, each argument becomes a Datum. The Recorder links it to a trusted supplier of the exact same value if one exists (exact-value attribution), and keeps the other context edges marked `attribution: "context"`, which the Guard does not follow.
 4. The runtime records an `Action` with `ARG` edges to the arguments and a `TO` edge to a `Sink`, then calls `Guard.enforce`.
-5. The Guard re-classifies the sink against tenant policy, runs complete reachability searches from the destination and payload arguments, and returns a `GuardDecision`. It appends a `Decision` audit node to the graph.
+5. The Guard re-classifies the sink against tenant policy, runs complete reachability searches from the destination and payload arguments, and returns a `GuardDecision` with the verdict `ALLOW`, `REQUIRE_HUMAN_APPROVAL` or `BLOCK`. A search that cannot complete (node, time or depth limit, or a query error) is `INDETERMINATE` and fails closed: never ALLOW, and BLOCK if a lethal trifecta cannot be ruled out. It appends a `Decision` audit node to the graph.
 6. The runtime executes the tool only on `ALLOW`, and re-checks immediately before executing.
 
-Agents that do not use the Python runtime can do steps 1–5 over HTTP and must enforce step 6 themselves; see [Recording your own agents](/docs/integrating).
+Agents that do not use the Python runtime can do steps 1–5 over HTTP and must enforce step 6 themselves; see [Recording your own agents](/docs/integrating). The Recorder's `POST …/record/approval` and `PATCH …/actions/{id}/status` write approvals and statuses without the Guard's human-approver checks, so they are for trusted integrators only (public-demo mode blocks them).
 
 ## HTTP layout
 
@@ -92,7 +92,7 @@ When `CUSTODY_STATIC_DIR` points at a built console (`frontend/dist`), the API a
 ## How FalkorDB is used
 
 - **One graph per tenant** (`custody:<tenant>`), so tenants are isolated and a tenant can be dropped in one call. Tenant slugs must match `[a-z0-9][a-z0-9_-]{0,62}`.
-- **Range indexes** on ids, kinds, sessions, fingerprints, action status and sink destination, created idempotently when a graph is first used.
+- **Range indexes** on ids, kinds, sessions, fingerprints, action status, sink destination and the action id of each Decision, created idempotently when a graph is first used.
 - **Read-only queries** (`GRAPH.RO_QUERY`) for the Guard's checks, so a decision cannot write.
 - **Complete level-by-level traversals** for every verdict: one read query per breadth-first level, with a visited set. Variable-length path patterns (`*0..25`) only supply evidence paths and Warden views.
 - **Graph algorithms**: `algo.betweenness` to rank risky memories and `algo.WCC` to group contamination into incidents.
@@ -104,7 +104,7 @@ When `CUSTODY_STATIC_DIR` points at a built console (`frontend/dist`), the API a
 custody/
   api/          FastAPI app; routes: recorder, guard, console; public_demo.py
   console/      UI read models, demo and Warden runners, agent-influence view
-  demo/         attack.py (primary story), extended.py, worlds.py, llm_run.py
+  demo/         attack.py (primary story), extended.py, worlds.py, acme_warden.py, llm_run.py
   graph/        model, schema, repository (Cypher), traversal.py (complete search)
   guard/        policy, queries, Guard service, certificates, re-adjudication
   memory/       shared-memory retrieval (hides quarantined memories)
