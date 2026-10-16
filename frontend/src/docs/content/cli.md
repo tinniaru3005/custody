@@ -4,7 +4,9 @@ Everything here uses the same `CUSTODY_*` settings as the API (see [Configuratio
 
 ## `python -m custody.warden`
 
-The Warden's command line ([`custody/warden/__main__.py`](repo:custody/warden/__main__.py)). Logs go to stderr.
+The Warden's command line ([`custody/warden/__main__.py`](repo:custody/warden/__main__.py)), also installed as the `custody-warden` command. Logs go to stderr.
+
+`--policy NAME` takes a registered tenant policy name (such as `acme`) or `default`. Without it, the tenant's own policy is used, except that `--seed-demo` on a tenant with no registered policy uses the Acme policy, because the seeded scenario is Acme's. `--seed-demo` and `seed` load the Warden's own incident scenario ([`custody/demo/acme_warden.py`](repo:custody/demo/acme_warden.py)), not the console's primary or extended demo.
 
 ### `serve`: run the MCP server
 
@@ -21,15 +23,15 @@ See [MCP integration](/docs/mcp#run-the-server) for what each flag does and how 
 python -m custody.warden agent --tenant acme --seed-demo "That vendor page was malicious. Clean it up."
 ```
 
-| Flag                     | Default                           | Meaning                                                                               |
-| ------------------------ | --------------------------------- | ------------------------------------------------------------------------------------- |
-| `request` (positional)   | required                          | what the operator wants                                                               |
-| `--tenant`               | required                          | tenant graph                                                                          |
-| `--planner`              | `auto`                            | `auto` (Claude if `ANTHROPIC_API_KEY` is set, else playbook), `anthropic`, `playbook` |
-| `--mcp-url`              | none                              | use a running MCP server instead of an in-process one                                 |
-| `--seed-demo`            | off                               | load the Acme incident scenario if the tenant has no actions                          |
-| `--policy`, `--operator` | tenant's own, `security-operator` | as for `serve`                                                                        |
-| `--json`                 | off                               | print the full report as JSON                                                         |
+| Flag                     | Default                           | Meaning                                                                                                                                                          |
+| ------------------------ | --------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `request` (positional)   | required                          | what the operator wants                                                                                                                                          |
+| `--tenant`               | required                          | tenant graph                                                                                                                                                     |
+| `--planner`              | `auto`                            | `auto` (Claude if `ANTHROPIC_API_KEY` is set, else playbook), `anthropic`, `playbook`                                                                            |
+| `--mcp-url`              | none                              | use a running MCP server instead of an in-process one (`--tenant` is still required but the server's tenant, policy and data are used; `--seed-demo` is ignored) |
+| `--seed-demo`            | off                               | load the Warden's Acme incident scenario if the tenant has no actions                                                                                            |
+| `--policy`, `--operator` | tenant's own, `security-operator` | as for `serve`                                                                                                                                                   |
+| `--json`                 | off                               | print the full report as JSON                                                                                                                                    |
 
 Output with the offline playbook (ids will differ):
 
@@ -41,6 +43,7 @@ Incident report for web:https://docs.vaultsync-backup.example/setup (incident in
 - Quarantine: quarantined (Guard ALLOW, action act_…): d_…, d_….
 - Blocked by the Guard before execution: act_….
 - Already executed to external sinks: act_….
+- Other open incidents (not touched): inc_… [medium] 1 untrusted source(s) (email:msg-7781@paypa1-billing.example) …
 APPROVAL NEEDED — nothing has been sent:
   * act_…: disclosure to it-support@northwind-msp.example (Guard REQUIRE_HUMAN_APPROVAL). …
 ```
@@ -52,7 +55,7 @@ python -m custody.warden approve act_… --tenant acme \
   --approver priya@acme-robotics.example [--reason "…"] [--send]
 ```
 
-Prints the new verdict and status; with `--send`, also sends the disclosure (to the in-memory outbox) after a fresh Guard check:
+Prints the new verdict and status. The Warden cannot approve: an approver named `warden` is refused, as are empty and `system:` names. With `--send`, also sends the disclosure (to the in-memory outbox) after a fresh Guard check:
 
 ```json
 {
@@ -60,10 +63,12 @@ Prints the new verdict and status; with `--send`, also sends the disclosure (to 
   "decision": "ALLOW",
   "status": "approved",
   "send": {
+    "action_id": "act_…",
     "sent": true,
     "verdict": "ALLOW",
     "status": "executed",
     "destination": "it-support@northwind-msp.example",
+    "payload_fingerprint": "sha256:…",
     "detail": "sent after human approval and a fresh Guard ALLOW"
   }
 }
@@ -75,38 +80,38 @@ Prints the new verdict and status; with `--send`, also sends the disclosure (to 
 python -m custody.warden seed --tenant acme [--reset]
 ```
 
-Loads the Acme incident scenario if the tenant has no actions yet; `--reset` drops the tenant graph first.
+Loads the Warden's Acme incident scenario if the tenant has no actions yet (otherwise prints `tenant already has actions; use --reset`); `--reset` drops the tenant graph first.
 
 ## Scripts
 
-| Script                                                                | What it does                                                                                             | Flags                                                                                                                 |
-| --------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
-| [`scripts/attack_demo.py`](repo:scripts/attack_demo.py)               | Runs the primary demo and prints the story and the decision with its paths                               | `--embedded PATH`, `--tenant`, `--extended`, `--investigate` (run the Warden afterwards)                              |
-| [`scripts/guard_demo.py`](repo:scripts/guard_demo.py)                 | One safe internal Slack post (ALLOW) and one lethal-trifecta upload (BLOCK) through the runtime          | `--embedded PATH`, `--tenant`, `--json`                                                                               |
-| [`scripts/warden_demo.py`](repo:scripts/warden_demo.py)               | Builds the incident and asks the Warden to clean it up                                                   | `--tenant` (default `acme-warden-demo`), `--planner playbook\|anthropic`, `--approve` (approve and send as the human) |
-| [`scripts/seed_acme.py`](repo:scripts/seed_acme.py)                   | Seeds the synthetic Acme Robotics tenant                                                                 | `--embedded PATH`, `--tenant`, `--keep` (don't drop the graph first)                                                  |
-| [`scripts/record_llm_run.py`](repo:scripts/record_llm_run.py)         | Records one real model-driven run of the primary scenario as a replay fixture; needs `ANTHROPIC_API_KEY` | `--model`, `--out`                                                                                                    |
-| [`scripts/export_ui_fixtures.py`](repo:scripts/export_ui_fixtures.py) | Regenerates the JSON fixtures the console's unit tests use, from real API responses                      | none; uses `CUSTODY_FALKORDB_EMBEDDED_PATH`                                                                           |
+| Script                                                                | What it does                                                                                             | Flags                                                                                                                                      |
+| --------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| [`scripts/attack_demo.py`](repo:scripts/attack_demo.py)               | Runs the primary demo and prints the story and the decision with its paths                               | `--embedded PATH`, `--tenant`, `--extended`, `--investigate` (run the Warden afterwards)                                                   |
+| [`scripts/guard_demo.py`](repo:scripts/guard_demo.py)                 | One internal Slack post (ALLOW) and one lethal-trifecta upload (BLOCK) through the runtime               | `--embedded PATH`, `--tenant`, `--json`                                                                                                    |
+| [`scripts/warden_demo.py`](repo:scripts/warden_demo.py)               | Builds the incident and asks the Warden to clean it up                                                   | `--tenant` (default `acme-warden-demo`), `--planner playbook\|anthropic` (default `playbook`), `--approve` (approve and send as the human) |
+| [`scripts/seed_acme.py`](repo:scripts/seed_acme.py)                   | Seeds the synthetic Acme Robotics tenant                                                                 | `--embedded PATH`, `--tenant`, `--keep` (don't drop the graph first)                                                                       |
+| [`scripts/record_llm_run.py`](repo:scripts/record_llm_run.py)         | Records one real model-driven run of the primary scenario as a replay fixture; needs `ANTHROPIC_API_KEY` | `--model` (default `$CUSTODY_DEMO_LLM_MODEL`, else the Warden default), `--out` (default `custody/demo/fixtures/llm_run.json`)             |
+| [`scripts/export_ui_fixtures.py`](repo:scripts/export_ui_fixtures.py) | Regenerates the JSON fixtures the console's unit tests use, from real API responses                      | none (it has no `--help` and runs immediately); uses `CUSTODY_FALKORDB_EMBEDDED_PATH`, or a temporary file if unset                        |
 
-`--embedded PATH` starts an embedded FalkorDB on that file; these scripts create its folder. `python -m custody.warden` and `warden_demo.py` take the database from `CUSTODY_*` settings instead, and with `CUSTODY_FALKORDB_EMBEDDED_PATH` the folder must already exist.
+`--embedded PATH` starts an embedded FalkorDB on that file; these scripts create its folder. Without it they use the `CUSTODY_*` settings. `python -m custody.warden` and `warden_demo.py` take the database from `CUSTODY_*` settings instead, and with `CUSTODY_FALKORDB_EMBEDDED_PATH` the folder must already exist.
 
 ## Make targets
 
-| Target                                    | Runs                                                                      |
-| ----------------------------------------- | ------------------------------------------------------------------------- |
-| `make install`                            | creates `.venv`, installs `.[dev,warden,bench]`, runs `npm ci`            |
-| `make api`                                | API on :8000 against the `CUSTODY_FALKORDB_*` settings, with reload       |
-| `make api-embedded`                       | API on :8000 with an embedded database at `.data/custody.db`              |
-| `make api-public`                         | public-demo mode on :8000 with `.data/public.db`, serving `frontend/dist` |
-| `make ui`                                 | Vite dev server on :5173                                                  |
-| `make demo`                               | `scripts/attack_demo.py`                                                  |
-| `make build`                              | builds the console (and these docs) into `frontend/dist`                  |
-| `make lint`                               | `ruff`, then ESLint, `tsc` and Prettier in `frontend/`                    |
-| `make test-backend`, `make test-frontend` | `pytest -q`, `npm test`                                                   |
-| `make e2e`                                | builds, then runs the Playwright suite                                    |
-| `make test`                               | lint, backend, frontend and end-to-end tests                              |
-| `make fixtures`                           | `scripts/export_ui_fixtures.py`                                           |
-| `make bench`, `make bench-large`          | the benchmark runs; see [Benchmarks](/docs/benchmarks)                    |
+| Target                                    | Runs                                                                                                                       |
+| ----------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| `make install`                            | creates `.venv`, installs `.[dev,warden,bench]` (editable), runs `npm ci` in `frontend/`                                   |
+| `make api`                                | API on :8000 against the `CUSTODY_FALKORDB_*` settings, with reload                                                        |
+| `make api-embedded`                       | API on :8000 with an embedded database at `.data/custody.db`                                                               |
+| `make api-public`                         | public-demo mode on :8000 with `.data/public.db`, serving `frontend/dist`                                                  |
+| `make ui`                                 | Vite dev server on :5173                                                                                                   |
+| `make demo`                               | `scripts/attack_demo.py` against the `CUSTODY_*` settings                                                                  |
+| `make build`                              | builds the console (and these docs) into `frontend/dist`                                                                   |
+| `make lint`                               | `ruff`, then ESLint, `tsc` and Prettier in `frontend/`                                                                     |
+| `make test-backend`, `make test-frontend` | `pytest -q`, `npm test`                                                                                                    |
+| `make e2e`                                | builds, then runs the Playwright suite                                                                                     |
+| `make test`                               | lint, backend, frontend and end-to-end tests                                                                               |
+| `make fixtures`                           | `scripts/export_ui_fixtures.py`                                                                                            |
+| `make bench`, `make bench-large`          | correctness, scaling, SQL comparison, LLM test and report; the 100k-node run. See [Benchmarks](/docs/benchmarks#reproduce) |
 
 ## Documentation screenshots
 

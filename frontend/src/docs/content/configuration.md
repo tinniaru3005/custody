@@ -16,10 +16,10 @@ Server settings are environment variables prefixed with `CUSTODY_`, read by [`cu
 
 ## Graph
 
-| Variable                  | Default   | Purpose                                                                                                                                                                   |
-| ------------------------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `CUSTODY_GRAPH_PREFIX`    | `custody` | graph names are `<prefix>:<tenant>`                                                                                                                                       |
-| `CUSTODY_MAX_TRACE_DEPTH` | `25`      | maximum `DERIVED_FROM` hops in lineage, trace and evidence queries and in the Warden's investigation views. Guard verdicts use a complete search and do not depend on it. |
+| Variable                  | Default   | Purpose                                                                                                                                                                                                                                                              |
+| ------------------------- | --------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `CUSTODY_GRAPH_PREFIX`    | `custody` | graph names are `<prefix>:<tenant>`                                                                                                                                                                                                                                  |
+| `CUSTODY_MAX_TRACE_DEPTH` | `25`      | maximum `DERIVED_FROM` hops in lineage, path-to and trace views, in exact-value attribution candidates and in the Warden's analyses. Guard verdicts use a complete search and do not depend on it; the Guard's evidence queries use `GuardPolicy.max_depth` instead. |
 
 ## HTTP
 
@@ -27,7 +27,7 @@ Server settings are environment variables prefixed with `CUSTODY_`, read by [`cu
 | ---------------------- | ------- | ------------------------------------------------------------------------------------------------------------------------- |
 | `CUSTODY_STATIC_DIR`   | none    | serve the built console (`frontend/dist`) at `/`, with the SPA fallback. Set to `/app/frontend/dist` in the Docker image. |
 | `CUSTODY_CORS_ORIGINS` | none    | comma-separated origins, only when the console is hosted on a different origin                                            |
-| `PORT`                 | `8000`  | the port the Docker image listens on                                                                                      |
+| `PORT`                 | `8000`  | the port the Docker image listens on (read by the image's start command, not by Custody)                                  |
 
 ## Public demo
 
@@ -41,15 +41,25 @@ Server settings are environment variables prefixed with `CUSTODY_`, read by [`cu
 
 These four are read directly from the process environment, **not** from `.env`. Export them in your shell, your container or your host's settings.
 
-| Variable                 | Default             | Purpose                                                                                                                                                    |
-| ------------------------ | ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `ANTHROPIC_API_KEY`      | none                | lets the Warden plan with Claude (planner `auto` or `anthropic`) and enables `scripts/record_llm_run.py`. Without it the Warden uses the offline playbook. |
-| `CUSTODY_WARDEN_MODEL`   | `claude-sonnet-5-5` | model for the Claude planner                                                                                                                               |
-| `CUSTODY_DEMO_MODE`      | `auto`              | primary demo: `auto` replays a recorded real-LLM run if a valid one exists, else scripted; `recorded`; `scripted`                                          |
-| `CUSTODY_DEMO_LLM_MODEL` | the Warden default  | model used by `scripts/record_llm_run.py`                                                                                                                  |
+| Variable                 | Default             | Purpose                                                                                                                                                                                                                                                                                                                                                                                                                             |
+| ------------------------ | ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `ANTHROPIC_API_KEY`      | none                | lets the Warden plan with Claude (planner `auto` or `anthropic`) and enables `scripts/record_llm_run.py`. Without it the Warden uses the offline playbook.                                                                                                                                                                                                                                                                          |
+| `CUSTODY_WARDEN_MODEL`   | `claude-sonnet-5-5` | model for the Claude planner                                                                                                                                                                                                                                                                                                                                                                                                        |
+| `CUSTODY_DEMO_MODE`      | `auto`              | primary demo: `auto` replays `custody/demo/fixtures/llm_run.json` only if it is a real-model recording that contains a BLOCK, else runs the scripted simulation; `recorded` also replays a test-double recording (labelled as not a real model); `scripted` always runs the simulation. No real recording ships, so `auto` currently runs the scripted demo. The console's `POST …/console/demo/attack?mode=` overrides it per run. |
+| `CUSTODY_DEMO_LLM_MODEL` | the Warden default  | model used by `scripts/record_llm_run.py`                                                                                                                                                                                                                                                                                                                                                                                           |
 
 > [!WARNING]
 > Don't set `ANTHROPIC_API_KEY` on a public deployment you don't want others to spend from. Public-demo mode refuses Warden runs, but a normal-mode deployment without authentication does not.
+
+## Benchmarks
+
+Read from the process environment by [`bench/baselines.py`](repo:bench/baselines.py) only; the server ignores them.
+
+| Variable                  | Default             | Purpose                                                                                    |
+| ------------------------- | ------------------- | ------------------------------------------------------------------------------------------ |
+| `CUSTODY_BENCH_SBERT`     | `all-MiniLM-L6-v2`  | sentence-transformers model for `python -m bench.run_correctness --sbert`                  |
+| `CUSTODY_BENCH_LLM_MODEL` | `claude-sonnet-4-5` | model for the LLM-judge baseline; differs from the Warden's default `CUSTODY_WARDEN_MODEL` |
+| `ANTHROPIC_API_KEY`       | none                | enables the LLM-judge parts of the benchmarks                                              |
 
 ## Console build
 
@@ -63,10 +73,15 @@ Read at build time by Vite (`frontend/.env.local` or the environment of `npm run
 
 ## Tests
 
-| Variable                                                          | Purpose                                                                                        |
-| ----------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
-| `CUSTODY_TEST_FALKORDB_HOST`, `CUSTODY_TEST_FALKORDB_PORT`        | run `pytest` against a FalkorDB server instead of an embedded one                              |
-| `PYTHON`, `PW_CHROMIUM`, `E2E_PORT`, `E2E_DB`, `E2E_GRAPH_PREFIX` | Playwright: Python interpreter, browser binary, API port, embedded database file, graph prefix |
+Read from the process environment by `tests/conftest.py` and [`frontend/playwright.config.ts`](repo:frontend/playwright.config.ts):
+
+| Variable                                                   | Default                                      | Purpose                                                                                                                    |
+| ---------------------------------------------------------- | -------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| `CUSTODY_TEST_FALKORDB_HOST`, `CUSTODY_TEST_FALKORDB_PORT` | none (embedded), `6379`                      | run `pytest` against a FalkorDB server instead of an embedded one                                                          |
+| `PYTHON`                                                   | `.venv/bin/python`                           | Playwright: interpreter that starts the API                                                                                |
+| `PW_CHROMIUM`                                              | none                                         | Playwright: path to a preinstalled Chromium                                                                                |
+| `E2E_PORT`, `E2E_DB`, `E2E_GRAPH_PREFIX`                   | `8765`, `/tmp/custody-e2e.db`, `custody-e2e` | Playwright: API port, embedded database file, graph prefix (the API runs with `CUSTODY_DEMO_MODE=scripted` and no API key) |
+| `DOCS_SCREENSHOTS`, `DOCS_PUBLIC_URL`, `SCREENSHOTS`       | unset (specs skipped)                        | enable the screenshot specs; see [Commands](/docs/cli#documentation-screenshots)                                           |
 
 ## Guard policy
 
@@ -101,16 +116,16 @@ register_policy("myteam", GuardPolicy(
 from custody.api.app import app  # noqa: E402  (serve with: uvicorn myapp:app)
 ```
 
-| `GuardPolicy` field                                                                                                         | Default              | Meaning                                                                                |
-| --------------------------------------------------------------------------------------------------------------------------- | -------------------- | -------------------------------------------------------------------------------------- |
-| `internal_email_domains`, `internal_slack_workspaces`, `shared_slack_channels`, `internal_hosts`, `internal_ticket_systems` | empty                | what counts as internal (subdomains of internal domains and hosts are internal)        |
-| `actions`                                                                                                                   | `DEFAULT_ACTIONS`    | per action type: `outbound`, `irreversible`, `risk` (`low`/`high`), `human_review`     |
-| `destination_roles`                                                                                                         | `{"destination"}`    | argument roles checked for integrity; every other role is a payload                    |
-| `max_depth`, `path_limit`, `evidence_timeout_ms`                                                                            | 25, 50, 250          | bounds of the evidence queries (explanations only)                                     |
-| `search_max_depth`, `search_max_nodes`, `search_timeout_ms`                                                                 | none, 100 000, 2 000 | bounds of the complete searches; hitting one makes a check INDETERMINATE (fail closed) |
-| `precedent_escalation`                                                                                                      | `true`               | escalate to BLOCK after a human rejected a secret-bearing action to the same sink      |
-| `egress_endorsements`                                                                                                       | `true`               | allow secret-egress endorsements to clear confidentiality                              |
-| `contamination_analysis`, `contamination_timeout_ms`, `contamination_max_checks`                                            | `true`, 1 000, 25    | the untrusted-roots explanation                                                        |
+| `GuardPolicy` field                                                                                                         | Default              | Meaning                                                                                                                                                             |
+| --------------------------------------------------------------------------------------------------------------------------- | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `internal_email_domains`, `internal_slack_workspaces`, `shared_slack_channels`, `internal_hosts`, `internal_ticket_systems` | empty                | what counts as internal (subdomains of internal domains and hosts are internal; channels in `shared_slack_channels` are external even inside an internal workspace) |
+| `actions`                                                                                                                   | `DEFAULT_ACTIONS`    | per action type: `outbound`, `irreversible`, `risk` (`low`/`high`), `human_review`                                                                                  |
+| `destination_roles`                                                                                                         | `{"destination"}`    | argument roles checked for integrity; every other role is a payload                                                                                                 |
+| `max_depth`, `path_limit`, `evidence_timeout_ms`                                                                            | 25, 50, 250          | bounds of the evidence queries; they can only confirm a violation, never clear one                                                                                  |
+| `search_max_depth`, `search_max_nodes`, `search_timeout_ms`                                                                 | none, 100 000, 2 000 | bounds of the complete searches; hitting one makes a check INDETERMINATE (fail closed)                                                                              |
+| `precedent_escalation`                                                                                                      | `true`               | escalate to BLOCK after a human rejected a secret-bearing action to the same sink                                                                                   |
+| `egress_endorsements`                                                                                                       | `true`               | allow secret-egress endorsements to clear confidentiality                                                                                                           |
+| `contamination_analysis`, `contamination_timeout_ms`, `contamination_max_checks`                                            | `true`, 1 000, 25    | the untrusted-roots explanation                                                                                                                                     |
 
 Action types in `DEFAULT_ACTIONS`:
 
