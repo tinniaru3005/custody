@@ -7,7 +7,7 @@ Three scenarios ship with Custody, all set in the synthetic company Acme Robotic
 
 ## The primary attack
 
-Two scripted agents: **Scout** (research: reads the web, writes shared memory) and **Ops** (infrastructure: vault, key rotation, Slack, backups). Run it from the console's **Run attack scenario** button, `POST /api/tenants/acme/console/demo/attack`, or `python scripts/attack_demo.py`.
+Two scripted agents: **Scout** (research: reads the web, writes shared memory) and **Ops** (infrastructure: vault, key rotation, Slack, backups). Run it from the console's **Run attack scenario** button (not shown in public-demo mode), `POST /api/tenants/acme/console/demo/attack`, or `python scripts/attack_demo.py`.
 
 | #   | When  | What happens                                                                                                                                                                         | Guard                         |
 | --- | ----- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------- |
@@ -45,7 +45,7 @@ One Day-4 request, the same destination bytes and the same rotated key, recorded
 | World       | Where the destination came from                                                                                                    | Verdict                       |
 | ----------- | ---------------------------------------------------------------------------------------------------------------------------------- | ----------------------------- |
 | A, clean    | An entry in Acme's trusted infrastructure registry, which the security lead endorsed for secret egress (`ENDORSES {egress: true}`) | **ALLOW**, with a certificate |
-| B, typed    | Priya typed it into the conversation. Integrity is clean, but a secret is going to an external sink nobody approved for secrets.   | **REQUIRE APPROVAL**          |
+| B, typed    | Priya typed it into the conversation. Integrity is clean, but a secret is going to an external sink nobody approved for secrets.   | **REQUIRE_HUMAN_APPROVAL**    |
 | C, poisoned | Scout's Day-1 vendor page, via shared memory                                                                                       | **BLOCK**                     |
 
 _The content can be identical. The provenance changes the decision._
@@ -54,7 +54,7 @@ _The content can be identical. The provenance changes the decision._
 
 ## The extended scenario
 
-A multi-incident version used to show the Warden and the approval queue. It adds a **Courier** agent that relays digests and sends email. Run it with `POST /api/tenants/acme/console/demo/attack?scenario=extended` or `python scripts/attack_demo.py --extended --investigate`.
+A multi-incident version used to show the Warden and the approval queue. It adds a **Courier** agent that relays digests and sends email. Run it with `POST /api/tenants/acme/console/demo/attack?scenario=extended` or `python scripts/attack_demo.py --extended --investigate`; the console has no button for it.
 
 - **Day 1**: Scout saves the attacker's destination to shared memory; Courier relays the digest to Ops.
 - **Days 2–3**: Courier emails Scout's notes to the external MSP (allowed and executed, so contaminated content has left the company), Ops proposes a nightly backup to the remembered URL (held for human approval), and Courier files a spoofed invoice email, an unrelated second incident.
@@ -74,14 +74,14 @@ Scout and Ops are then driven by the model (tool use) through the normal runtime
 
 **Run attack scenario** then replays it with no model call: every request and tool result must match the recording byte for byte, otherwise the replay stops (`ReplayDivergence`) and the scripted story is used. The demo is labelled "Recorded real LLM execution — deterministic replay" with the model and date.
 
-| `CUSTODY_DEMO_MODE` (or `?mode=`) | Behaviour                                                                 |
-| --------------------------------- | ------------------------------------------------------------------------- |
-| `auto` (default)                  | Replay a valid real recording if one exists, otherwise the scripted story |
-| `recorded`                        | Replay the recording                                                      |
-| `scripted`                        | Always the scripted simulation                                            |
+| `CUSTODY_DEMO_MODE` (or `?mode=`) | Behaviour                                                                                                                                                                     |
+| --------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `auto` (default)                  | Replay a valid real-model recording that contains a BLOCK if one exists, otherwise the scripted story                                                                         |
+| `recorded`                        | Also replay a test-double recording (labelled "Recorded test-double execution (not a real model)"); without a usable recording, or if the replay diverges, the scripted story |
+| `scripted`                        | Always the scripted simulation                                                                                                                                                |
 
 > [!LIMITATION]
-> No real recording ships in the repository. The record and replay path is tested with a deterministic stand-in model (`tests/integration/test_llm_replay.py`). A model may also refuse the page's hidden instruction; a recording without a blocked action falls back to the scripted story, and the script says so rather than retrying.
+> No real recording ships in the repository, so `auto` and `recorded` currently run the scripted story. `?mode=` applies to the primary scenario only. The record and replay path is tested with a deterministic stand-in model (`tests/integration/test_llm_replay.py`). A model may also refuse the page's hidden instruction; a recording without a blocked action falls back to the scripted story, and the script says so rather than retrying.
 
 ## Command-line demos
 
@@ -92,7 +92,7 @@ python scripts/guard_demo.py --embedded .data/guard.db                         #
 python scripts/warden_demo.py                                                  # incident + cleanup
 ```
 
-`guard_demo.py` uses a slightly different story: a research agent passes the URL to Ops both through shared memory and through a direct message, so the BLOCK lists routes through both (they converge on the vendor page content); the safe case posts a rotated deploy key to `#security`. `warden_demo.py` uses the `CUSTODY_*` settings (set `CUSTODY_FALKORDB_EMBEDDED_PATH` for an embedded database) and the tenant `acme-warden-demo`. All flags: [Commands and scripts](/docs/cli).
+`guard_demo.py` uses a slightly different story: a research agent passes the URL to Ops both through shared memory and through a direct message, so the BLOCK lists routes through both (they converge on the vendor page content); the allowed case posts a rotated deploy key to `#security`. `warden_demo.py` uses the `CUSTODY_*` settings (set `CUSTODY_FALKORDB_EMBEDDED_PATH` for an embedded database) and the tenant `acme-warden-demo`. All flags: [Commands and scripts](/docs/cli).
 
 ## Resetting
 
