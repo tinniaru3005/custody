@@ -32,6 +32,10 @@ CLI, benchmarks, deployment, security model, troubleshooting) are served by the 
 repository: [Guard](docs/guard.md) · [graph model](docs/graph-model.md) ·
 [Warden and MCP](docs/warden.md) · [benchmarks](bench/README.md).
 
+**Blog post:** [Your Agent Forgot the Prompt Injection. Its Memory Didn't.](https://arunima-chaudhuri.hashnode.dev/your-agent-forgot-the-prompt-injection-its-memory-didn-t)
+covers why shared agent memory turns prompt injection into a provenance problem and how
+Custody's Guard and Warden handle it.
+
 ---
 
 ## Contents
