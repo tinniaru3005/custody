@@ -1,13 +1,19 @@
 # Custody Warden
 
-The Warden is Custody's investigation and remediation agent. It reads the provenance graph
-to understand an incident, contains it, and drafts what needs to be said to people
-outside the organisation. Its capabilities are MCP tools, and the Warden agent is an LLM
-that picks among them.
+The Warden is Custody's investigation and remediation agent. Its role is deliberately
+narrow: **trace → re-adjudicate → contain → explain**. It reads the provenance graph to
+understand an incident, re-checks history when a Source turns out to be compromised,
+contains the contamination, and drafts what needs to be said to people outside the
+organisation. Its capabilities are 17 MCP tools; a planner (Claude with tool use, or a
+deterministic offline playbook) picks among them.
 
-The Warden does not get around the security system. Each action it takes is recorded as
-an `Action` by agent `warden` and goes through the same deterministic Guard as any worker
-agent's. External communication also needs explicit human approval.
+The Warden does not get around the security system and is not an authority. Each action it
+takes is recorded as an `Action` by agent `warden` and goes through the same deterministic
+Guard as any worker agent's; the Guard's verdict is final. Anything that loosens security,
+and all external communication, needs explicit human approval.
+
+The documentation site (`/docs/warden` in the running app, source in
+`frontend/src/docs/content/warden.md`) has a walkthrough with screenshots.
 
 ## Tools
 
@@ -17,22 +23,25 @@ agent's. External communication also needs explicit human approval.
 | `find_sources(query?, kind?, trust?)` | read | Finds Sources by id, URL or content. Untrusted sources with the most downstream influence come first. |
 | `trace_back(action_id)` | read | Paths from each argument to its Sources: trusted, untrusted and secret (vault) sources, memories, recalls and messages crossed, the latest Guard decision, and an explanation. |
 | `trace_forward(source_id)` | read | Follows a Source (or Datum) forward through `DERIVED_FROM` to the derived data, memories, recalls, messages and actions it reached. Reports which actions already executed externally, which were blocked, and which are pending. |
+| `find_chokepoints(action_id)` | read | Single provenance nodes whose removal breaks every recorded untrusted path into the action, each verified by a complete re-search. See [Chokepoint analysis](#chokepoint-analysis-find_chokepoints). |
 | `rank_risky_memories(limit?, include_quarantined?)` | read | Ranks memories by taint × downstream reach, plus **FalkorDB `algo.betweenness`** centrality. |
 | `cluster_incidents()` | read (sandbox) | Groups contamination into incidents using **FalkorDB `algo.WCC`** on a **GRAPH.COPY** sandbox, and gives each a severity. |
 | `simulate_policy(policy)` | read (sandbox) | Answers "if this policy had been on earlier, what would have been blocked or sent for approval?" Re-runs the Guard on a GRAPH.COPY clone. |
-| `quarantine(memory_ids, reason?, incident_id?)` | **Guard-checked action** | Records a `quarantine_memory` Action. Executes only on Guard ALLOW. Afterwards the memories are hidden from retrieval and cannot be recalled. |
-| `draft_disclosure(action_ids, notes?, claims?)` | write (draft only) | Every factual sentence cites verified graph ids from the traced incident (unsupported claims removed). Writes one draft per external recipient of an executed action. Nothing is sent. |
+| `quarantine(memory_ids, reason?, incident_id?)` | **Guard-checked action** | Records a `quarantine_memory` Action. Executes only on Guard ALLOW. Afterwards the memories are hidden from normal retrieval and cannot be recalled (history is kept). |
+| `draft_disclosure(action_ids, notes?, claims?)` | write (draft only) | Every factual sentence must cite existing graph ids from the traced incident (others are removed). Writes one draft per external recipient of an executed action. Nothing is sent. |
 | `propose_disclosure(draft_id)` | **Guard-checked action** | Records a `send_disclosure` Action. The Guard returns REQUIRE_HUMAN_APPROVAL (policy `human_review`). It never auto-executes. |
 | `send_approved_disclosure(action_id)` | **Guard-checked action** | Sends only if a human approved **and** a fresh Guard check returns ALLOW. Otherwise returns `sent=false`. |
 | `revoke_source_trust(source_id, reason?)` | **Guard-checked action** (tightening) | Marks a Source untrusted and re-adjudicates every downstream historical action; executes on Guard ALLOW. |
-| `propose_loosening(kind, targets, reason?)` | **Guard-checked proposal** (loosening) | `unquarantine_memory`, `endorse_data`, `restore_source_trust`, `weaken_restriction`: always REQUIRE_HUMAN_APPROVAL; never executed by the Warden without a human approval and a fresh Guard ALLOW. |
+| `propose_loosening(kind, targets, reason?)` | **Guard-checked proposal** (loosening) | `unquarantine_memory`, `endorse_data`, `restore_source_trust`, `weaken_restriction`: always REQUIRE_HUMAN_APPROVAL; executed only after a human approval and a fresh Guard ALLOW, by an operator calling `Warden.execute_approved_remediation` from Python (not exposed over MCP). |
 | `why_allowed(action_id)` | read | The action's Provenance Completeness Certificate and a fixed-template rendering of its evidence and the policy result. |
 | `check_action(action_id)` | read + audit | **The Guard as a service** for any MCP agent framework: runs the deterministic Guard on an action recorded through the Recorder API. Returns `verdict` (`ALLOW` / `REQUIRE_APPROVAL` / `BLOCK`), `fail_closed` (an incomplete search made it non-ALLOW) and the INDETERMINATE checks, triggered checks, per-check search outcome, evidence paths, untrusted sources, sink classification, approval options and, on ALLOW, the certificate summary. Writes a Decision audit node; never changes the action's status or executes anything. |
-| `explain_decision(action_id, decision_id?)` | read | The latest (or given) recorded Decision next to the same Guard re-run on the current graph, with `matches_recorded` (endorsements and trust revocations are the only ways a verdict changes later). Errors if the action was never checked. |
+| `explain_decision(action_id, decision_id?)` | read | The latest (or given) recorded Decision next to the same Guard re-run on the current graph, with `matches_recorded`. A later verdict can differ after endorsements, action-scoped approvals, trust revocations or restorations, precedent rejections or a policy change. Read-only; errors if the action was never checked. |
 
 There is no approval tool. A human approves through the Guard HTTP API
-(`POST /tenants/{t}/guard/actions/{id}/approve`), `python -m custody.warden approve`, or
-`Warden.approve_disclosure` / `Warden.approve_remediation`. Approvers named `warden` or `system:*` are refused.
+(`POST /tenants/{t}/guard/actions/{id}/approve`), `python -m custody.warden approve` (disclosures only), or
+`Warden.approve_disclosure` / `Warden.approve_remediation`. The Guard refuses approvers
+that are not human or whose name starts with `system:`; the Warden's approval wrappers
+also refuse `warden`.
 
 All results are typed (pydantic, see `custody/warden/models.py`), and the MCP server
 publishes them as `outputSchema`. Previews in results can contain text written by the
@@ -44,7 +53,7 @@ and never as instructions.
 **Direct vs. context influence.** Edges with `attribution: 'context'` mean a value was in
 the model's context but was attributed to a trusted supplier. The Guard does not follow
 these edges. The Warden reports anything reached only through them as
-`influence: "context_only"`. In the demo, the `#security` Slack post had the vendor memory
+`influence: "context_only"`. In the Warden seed incident (`--seed-demo`), the `#security` Slack post had the vendor memory
 in context but is context-only, so it is not quarantined or disclosed.
 
 **Warden artefacts** (data and actions by agent `warden`) are excluded from contamination,
@@ -68,8 +77,8 @@ a test checks this. Severity:
 
 - **critical**: an executed external action with a contaminated destination or a secret
   payload.
-- **high**: any executed external action, or a blocked attempt.
-- **medium**: contaminated memories or pending actions.
+- **high**: any other executed external action, or a blocked attempt.
+- **medium**: contaminated memories, pending actions, or any other action in the incident.
 - **low**: none of the above.
 
 ## Simulation isolation (`GRAPH.COPY`)
@@ -126,7 +135,7 @@ A `PolicySpec` can:
 | Direction | Remediation | How it runs |
 |---|---|---|
 | tightening | `quarantine` / `disable_memory_recall`, `revoke_source_trust` | Warden Action → `Guard.enforce` → executes on ALLOW |
-| loosening | `unquarantine_memory`, `endorse_data`, `restore_source_trust`, `weaken_restriction` | `propose_loosening` only: policy marks them `human_review` (forced by `harden_policy` whatever the tenant policy says), so the Guard returns REQUIRE_HUMAN_APPROVAL; a human approves (`Warden.approve_remediation` / the Guard HTTP API; the Warden and agents are refused); `execute_approved_remediation` re-runs the Guard and executes only on ALLOW |
+| loosening | `unquarantine_memory`, `endorse_data`, `restore_source_trust`, `weaken_restriction` | `propose_loosening` only: policy marks them `human_review` (forced by `harden_policy` whatever the tenant policy says), so the Guard returns REQUIRE_HUMAN_APPROVAL; a human approves (`Warden.approve_remediation` / the Guard HTTP API; the Warden and agents are refused); an operator then calls `Warden.execute_approved_remediation(action_id)` from Python, which re-runs the Guard and executes only on ALLOW. This step is not exposed over MCP, the CLI or HTTP. |
 
 - Every remediation is a recorded Action decided by the same Guard; nothing bypasses it. If
   a tenant policy wants a human even for a tightening action, the Warden waits.
@@ -164,7 +173,9 @@ id must belong to the traced incident (the actions, their sinks, and the complet
 ancestry of their arguments with its Sources). Model-written prose may be added through
 `notes` (one claim per sentence, ids in `[brackets]`) or `claims=[{text, citations}]`;
 unsupported sentences are removed and listed in `rejected_claims` with the reason. The
-model may phrase facts; it cannot add facts the graph does not support.
+model may phrase facts, but cannot cite anything outside the traced incident. The check is
+about *grounding*, not truth: a false sentence that cites in-scope ids would pass, which is
+one reason every disclosure needs a human approval before it is sent.
 
 ```
 draft_disclosure([act])        only executed + external actions; one draft per recipient,
@@ -212,21 +223,51 @@ never claims something was sent unless `send_approved_disclosure` returned `sent
 ```bash
 pip install -e ".[dev,warden]"
 
-# MCP server (stdio) for any MCP client
-python -m custody.warden serve --tenant acme
-python -m custody.warden serve --tenant acme --seed-demo          # load the incident scenario
-python -m custody.warden serve --tenant acme --transport streamable-http --port 8765   # → http://127.0.0.1:8765/mcp
+export CUSTODY_FALKORDB_EMBEDDED_PATH=.data/custody.db   # or CUSTODY_FALKORDB_HOST/PORT
 
-# the agent
+# load the Acme incident scenario into a tenant (--reset drops the tenant graph first)
+python -m custody.warden seed --tenant acme
+
+# MCP server (stdio) for any MCP client; logs go to stderr
+python -m custody.warden serve --tenant acme
+python -m custody.warden serve --tenant acme --seed-demo          # seed if the tenant is empty
+python -m custody.warden serve --tenant acme --transport streamable-http --port 8765   # → http://127.0.0.1:8765/mcp
+#   also: --transport sse, --host, --policy <name>, --operator <name>
+
+# the agent (planner: auto = Claude if ANTHROPIC_API_KEY is set, else the playbook)
 python -m custody.warden agent --tenant acme --seed-demo "That vendor page was malicious. Clean it up."
+python -m custody.warden agent --tenant acme --planner playbook --json "..."
 python -m custody.warden agent --tenant acme --mcp-url http://127.0.0.1:8765/mcp "..."
 python scripts/warden_demo.py [--planner anthropic] [--approve]
 
-# human approval (and send)
+# human approval of a proposed disclosure (and send)
 python -m custody.warden approve <action_id> --tenant acme --approver priya@acme-robotics.example --send
 ```
 
-See the README for client configuration (Claude Desktop, Claude Code, MCP Inspector).
+**Claude Desktop / Claude Code.** Register the stdio server with the absolute path to the
+virtualenv's Python and a database setting, e.g. in `claude_desktop_config.json`:
+
+```json
+{
+  "mcpServers": {
+    "custody-warden": {
+      "command": "/path/to/custody/.venv/bin/python",
+      "args": ["-m", "custody.warden", "serve", "--tenant", "acme", "--seed-demo"],
+      "env": { "CUSTODY_FALKORDB_EMBEDDED_PATH": "/path/to/custody/.data/custody.db" }
+    }
+  }
+}
+```
+
+For Claude Code:
+
+```bash
+claude mcp add --transport stdio --env CUSTODY_FALKORDB_EMBEDDED_PATH=/path/to/custody/.data/custody.db \
+  custody-warden -- /path/to/custody/.venv/bin/python -m custody.warden serve --tenant acme --seed-demo
+```
+
+The MCP Inspector can connect to the Streamable HTTP endpoint above. To share one graph
+between the console API and the MCP server, point both at the same FalkorDB server.
 
 ## Guard over MCP: what the verdict is worth
 
@@ -268,12 +309,16 @@ the decision view.
 
 ## Known limits
 
-- Warden's investigation queries (blast radius, ancestry, contamination) enumerate paths
-  and are bounded by `max_trace_depth`; results deeper than that are not shown. Guard
+- Warden's investigation queries (blast radius, ancestry, contamination) are bounded by
+  `CUSTODY_MAX_TRACE_DEPTH` (default 25); results deeper than that are not shown. Guard
   verdicts do not depend on this bound (see docs/guard.md, "Completeness"). Path
   enumeration can be exponential in dense multi-turn sessions, so these queries run with a
   10 s server-side timeout and fail rather than hang. Large tenants would want `algo.BFS`
   or precomputed reachability.
 - `cluster_incidents` copies the whole tenant graph on every call, which is O(graph).
-- Disclosure sending supports email sinks. Other channels are drafted only.
-- Un-quarantining is not implemented. It would be a human-only action in the same style.
+- Disclosure sending supports (simulated) email sinks. Other channels are drafted only.
+- Executing an approved loosening remediation (`execute_approved_remediation`) is a Python
+  call only; there is no MCP tool, CLI command or HTTP route for it.
+- The console's Warden page shows investigations and re-adjudication reports; remediation
+  proposals and `why_allowed` are available over MCP and Python, not in the UI.
+- Citation checks prove grounding in the graph, not that a sentence is true.
