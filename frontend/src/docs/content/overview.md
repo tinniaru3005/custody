@@ -7,8 +7,8 @@ Agent teams share memory. A research agent reads a web page and writes a note; d
 Custody answers that question with a graph:
 
 - The **Recorder** stores every user message, web page, vault read, model output, memory, recall and inter-agent message as a node in a **provenance graph** in [FalkorDB](https://www.falkordb.com), with an edge to everything it was derived from.
-- The **Guard** runs deterministic Cypher graph queries over that graph before a side effect happens and returns **ALLOW**, **REQUIRE APPROVAL** or **BLOCK**, together with the exact path that caused the decision. No language model is involved in the decision.
-- The **Warden** is an incident-response agent whose only capabilities are [MCP](https://modelcontextprotocol.io) tools over the graph: trace an untrusted source forward, rank risky memories, quarantine them and draft disclosures. Its own actions pass through the same Guard.
+- The **Guard** runs deterministic Cypher graph queries over that graph before a side effect happens and returns **ALLOW**, **REQUIRE_HUMAN_APPROVAL** or **BLOCK**, together with the exact path that caused the decision. Verdicts come from a complete traversal; a search that cannot finish fails closed and is never an ALLOW. No language model is involved in the decision.
+- The **Warden** is an incident-response agent whose only capabilities are [MCP](https://modelcontextprotocol.io) tools over the graph: trace an untrusted source forward, revoke its trust and re-adjudicate past decisions, rank risky memories, quarantine them and draft disclosures. Its own actions pass through the same Guard.
 
 <figure class="diagram">
 <svg viewBox="0 0 760 270" role="img" aria-labelledby="ov-t ov-d">
@@ -22,13 +22,13 @@ Custody answers that question with a graph:
 <text class="dg-m" x="36" y="108">propose actions</text>
 <rect class="dg-box" x="295" y="30" width="170" height="86" rx="10"/>
 <text class="dg-h" x="311" y="56">Recorder</text>
-<text class="dg-m" x="311" y="76">the only write path</text>
+<text class="dg-m" x="311" y="76">the provenance write path</text>
 <text class="dg-m" x="311" y="92">every Datum + its parents</text>
 <text class="dg-code" x="311" y="108">/record/*</text>
 <rect class="dg-db" x="570" y="30" width="170" height="86" rx="10"/>
 <text class="dg-h" x="586" y="56">Provenance graph</text>
-<text class="dg-m" x="586" y="76">FalkorDB, one graph</text>
-<text class="dg-m" x="586" y="92">per tenant, append-only</text>
+<text class="dg-m" x="586" y="76">FalkorDB graph per tenant</text>
+<text class="dg-m" x="586" y="92">lineage is append-only</text>
 <text class="dg-code" x="586" y="108">custody:&lt;tenant&gt;</text>
 <rect class="dg-box" x="295" y="160" width="170" height="86" rx="10"/>
 <text class="dg-h" x="311" y="186">Guard</text>
@@ -82,4 +82,4 @@ The console ships with a synthetic company, **Acme Robotics**, and a scripted at
 
 ## Status and scope
 
-Custody is a working reference implementation, not a hosted product. It has no authentication of its own, ships no connectors to real Slack, email or storage services, and its Guard is only as good as the provenance it is given: an integration that leaves context out of the graph can get an ALLOW it should not have. The [security model](/docs/security) lists these limits in full.
+Custody is a working reference implementation, not a hosted product. It has no authentication of its own, ships no connectors to real Slack, email or storage services, and its Guard is only as good as the provenance it is given: an integration that leaves context out of the graph can get an ALLOW it should not have. An ALLOW means only that, relative to the recorded provenance graph, the current Source trust labels (policy inputs, not inferred) and a complete traversal, no untrusted influence path was found; it does not prove the action safe. The [security model](/docs/security) lists these limits in full.

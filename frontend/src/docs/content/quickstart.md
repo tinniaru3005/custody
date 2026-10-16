@@ -48,7 +48,7 @@ The console wipes the `acme` tenant graph, records the scripted story through th
 
 ![The seven-step timeline: steps 5 and 6 carry ALLOW and BLOCK badges](demo-timeline.webp "Step 5 (internal Slack post) is allowed; step 6 (upload to the attacker's URL) is blocked.")
 
-1. Click step **5**. Ops posts the rotated key to `#platform-team`. The destination is exactly what the user typed, and the Slack workspace is internal, so the Guard returns **ALLOW** and attaches a provenance completeness certificate.
+1. Click step **5**. Ops posts the rotated key to `#platform-team`. The destination is exactly what the user typed, and the Slack workspace is internal, so the Guard returns **ALLOW** and attaches a [provenance completeness certificate](/docs/guard#provenance-completeness-certificate): relative to the recorded provenance graph, the current trust labels and a complete traversal, no untrusted influence path was found.
 2. Click step **6**. Ops proposes `upload_backup` to the URL it recalled from shared memory. The destination traces back to an untrusted page, the payload is a secret and the sink is external: a lethal trifecta. **BLOCK**, with no approval option.
 3. Click step **7**, then **Open decision**. The Guard decision page shows every check, the provenance route, the latency of each query and the audit trail stored in the graph.
 

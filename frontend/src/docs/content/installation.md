@@ -58,7 +58,7 @@ mkdir -p .data
 export CUSTODY_FALKORDB_EMBEDDED_PATH=.data/custody.db
 ```
 
-`falkordblite` starts a private FalkorDB process for that file. This is what the test suite, the Playwright end-to-end tests and the hosted public demo use.
+`falkordblite` starts a private FalkorDB process for that file. This is what the test suite (unless `CUSTODY_TEST_FALKORDB_HOST` is set), the Playwright end-to-end tests, `make api-public` and the [Render public demo](/docs/deployment#render) use.
 
 ### C: FalkorDB Cloud
 
@@ -140,4 +140,4 @@ npm run build && npx playwright test      # end-to-end: real backend + built UI 
 Playwright starts the API itself with an embedded database. Set `PYTHON=` if your virtual environment is not at `.venv`, and `PW_CHROMIUM=/path/to/chrome` to use an installed browser instead of `npx playwright install chromium`.
 
 > [!NOTE]
-> `tests/unit/test_bench_smoke.py` also renders the benchmark figures, which needs `matplotlib`. It is not in any extra, so install it separately (`pip install matplotlib`) if you run the full suite.
+> `tests/unit/test_bench_smoke.py` runs the benchmark baselines, which need `scikit-learn` (the `bench` extra), and renders the benchmark figures, which needs `matplotlib`. `pip install -e ".[dev,warden]"` installs neither, and `matplotlib` is not in any extra, so install them separately (`pip install -e ".[bench]" matplotlib`) if you run the full suite.
