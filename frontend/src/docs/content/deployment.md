@@ -20,7 +20,9 @@ Or with an embedded database and no external FalkorDB:
 docker run -p 8000:8000 -e CUSTODY_FALKORDB_EMBEDDED_PATH=/tmp/custody.db custody
 ```
 
-Locally, `docker compose --profile app up --build` starts the image next to a FalkorDB container.
+Locally, `docker compose --profile app up --build` starts the image next to a FalkorDB container (the `custody` service is in the `app` profile; `docker compose up -d falkordb` starts only the database). The compose file passes `ANTHROPIC_API_KEY` through from your shell if it is set.
+
+`GET /health` (or `/api/health`) returns `status` (`ok` or `degraded`), `falkordb` (whether the database answers a ping), `version` and `public_demo`, plus `demo_tenant` in public-demo mode.
 
 | Path                                         | Served by                                             |
 | -------------------------------------------- | ----------------------------------------------------- |
@@ -47,18 +49,18 @@ The image runs on Render (and Railway, Fly.io or Cloud Run) without changes. For
 3. Set the **Health Check Path** to `/api/health`.
 4. Leave **Auto-Deploy** on: every push to the deployed branch rebuilds the image, docs included.
 
-On startup, public-demo mode seeds the primary demo and the three worlds if the database is empty, so an ephemeral `/tmp` database is fine. On Render's free instance type the service sleeps after a period without traffic and the first request after that takes longer while it starts.
+On startup, public-demo mode seeds the primary demo and the three worlds if the demo tenant has no recorded demo run, so an ephemeral `/tmp` database is fine. On Render's free instance type the service sleeps after a period without traffic and the first request after that takes longer while it starts.
 
 > [!NOTE]
 > Use FalkorDB Cloud (or another server) instead of the embedded database when the data must survive restarts or be shared with other processes, such as a separately hosted MCP server.
 
 ## Public-demo mode
 
-`CUSTODY_PUBLIC_DEMO=true` makes a deployment safe to share without building an authentication system ([`custody/api/public_demo.py`](repo:custody/api/public_demo.py)):
+`CUSTODY_PUBLIC_DEMO=true` lets you share a read-only deployment without building an authentication system ([`custody/api/public_demo.py`](repo:custody/api/public_demo.py)):
 
 - **One synthetic tenant** (`CUSTODY_DEMO_TENANT`, default `acme`), seeded at startup with the primary demo and the three worlds. Every other tenant path returns 404.
-- **Read-only.** Only `GET`, `HEAD` and `OPTIONS`, plus `POST …/console/demo/reset`. Recorder writes, Guard check, approve, reject and endorse, running scenarios, the Warden (which could call a paid model API) and sending disclosures all return 403. The console hides or disables those controls and shows a "Public demo · read-only" tag.
-- **Reset Demo** restores the initial state deterministically (counter-based ids and a fixed simulated clock, so the graph is identical after every reset) and is rate-limited: one reset per `CUSTODY_DEMO_RESET_MIN_INTERVAL_S` (10 s), 429 otherwise.
+- **Read-only.** Only `GET`, `HEAD` and `OPTIONS`, plus `POST …/console/demo/reset`. Recorder writes, Guard check, approve, reject, endorse and trust revocation, running scenarios or building the worlds, the Warden (which could call a paid model API) and sending disclosures all return 403. The console hides or disables those controls and shows a "Public demo · read-only" tag.
+- **Reset Demo** restores the initial state deterministically (counter-based ids and a fixed simulated clock, so the graph is identical after every reset) and is rate-limited: one reset per `CUSTODY_DEMO_RESET_MIN_INTERVAL_S` (10 s), 429 with a `Retry-After` header otherwise.
 - **No configuration exposed.** `/swagger`, `/redoc` and `/openapi.json` are off; `/health` returns only the status, whether FalkorDB answers, the version, the public-demo flag and the demo tenant.
 - **No real credentials in the data.** The vault and its keys are simulated fakes, and raw secret values never reach the graph or any API response.
 
@@ -69,7 +71,7 @@ On startup, public-demo mode seeds the primary demo and the three worlds if the 
 
 ## Normal mode
 
-Outside public-demo mode the console and the API have no authentication: anyone who can reach them can record data, run scenarios and approve actions as any name. Put the deployment behind your own authentication proxy before exposing it. Approvers are assumed to be humans authenticated outside Custody.
+Outside public-demo mode the console and the API have no authentication: anyone who can reach them can record data, run scenarios and approve actions as any name. The Recorder endpoints `POST …/record/approval` and `PATCH …/actions/{id}/status` also write approvals and action statuses directly, without the Guard's approval guardrails (human-only approvers, no approval for a lethal trifecta or an `INDETERMINATE` check); they are meant for a trusted integrator only. Put the deployment behind your own authentication proxy before exposing it, and do not expose those two endpoints to agents. Approvers are assumed to be humans authenticated outside Custody.
 
 ## Split hosting
 
