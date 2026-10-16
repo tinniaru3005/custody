@@ -7,7 +7,7 @@ The repository includes a benchmark that compares Custody's graph checks with co
 
 ## Setup
 
-330 labelled actions (210 dangerous, 120 clean), seed 1234, 10 variants per family, recorded through the real agent runtime on embedded FalkorDB (2 vCPU Xeon @ 2.10 GHz). Headline numbers use the 290 in-scope cases; implicit flows, over-approximation and two endorsement categories are excluded because they are outside Custody's model or defined by recorded policy.
+330 labelled actions (210 dangerous, 120 clean), seed 1234, 10 variants per family, recorded through the real agent runtime on embedded FalkorDB (2 vCPU Xeon @ 2.10 GHz). Headline numbers use the 290 in-scope cases; implicit flows, over-approximation and two endorsement categories (endorsed sibling, policy-endorsed) are excluded because they are outside Custody's model or defined by recorded policy. Rows marked _hindsight_ use the operating point with the best F1 on this very data, which favours the baseline.
 
 ## Headline (in-scope set)
 
@@ -22,31 +22,31 @@ The repository includes a benchmark that compares Custody's graph checks with co
 | String exact                              | 0.857     | 0.632  | 0.727 | 0 / 150                                 |
 | Keyword scan (context)                    | 0.75      | 0.158  | 0.261 | 0 / 250                                 |
 
-Custody and the recursive SQL CTE agree on 330 of 330 cases.
+Custody and the recursive SQL CTE agree on 330 of 330 cases. These numbers carry the circularity caveat above: Custody's in-scope accuracy is close to guaranteed by construction.
 
 ![Share of cases handled correctly, by method and category](bench-heatmap.webp "Detection rate on attacks and false-escalation rate on decoys, per method and category (committed run).")
 
 ## What it found
 
-- **Same bytes, different provenance.** On decoys that carry exactly the same bytes as an untrusted page but came from a trusted source, the content methods that search untrusted documents escalated every time; Custody escalated none.
-- **Negative answers.** Only the graph methods' "nothing found" answers are completed traversals. Negative predictive value was 100% for Custody, 92% for the depth-bounded Cypher query, and at most 70% for the content methods.
+- **Same bytes, different provenance.** On decoys that carry exactly the same bytes as an untrusted page but came from a trusted source, exact-string and host matching and every retrieval method escalated every time; Custody and string matching with context attribution escalated none.
+- **Negative answers.** Only the graph methods' "nothing found" answers are completed traversals. Negative predictive value was 100% for Custody, 92% for the depth-bounded Cypher query, and at most 70% for the content methods. The `*0..25` query missed all 8 dangerous chains of 26 and 40 hops.
 - **Where content methods are as good.** Direct, cross-session, high fan-in and transformed-secret attacks were caught 100% of the time by string matching and by TF-IDF and multi-hop retrieval too (LSA retrieval did worse).
-- **Custody's own errors.** Implicit flows were missed (out of scope by design), and over-approximation produced false alarms (also out of scope). Agent summaries written while a key was in context were labelled secret.
+- **Custody's own errors.** All 10 implicit flows were missed (out of scope by design), and all 10 over-approximation cases were false alarms (also out of scope). All 3 agent summaries written while a key was in context were labelled secret although they did not contain it.
 - **FalkorDB versus SQL.** Same answers; SQLite's in-process recursive CTE was much faster per check (0.27 ms versus 22 ms for Custody's full Guard, which also runs confidentiality, binding and the explanation).
 
 ![Negative-claim validity](bench-negative_claims.webp "How often a 'nothing found' answer was actually correct, and whether it came from a completed traversal (committed run).")
 
 ## Scaling, and a falsified target
 
-One pre-registered falsification condition **triggered**: a clean ALLOW with 10 000 ancestors took 1.32 s at the median, above the 1 s target (the time includes the ALLOW certificate). On graphs of 100 000+ nodes, searches that cannot finish within the shipped 2 s limit return `INDETERMINATE` and fail closed rather than allow. Full tables, including the 100k-node runs: [`bench/results/large.md`](repo:bench/results/large.md) and [`scaling.md`](repo:bench/results/scaling.md).
+One pre-registered falsification condition **triggered**: a clean ALLOW with 10 000 ancestors took 1.32 s at the median, above the 1 s target (the time includes the ALLOW certificate). On graphs of 100 000+ nodes, searches that cannot finish within the shipped limits (100 000 nodes, 2 s) return `INDETERMINATE` and fail closed rather than allow; with 100 000-way fan-in this happened for both the dangerous and the clean variant, while the same graphs completed under raised limits. Full tables, including the 100k-node runs: [`bench/results/large.md`](repo:bench/results/large.md) and [`scaling.md`](repo:bench/results/scaling.md).
 
-Not measured in the committed run: an LLM-as-judge baseline (no API key was available; the harness is ready) and neural embeddings.
+Not measured in the committed run: an LLM-as-judge baseline (no API key was available; the harness is ready), neural embeddings (LSA is the dense stand-in, not a neural model), and a replay of a real model-driven run (no genuine LLM recording exists yet). The adversarial test ran only Custody's half: its verdict was the same with and without the injected approval claim.
 
 ## Reproduce
 
 ```bash title="Terminal"
 pip install -e ".[dev,bench]"
-python -m bench.run_correctness      # 330 labelled cases, 11 methods, 5 identical repeats
+python -m bench.run_correctness      # 330 labelled cases, Custody + 8 baselines, 5 identical repeats
 python -m bench.run_sql_compare      # SQL vs FalkorDB: cycles, path extraction, query size
 python -m bench.run_llm_adversarial  # approval-claim injection (the LLM half needs a key)
 python -m bench.run_scaling          # latency vs depth, fan-in, summary trees, dense sessions
@@ -54,4 +54,6 @@ python -m bench.run_large            # 100k+ nodes (long: about 17 minutes on 2 
 python -m bench.report               # REPORT.md + figures (needs matplotlib)
 ```
 
-`make bench` runs all but the large-graph run.
+Useful options (see each module's `--help`): `--host HOST --port PORT` for a FalkorDB server instead of the embedded one (all runs except the LLM test), `--out DIR`, `run_correctness --variants N --seed S --families all|v1 --repeats N --sbert`, `run_correctness --llm-judge --llm-runs N --llm-cases N --llm-price-in/--llm-price-out USD`, `run_llm_adversarial --runs N --model M --temperature T --price-in/--price-out USD`, `run_scaling --reps N --quick`, `run_large --reps N --quick`, `report --results DIR`. Benchmark environment variables are listed in [Configuration](/docs/configuration#benchmarks).
+
+`make bench` runs all but the large-graph run (`make bench-large`; re-run `python -m bench.report` after it).

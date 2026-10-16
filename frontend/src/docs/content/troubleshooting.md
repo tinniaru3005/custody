@@ -33,7 +33,7 @@ The API started but FalkorDB stopped answering afterwards. The console's sidebar
 
 ### Settings in `.env` are ignored for the Warden model or demo mode
 
-`ANTHROPIC_API_KEY`, `CUSTODY_WARDEN_MODEL`, `CUSTODY_DEMO_MODE` and `CUSTODY_DEMO_LLM_MODEL` are read from the process environment, not from `.env`. Export them in the shell, the container or the host's settings. The other `CUSTODY_*` settings are read from both. See [Configuration](/docs/configuration#models-and-demo-mode).
+`ANTHROPIC_API_KEY`, `CUSTODY_WARDEN_MODEL`, `CUSTODY_DEMO_MODE` and `CUSTODY_DEMO_LLM_MODEL` (and the benchmark and test variables) are read from the process environment, not from `.env`. Export them in the shell, the container or the host's settings. The other `CUSTODY_*` settings are read from both. See [Configuration](/docs/configuration#models-and-demo-mode).
 
 ### The console loads but every panel errors (Vite dev server)
 
@@ -55,11 +55,11 @@ The deployment runs with `CUSTODY_PUBLIC_DEMO=true`, which refuses every write e
 
 ### 403 "action … was blocked as a lethal trifecta; it has no approval option"
 
-Working as intended: a lethal trifecta (untrusted destination, secret payload, external sink) can never be approved. The agent has to propose a different action, for example with a destination the user supplied.
+Working as intended: a lethal trifecta (untrusted destination, secret payload, external sink) can never be approved. The same message is returned for any action whose status is already `blocked`, including a precedent escalation. The agent has to propose a different action, for example with a destination the user supplied.
 
 ### 403 "only a human approver can approve or endorse"
 
-The approver was empty, started with `system:`, or was not of kind `human`. Pass a person's identifier as `approver`.
+The approver was empty, started with `system:`, or was not of kind `human`. Pass a person's identifier as `approver`. Through the Warden's approval helpers (`python -m custody.warden approve`), the name `warden` is also refused, with "the Warden cannot approve its own actions".
 
 ### 409 when recording a recall
 
@@ -71,17 +71,17 @@ Public-demo resets are rate-limited to one per `CUSTODY_DEMO_RESET_MIN_INTERVAL_
 
 ### 503 "provenance search incomplete; cannot say whether a path exists"
 
-From `GET …/data/{id}/path-to/{target}`: the complete search hit a limit, so Custody will not claim there is no path. Setting `max_depth` only helps if a path exists within that depth; a search that stops at the depth bound is still incomplete. See the next entry for the limits.
+From `GET …/data/{id}/path-to/{target}`: the complete search hit a limit, so Custody will not claim there is no path. Setting `max_depth` only helps if a path exists within that depth; a search that stops at the depth bound is still incomplete. This endpoint uses the default search limits (100 000 nodes, 2 000 ms), not the tenant's `GuardPolicy`, so raising the policy limits does not change it.
 
 ### 500 when running the Warden with planner `anthropic`
 
-The Claude planner was requested without `ANTHROPIC_API_KEY` in the process environment, so the first planning call fails. The operator's request has already been recorded by then, so a partial investigation record stays in the graph. Set the key, or use planner `auto` (which falls back to the offline playbook) or `playbook`.
+The Claude planner was requested without `ANTHROPIC_API_KEY` in the process environment, so the first planning call fails. (If the `anthropic` package is not installed at all, the console endpoint answers 400 "pip install anthropic (or use PlaybookPlanner)" instead.) The operator's request has already been recorded by then, so a partial investigation record stays in the graph. Set the key, or use planner `auto` (which falls back to the offline playbook) or `playbook`.
 
 ## Guard results
 
 ### A check is INDETERMINATE, or an action is held with no approval option
 
-A complete provenance search hit its node limit (100 000), its time limit (2 000 ms) or a query error, so the Guard failed closed. Re-check once the graph is less busy; for very large tenants, raise `search_max_nodes` or `search_timeout_ms` in the tenant's `GuardPolicy` ([Configuration](/docs/configuration#guard-policy)). A later check that completes decides normally.
+A complete provenance search hit its node limit (100 000), its time limit (2 000 ms), its depth limit (none by default) or a query error, so the Guard failed closed: `REQUIRE_HUMAN_APPROVAL` with no approval option, or BLOCK if a lethal trifecta cannot be ruled out. Re-check once the graph is less busy; for very large tenants, raise `search_max_nodes` or `search_timeout_ms` (or remove `search_max_depth`) in the tenant's `GuardPolicy` ([Configuration](/docs/configuration#guard-policy)). A later check that completes decides normally.
 
 ### A value the user typed is treated as untrusted
 
@@ -93,13 +93,13 @@ Tenants without a registered `GuardPolicy` use the default policy, in which ever
 
 ### The certificate says DOWNGRADED
 
-A model output in the destination's ancestry was recorded with `coverage: "REDUCED"` (or without a coverage value). The verdict is unaffected; the certificate's negative claim just is not exhaustive. Record outputs with their full context window.
+A model output in the destination's ancestry was recorded with `coverage: "REDUCED"` (or is older data stored without a coverage value, which counts as reduced). The verdict is unaffected; the certificate's negative claim is weaker because that output's recorded inputs are narrower than its context. Record outputs with their full context window.
 
 ## Tests and tooling
 
 ### `test_bench_smoke` fails with "No module named 'matplotlib'"
 
-The benchmark report renders figures with matplotlib, which is not in any extra. `pip install matplotlib`.
+The benchmark report renders figures with matplotlib, which is not in any extra. `pip install matplotlib` (the test also needs the `bench` extra, scikit-learn).
 
 ### Playwright cannot find a browser
 
