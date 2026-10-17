@@ -30,6 +30,7 @@ CLI, benchmarks, deployment, security model, troubleshooting) are served by the 
 `/docs` (e.g. <http://localhost:5173/docs> in development). Their source is in
 [frontend/src/docs/content/](frontend/src/docs/content/). Reference notes in this
 repository: [Guard](docs/guard.md) · [graph model](docs/graph-model.md) ·
+[Cypher queries and graph algorithms](docs/cypher-queries.md) ·
 [Warden and MCP](docs/warden.md) · [benchmarks](bench/README.md).
 
 **Blog post:** [Your Agent Forgot the Prompt Injection. Its Memory Didn't.](https://arunima-chaudhuri.hashnode.dev/your-agent-forgot-the-prompt-injection-its-memory-didn-t)
@@ -430,6 +431,21 @@ updated in place with an audit node next to them (`Action.status`, `Datum.endors
 
 ## How Custody uses FalkorDB
 
+**Why graph traversal is essential.** Custody never asks whether text *looks* malicious. It
+asks whether a chain of recorded derivations leads from an action's argument back to an
+untrusted Source, a chain that can cross any number of LLM turns, memories, recalls,
+sessions and agents. That is unbounded-depth reachability, and the path is the evidence.
+Without the traversal there is no verdict, no explanation and no certificate; content
+methods miss deep and split-source chains and can never prove a negative (see
+[Benchmarks](#benchmarks)). FalkorDB stores that history natively as a graph and supplies
+what the Guard and Warden build on: index-backed one-hop expansion for the complete search,
+path results for evidence, server-enforced read-only queries with timeouts, built-in graph
+algorithms, and graph copies for what-ifs. A recursive SQL CTE reaches the same verdicts on
+the benchmark; soundness comes from the *complete* traversal, and FalkorDB is where Custody
+runs it.
+
+Every query and algorithm, quoted from the code: **[docs/cypher-queries.md](docs/cypher-queries.md)**.
+
 - **One graph per tenant** (`custody:<tenant>`), so tenants are isolated and can be dropped
   atomically. The three-worlds comparison uses its own graph (`<tenant>-worlds`).
 - **Complete level-by-level traversals** for every Guard verdict, the certificate's ancestor
@@ -515,7 +531,7 @@ Then pick a database:
 
 ```bash
 docker compose up -d falkordb                      # A: local FalkorDB on :6379 (browser UI on :3000)
-export CUSTODY_FALKORDB_EMBEDDED_PATH=.data/custody.db   # B: embedded, no Docker (Python 3.12+)
+mkdir -p .data && export CUSTODY_FALKORDB_EMBEDDED_PATH=.data/custody.db   # B: embedded, no Docker (Python 3.12+)
 cp .env.example .env                               # C: FalkorDB Cloud: fill in host/port/user/password
 ```
 
@@ -733,7 +749,7 @@ frontend/       React + Vite + TypeScript console (src/pages, src/components, e2
 scripts/        attack_demo.py, guard_demo.py, warden_demo.py, seed_acme.py,
                 record_llm_run.py, export_ui_fixtures.py
 tests/          unit, integration, guard, warden, console
-docs/           graph-model.md, guard.md, warden.md, screenshots/ (the docs site lives in frontend/src/docs)
+docs/           graph-model.md, cypher-queries.md, guard.md, warden.md, screenshots/ (the docs site lives in frontend/src/docs)
 ```
 
 ## Acknowledgements
