@@ -5,7 +5,8 @@ validated (`[a-z0-9][a-z0-9_-]{0,62}`) before they are turned into graph names. 
 three-worlds comparison writes to its own graph, `custody:<tenant>-worlds`.
 
 Code: `custody/graph/schema.py` (labels, relationship types, indexes), `model.py` (records),
-`repository.py` (Cypher), `traversal.py` (complete searches).
+`repository.py` (Cypher), `traversal.py` (complete searches). The queries themselves are
+documented in [cypher-queries.md](cypher-queries.md).
 
 ## Nodes
 
