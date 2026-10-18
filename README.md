@@ -24,6 +24,10 @@ run graph queries and graph algorithms; its own actions pass the same Guard.
 
 ![Attack demo: the blocked action and the provenance path that explains it](docs/screenshots/demo.png)
 
+**Demo video:** [Watch the Custody demo on YouTube](https://youtu.be/wGtRbjnj1Uc): the attack,
+the provenance path, the deterministic BLOCK and the three-worlds comparison, recorded on the
+live deployment at <https://custody-j3bt.onrender.com>.
+
 **Documentation:** the full docs (quickstart, installation, architecture, provenance graph,
 Guard, Warden, MCP, integrating your own agents, console, demos, HTTP API, configuration,
 CLI, benchmarks, deployment, security model, troubleshooting) are served by the app at
